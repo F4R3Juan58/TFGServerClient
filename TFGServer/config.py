@@ -1,2 +1,2 @@
-Token = "MTMzMjI3Mjc1NTgzOTczMzgxMQ.G7yRO5.7h7efQ8errmNAsZJJzW6NujIDEt0mG6bYGflBI"
-Token2 = "MTM1MTIxMTg1Mzk1NDQyMDc2Nw.GvFFxr.5pqC9v59p9xJm0vD48bEXLdQmSu0jJ_XBOUIeo"
+Token = "Tu_Token"
+
