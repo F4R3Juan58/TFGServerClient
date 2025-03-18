@@ -63,4 +63,10 @@
 		<PackageReference Include="MySql.Data" Version="9.2.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Registro.xaml.cs">
+	    <DependentUpon>Registro.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>
