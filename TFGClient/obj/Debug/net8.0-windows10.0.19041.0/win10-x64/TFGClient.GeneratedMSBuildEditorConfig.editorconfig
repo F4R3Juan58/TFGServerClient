@@ -34,11 +34,11 @@ build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/juan5/Desktop/TFG/TFGClient/MainPage.xaml]
+[C:/Users/juan5/Desktop/TFG/TFGClient/Registro.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.Registro.xaml
+build_metadata.AdditionalFiles.TargetPath = Registro.xaml
+build_metadata.AdditionalFiles.RelativePath = Registro.xaml
 
 [C:/Users/juan5/Desktop/TFG/TFGClient/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
