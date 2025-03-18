@@ -1,0 +1,36 @@
+# Archivos de usuario de Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+
+# Configuración de Rider/Resharper
+.idea/
+*.sln.iml
+
+# Archivos de macOS
+.DS_Store
+
+# Archivos generados por MAUI
+*.apk
+*.aab
+*.app
+*.xcuserstate
+
+# Archivos de publicación
+*.publish/
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Configuración de dispositivos Android simulados
+.vscode/
+*.db
+*.db-shm
+*.db-wal
