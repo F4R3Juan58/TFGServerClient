@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TFGClient.Registro">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label Text="FORMULARIO" FontSize="20" FontAttributes="Bold"/>
+
+            <!-- Formulario 1 -->
+            <Frame x:Name="Formulario" IsVisible="True">
+                <VerticalStackLayout>
+                    <Label Text="Nombre"/>
+                    <Entry Placeholder="Nombre" x:Name="NombreEntry" />
+                    <Label Text="Apellidos"/>
+                    <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" />
+                    <Label Text="Email"/>
+                    <Entry Placeholder="Email" x:Name="EmailEntry" />
+                    <Label Text="Contraseña"/>
+                    <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" />
+                    <Label Text="Confirma la contraseña"/>
+                    <Entry Placeholder="Contraseña" x:Name="ContrasenaConfirmacionEntry" />
+                    <Button Text="Verificacion" Clicked="OnVerificacionClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Verificacion -->
+            <Frame x:Name="Verificacion" IsVisible="False">
+                <VerticalStackLayout>
+                    <Label Text="Codigo de verificacion"/>
+                    <Entry Placeholder="Introduce el codigo de verificacion"/>
+                    <Button Text="Continuar" Clicked="OnContinuarClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Formulario 2 -->
+            <Frame x:Name="Formulario2" IsVisible="False">
+                <VerticalStackLayout>
+                    <Label Text="Comunidad Autonoma"/>
+                    <Picker x:Name="CAPicker">
+                    </Picker>
+                    <Label Text="Instituto"/>
+                    <Picker x:Name="InstitutoPicker">
+                    </Picker>
+                    <Label Text="Curso"/>
+                    <Picker x:Name="CursoPicker">
+                    </Picker>
+                    <Label Text="Alumno o Profesor"/>
+                    <Picker x:Name="PAPicker">
+                        <Picker.Items>
+                            <x:String>Alumno</x:String>
+                            <x:String>Profesor</x:String>
+                        </Picker.Items>
+                    </Picker>
+                    <Button Text="Registrarse" Clicked="OnRegisterClicked" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
