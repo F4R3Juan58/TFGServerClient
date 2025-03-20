@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\profesorhome.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:profesorhome.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -29,33 +45,81 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Registro.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
-              "RelativeDocumentMoniker": "Registro.xaml.cs",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
-              "RelativeToolTip": "Registro.xaml.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAIwC0AAABMAAAAAAAAAA==",
+              "Title": "App.g.i.cs",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs",
+              "RelativeDocumentMoniker": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs",
+              "RelativeToolTip": "obj\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\Platforms\\Windows\\App.g.i.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAIA8wEoAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-20T11:10:01.479Z",
+              "WhenOpened": "2025-03-20T12:00:05.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
+              "Title": "ProfesorHome.xaml",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml",
+              "RelativeDocumentMoniker": "ProfesorHome.xaml",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml",
+              "RelativeToolTip": "ProfesorHome.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-20T11:59:09.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Login.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml.cs",
+              "RelativeDocumentMoniker": "Login.xaml.cs",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml.cs",
+              "RelativeToolTip": "Login.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T11:55:47.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Registro.xaml",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeDocumentMoniker": "Registro.xaml",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeToolTip": "Registro.xaml",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAB8AAABSAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-18T12:39:55.202Z",
+              "WhenOpened": "2025-03-20T11:53:47.66Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppShell.xaml",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\AppShell.xaml",
+              "RelativeDocumentMoniker": "AppShell.xaml",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\AppShell.xaml",
+              "RelativeToolTip": "AppShell.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-20T11:53:11.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Login.xaml",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml",
+              "RelativeDocumentMoniker": "Login.xaml",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml",
+              "RelativeToolTip": "Login.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAswBIAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-20T11:53:09.441Z",
               "EditorCaption": ""
             }
           ]
