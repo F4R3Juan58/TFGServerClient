@@ -8,7 +8,13 @@
     Title="TFGClient">
 
     <ShellContent
+        ContentTemplate="{DataTemplate local:Login}"
+        Route="Login" />
+    <ShellContent
         ContentTemplate="{DataTemplate local:Registro}"
         Route="Registro" />
+    <ShellContent
+        ContentTemplate="{DataTemplate local:ProfesorHome}"
+        Route="ProfesorHome" />
 
 </Shell>

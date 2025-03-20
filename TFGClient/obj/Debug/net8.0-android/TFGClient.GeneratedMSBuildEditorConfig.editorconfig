@@ -30,6 +30,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
+[C:/Users/juan5/Desktop/TFG/TFGClient/Login.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.Login.xaml
+build_metadata.AdditionalFiles.TargetPath = Login.xaml
+build_metadata.AdditionalFiles.RelativePath = Login.xaml
+
+[C:/Users/juan5/Desktop/TFG/TFGClient/ProfesorHome.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.ProfesorHome.xaml
+build_metadata.AdditionalFiles.TargetPath = ProfesorHome.xaml
+build_metadata.AdditionalFiles.RelativePath = ProfesorHome.xaml
+
 [C:/Users/juan5/Desktop/TFG/TFGClient/Registro.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = TFGClient.Registro.xaml
