@@ -3,26 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\",
   "Documents": [
     {
-<<<<<<< HEAD
-=======
       "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
       "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-<<<<<<< HEAD
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-=======
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
     }
   ],
   "DocumentGroupContainers": [
@@ -32,11 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-<<<<<<< HEAD
-          "SelectedChildIndex": 5,
-=======
-          "SelectedChildIndex": 4,
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,16 +33,8 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
               "$type": "Document",
-<<<<<<< HEAD
-              "DocumentIndex": 1,
-=======
               "DocumentIndex": 2,
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
               "Title": "AppShell.xaml",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\AppShell.xaml",
               "RelativeDocumentMoniker": "AppShell.xaml",
@@ -69,42 +47,26 @@
             },
             {
               "$type": "Document",
-<<<<<<< HEAD
-              "DocumentIndex": 2,
-=======
               "DocumentIndex": 0,
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
               "Title": "Registro.xaml.cs",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
               "RelativeDocumentMoniker": "Registro.xaml.cs",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
               "RelativeToolTip": "Registro.xaml.cs",
-<<<<<<< HEAD
-              "ViewState": "AgIAABQAAAAAAAAAAAAwwCYAAAApAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAPAAAAAAAAAA==",
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
+              "ViewState": "AgIAABsAAAAAAAAAAAAowCsAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-18T12:43:25.673Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-<<<<<<< HEAD
-              "DocumentIndex": 0,
-=======
               "DocumentIndex": 1,
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
               "Title": "Registro.xaml",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeDocumentMoniker": "Registro.xaml",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeToolTip": "Registro.xaml",
-<<<<<<< HEAD
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAAuAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAB0AAAAAAAAAAAAswDYAAABJAAAAAAAAAA==",
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-03-18T12:39:55.202Z",
               "EditorCaption": ""

@@ -18,11 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TFGClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+291f71ef951dacfab9ef5be5f9143f8236aa0381")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+563c6f7dcf0c23e800ddd96b016f7fcdb1d4a724")]
->>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+8233b873e44221a96611e328d98d4ecb4a4e0136")]
 [assembly: System.Reflection.AssemblyProductAttribute("TFGClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TFGClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
