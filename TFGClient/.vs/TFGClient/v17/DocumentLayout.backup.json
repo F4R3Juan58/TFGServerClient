@@ -46,7 +46,12 @@
               "RelativeToolTip": "AppShell.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+<<<<<<< HEAD
               "WhenOpened": "2025-03-18T13:06:06.179Z"
+=======
+              "WhenOpened": "2025-03-18T13:06:06.179Z",
+              "EditorCaption": ""
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
             },
             {
               "$type": "Document",
@@ -56,7 +61,11 @@
               "RelativeDocumentMoniker": "Registro.xaml.cs",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
               "RelativeToolTip": "Registro.xaml.cs",
+<<<<<<< HEAD
               "ViewState": "AgIAABIAAAAAAAAAAAAowCYAAAApAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABCAAAAAAAAAA==",
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-18T12:43:25.673Z",
               "EditorCaption": ""
@@ -69,7 +78,11 @@
               "RelativeDocumentMoniker": "Registro.xaml",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeToolTip": "Registro.xaml",
+<<<<<<< HEAD
               "ViewState": "AgIAAAIAAAAAAAAAAAAswB4AAABgAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAB0AAAAAAAAAAAAswDYAAABJAAAAAAAAAA==",
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-03-18T12:39:55.202Z",
               "EditorCaption": ""
