@@ -5,57 +5,72 @@
 
     <ScrollView>
         <VerticalStackLayout>
-            <Label Text="FORMULARIO" FontSize="20" FontAttributes="Bold"/>
+            <Label Text="REGISTRO" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+            <Grid RowDefinitions="Auto"
+          ColumnDefinitions="*,*,*"
+          VerticalOptions="Center"
+          HorizontalOptions="FillAndExpand"
+          Padding="20">
 
-            <!-- Formulario 1 -->
-            <Frame x:Name="Formulario" IsVisible="True">
-                <VerticalStackLayout>
-                    <Label Text="Nombre"/>
-                    <Entry Placeholder="Nombre" x:Name="NombreEntry" />
-                    <Label Text="Apellidos"/>
-                    <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" />
-                    <Label Text="Email"/>
-                    <Entry Placeholder="Email" x:Name="EmailEntry" />
-                    <Label Text="Contraseña"/>
-                    <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" />
-                    <Label Text="Confirma la contraseña"/>
-                    <Entry Placeholder="Contraseña" x:Name="ContrasenaConfirmacionEntry" />
-                    <Button Text="Verificacion" Clicked="OnVerificacionClicked" />
-                </VerticalStackLayout>
-            </Frame>
+                <!-- Formulario 1 -->
+                <Frame x:Name="Formulario"
+               Grid.Column="1"
+               IsVisible="True"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="Center">
+                    <VerticalStackLayout>
+                        <Label Text="Nombre" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Nombre" x:Name="NombreEntry" Margin="0,0,0,20"/>
+                        <Label Text="Apellidos" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" Margin="0,0,0,20"/>
+                        <Label Text="Email" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20"/>
+                        <Label Text="Contraseña" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20"/>
+                        <Label Text="Confirma la contraseña" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Contraseña" x:Name="ContrasenaConfirmacionEntry" Margin="0,0,0,20"/>
+                        <Button Text="Verificación" Clicked="OnVerificacionClicked" HorizontalOptions="Center" Margin="0,10,0,10" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Verificacion -->
-            <Frame x:Name="Verificacion" IsVisible="False">
-                <VerticalStackLayout>
-                    <Label Text="Codigo de verificacion"/>
+                <!-- Verificación -->
+                <Frame x:Name="Verificacion"
+               Grid.Column="1"
+               IsVisible="False"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="Center">
+                    <VerticalStackLayout>
+                        <Label Text="Código de verificación" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Entry Placeholder="Introduce el código de verificación" x:Name="CodigoEntry" Margin="0,0,0,20"/>
+                        <Button Text="Continuar" Clicked="OnContinuarClicked" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-                    <Entry Placeholder="Introduce el codigo de verificacion" x:Name="CodigoEntry"/>
-                    <Button Text="Continuar" Clicked="OnContinuarClicked"/>
-                </VerticalStackLayout>
-            </Frame>
+                <!-- Formulario 2 -->
+                <Frame x:Name="Formulario2"
+               Grid.Column="1"
+               IsVisible="False"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="Center">
+                    <VerticalStackLayout>
+                        <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Picker x:Name="CAPicker" Margin="0,0,0,20"/>
+                        <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Picker x:Name="InstitutoPicker" Margin="0,0,0,20"/>
+                        <Label Text="Curso" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Picker x:Name="CursoPicker" Margin="0,0,0,20"/>
+                        <Label Text="Alumno o Profesor" HorizontalOptions="Center" Margin="0,10,0,10"/>
+                        <Picker x:Name="PAPicker" Margin="0,0,0,20">
+                            <Picker.Items>
+                                <x:String>Alumno</x:String>
+                                <x:String>Profesor</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Button Text="Registrarse" Clicked="OnRegisterClicked" HorizontalOptions="Center" Margin="0,10,0,10" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Formulario 2 -->
-            <Frame x:Name="Formulario2" IsVisible="False">
-                <VerticalStackLayout>
-                    <Label Text="Comunidad Autonoma"/>
-                    <Picker x:Name="CAPicker">
-                    </Picker>
-                    <Label Text="Instituto"/>
-                    <Picker x:Name="InstitutoPicker">
-                    </Picker>
-                    <Label Text="Curso"/>
-                    <Picker x:Name="CursoPicker">
-                    </Picker>
-                    <Label Text="Alumno o Profesor"/>
-                    <Picker x:Name="PAPicker">
-                        <Picker.Items>
-                            <x:String>Alumno</x:String>
-                            <x:String>Profesor</x:String>
-                        </Picker.Items>
-                    </Picker>
-                    <Button Text="Registrarse" Clicked="OnRegisterClicked" />
-                </VerticalStackLayout>
-            </Frame>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
 

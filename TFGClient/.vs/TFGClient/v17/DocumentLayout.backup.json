@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -33,40 +29,31 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AppShell.xaml",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\AppShell.xaml",
-              "RelativeDocumentMoniker": "AppShell.xaml",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\AppShell.xaml",
-              "RelativeToolTip": "AppShell.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-18T13:06:06.179Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Registro.xaml.cs",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
               "RelativeDocumentMoniker": "Registro.xaml.cs",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
               "RelativeToolTip": "Registro.xaml.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAIwC0AAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-18T12:43:25.673Z",
+              "WhenOpened": "2025-03-20T11:10:01.479Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Registro.xaml",
               "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeDocumentMoniker": "Registro.xaml",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeToolTip": "Registro.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAABjAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAB8AAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-03-18T12:39:55.202Z",
               "EditorCaption": ""

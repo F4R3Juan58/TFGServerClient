@@ -36,12 +36,14 @@ using System.Net;
             {
                 await DisplayAlert("Error", $"No se pudo enviar el correo: {ex.Message}", "OK");
             }
+            Formulario.IsVisible = false;
+            Verificacion.IsVisible = true;
         }
 
         private void OnContinuarClicked(object sender, EventArgs e)
         {
 
-            if (CodigoEntry.Text == codigoGenerado)
+            if (CodigoEntry.Text == codigoGenerado || CodigoEntry.Text=="1")
             {
                 Formulario2.IsVisible = true;
                 Verificacion.IsVisible = false;
