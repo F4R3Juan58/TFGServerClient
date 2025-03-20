@@ -28,7 +28,11 @@
             <Frame x:Name="Verificacion" IsVisible="False">
                 <VerticalStackLayout>
                     <Label Text="Codigo de verificacion"/>
+<<<<<<< HEAD
                     <Entry Placeholder="Introduce el codigo de verificacion" x:Name="CodigoEntry"/>
+=======
+                    <Entry Placeholder="Introduce el codigo de verificacion"/>
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
                     <Button Text="Continuar" Clicked="OnContinuarClicked"/>
                 </VerticalStackLayout>
             </Frame>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System.Net.Mail;
 using System.Net;
 
@@ -7,11 +8,18 @@ namespace TFGClient
     {
         private string codigoGenerado = string.Empty;
 
+=======
+﻿namespace TFGClient
+{
+    public partial class Registro : ContentPage
+    {
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
         public Registro()
         {
             InitializeComponent();
         }
 
+<<<<<<< HEAD
         private async void OnVerificacionClicked(object sender, EventArgs e)
         {
             var random = new Random();
@@ -36,12 +44,17 @@ namespace TFGClient
             {
                 await DisplayAlert("Error", $"No se pudo enviar el correo: {ex.Message}", "OK");
             }
+=======
+        private void OnVerificacionClicked(object sender, EventArgs e)
+        {
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
             Formulario.IsVisible = false;
             Verificacion.IsVisible = true;
         }
 
         private void OnContinuarClicked(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             if (CodigoEntry.Text == codigoGenerado)
             {
                 Formulario2.IsVisible = true;
@@ -52,6 +65,10 @@ namespace TFGClient
                 DisplayAlert("Error","El codigo que has introducido no es correcto","Ok");
             }
             
+=======
+            Formulario2.IsVisible = true;
+            Verificacion.IsVisible = false;
+>>>>>>> 291f71ef951dacfab9ef5be5f9143f8236aa0381
         }
 
         private void OnRegisterClicked(object sender, EventArgs e)
