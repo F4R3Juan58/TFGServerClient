@@ -1,0 +1,31 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TFGClient.Login"
+             BackgroundColor="#0f1012">
+
+    <Grid VerticalOptions="FillAndExpand"
+          HorizontalOptions="FillAndExpand"
+          RowDefinitions="*,Auto,*"
+          ColumnDefinitions="*,2*,*">
+
+        <!-- Formulario centrado vertical y horizontal -->
+        <Frame x:Name="Formulario"
+               Grid.Row="1"
+               Grid.Column="1"
+               BackgroundColor="#050505"
+               Padding="20"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="Center">
+
+            <VerticalStackLayout>
+                <Label Text="LOGIN" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20"/>
+
+                <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+
+                <Button Text="Login" Clicked="onLoginClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#146dba" />
+                <Button Text="Registro" Clicked="onRegistroClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
