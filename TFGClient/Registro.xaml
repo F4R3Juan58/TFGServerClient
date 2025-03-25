@@ -71,11 +71,11 @@
                         <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
                         <Picker x:Name="CAPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
 
+                        <Label Text="Localidad" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                        <Picker x:Name="LocalidadPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
                         <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
                         <Picker x:Name="InstitutoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
-
-                        <Label Text="Curso" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Picker x:Name="CursoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
 
                         <Label Text="Alumno o Profesor" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
                         <Picker x:Name="PAPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black">
@@ -85,8 +85,40 @@
                             </Picker.Items>
                         </Picker>
 
-                        <Button Text="Registrarse" Clicked="OnRegisterClicked" HorizontalOptions="Center" Margin="0,10,0,10"
+                        <Button Text="Continuar" Clicked="OnContinuar2Clicked" HorizontalOptions="Center" Margin="0,10,0,10"
                                 TextColor="White" BackgroundColor="#146dba" />
+                    </VerticalStackLayout>
+                </Frame>
+                <!-- Formulario 3 -->
+                <Frame x:Name="Formulario3"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   IsVisible="False"
+                   BackgroundColor="#050505"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Center">
+                    <VerticalStackLayout>
+                        <Label Text="Nivel" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                        <Picker x:Name="NivelPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                        <Label Text="Familia" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                        <Picker x:Name="FamiliaPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                        <HorizontalStackLayout>
+                            <VerticalStackLayout>
+                                <Label Text="Grado" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                                <Picker x:Name="GradoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout>
+                                <Label Text="Curso" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                                <Picker x:Name="CursoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                       
+
+                        <Button Text="Registrarse" Clicked="OnRegisterClicked" HorizontalOptions="Center" Margin="0,10,0,10"
+                            TextColor="White" BackgroundColor="#146dba" />
                     </VerticalStackLayout>
                 </Frame>
 

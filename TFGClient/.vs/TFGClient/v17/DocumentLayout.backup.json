@@ -7,20 +7,8 @@
       "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:login.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\profesorhome.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:profesorhome.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\profesorhome.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:profesorhome.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|c:\\users\\juan5\\desktop\\tfg\\tfgclient\\registro.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{56FFE982-0E09-452C-93A0-0C2E08639054}|TFGClient.csproj|solutionrelative:registro.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -41,6 +29,23 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Registro.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
+              "RelativeDocumentMoniker": "Registro.xaml.cs",
+              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml.cs",
+              "RelativeToolTip": "Registro.xaml.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowDQAAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T17:37:42.982Z",
+              "EditorCaption": ""
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Registro.xaml",
@@ -48,59 +53,9 @@
               "RelativeDocumentMoniker": "Registro.xaml",
               "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Registro.xaml",
               "RelativeToolTip": "Registro.xaml",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAAFwAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAmwHUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-24T19:36:10.61Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ProfesorHome.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml.cs",
-              "RelativeDocumentMoniker": "ProfesorHome.xaml.cs",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml.cs",
-              "RelativeToolTip": "ProfesorHome.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-20T13:05:28.875Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ProfesorHome.xaml",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml",
-              "RelativeDocumentMoniker": "ProfesorHome.xaml",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\ProfesorHome.xaml",
-              "RelativeToolTip": "ProfesorHome.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-20T11:59:09.743Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Login.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml.cs",
-              "RelativeDocumentMoniker": "Login.xaml.cs",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml.cs",
-              "RelativeToolTip": "Login.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-20T11:55:47.565Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Login.xaml",
-              "DocumentMoniker": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml",
-              "RelativeDocumentMoniker": "Login.xaml",
-              "ToolTip": "C:\\Users\\juan5\\Desktop\\TFG\\TFGClient\\Login.xaml",
-              "RelativeToolTip": "Login.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-20T11:53:09.441Z",
+              "WhenOpened": "2025-03-25T17:29:45.559Z",
               "EditorCaption": ""
             }
           ]
