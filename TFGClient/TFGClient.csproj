@@ -63,4 +63,19 @@
 		<PackageReference Include="MySql.Data" Version="9.2.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Registro.xaml.cs">
+	    <DependentUpon>Registro.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Login.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ProfesorHome.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
