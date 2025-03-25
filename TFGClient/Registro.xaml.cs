@@ -63,6 +63,12 @@ using System.Net;
         {
             DisplayAlert("Registro", "Registro completado", "OK");
         }
+
+        private void OnContinuar2Clicked(object sender, EventArgs e)
+        {
+            Formulario3.IsVisible = true;
+            Formulario2.IsVisible = false;
+        }
     }
 
 }
