@@ -59,15 +59,28 @@ using System.Net;
 
         }
 
-        private void OnRegisterClicked(object sender, EventArgs e)
-        {
-            DisplayAlert("Registro", "Registro completado", "OK");
-        }
-
         private void OnContinuar2Clicked(object sender, EventArgs e)
         {
             Formulario3.IsVisible = true;
             Formulario2.IsVisible = false;
+        }
+
+        private void OnRegisterClicked(object sender, EventArgs e)
+        {
+            string name = NombreEntry.Text;
+            string subname = ApellidosEntry.Text;
+            string email = EmailEntry.Text;
+            string password = ContrasenaEntry.Text;
+            string ca = CAPicker.SelectedItem?.ToString();
+            string localidad = LocalidadPicker.SelectedItem?.ToString();
+            string instituto = InstitutoPicker.SelectedItem?.ToString();
+            string profealumno = PAPicker.SelectedItem?.ToString();
+            string nivel = NivelPicker.SelectedItem?.ToString();
+            string grado = FamiliaPicker.SelectedItem?.ToString();
+            string curso = CursoPicker.SelectedItem?.ToString();
+
+
+            DisplayAlert("Registro", "Registro completado", "OK");
         }
     }
 
