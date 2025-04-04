@@ -28,7 +28,7 @@ namespace TFGClient
 
     public class DatabaseService
     {
-        private readonly string connectionString = "server=13.38.70.221;user=admin;database=DiscordDatabase;port=3306;password=User@123;";
+        private readonly string connectionString = "server=13.38.70.221;user=tfg;database=DiscordDatabase;port=3306;password=2DamTfg;";
 
         public ObservableCollection<Comunidad> ObtenerComunidades()
         {
