@@ -10,10 +10,10 @@ public partial class Login : ContentPage
     private async void onLoginClicked(object sender, EventArgs e)
     {
         
-        bool isProferor = false;
+        bool isProferor = true;
         if (isProferor == false)
         {
-            var uri = new Uri("https://discord.gg/f3YA784A");
+            var uri = new Uri("https://discord.gg/f3YA784A"); //AÑADIR LOGICA PARA QUE LA INVITACION LA PILLE DEL BOT DE PYTHON
             await Launcher.Default.OpenAsync(uri);
         }
         else

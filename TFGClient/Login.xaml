@@ -8,7 +8,6 @@
           RowDefinitions="*,Auto,*"
           ColumnDefinitions="*,2*,*">
 
-        <!-- Formulario centrado vertical y horizontal prueba -->
         <Frame x:Name="Formulario"
                Grid.Row="1"
                Grid.Column="1"
