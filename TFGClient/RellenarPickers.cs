@@ -53,4 +53,5 @@ namespace TFGClient
             return new ObservableCollection<string>(cursos.Select(c => c.Nombre));
         }
     }
+
 }

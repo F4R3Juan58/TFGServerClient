@@ -1,15 +1,26 @@
 ﻿using System.Net.Mail;
 using System.Net;
-        
+using System.Collections.ObjectModel;
 
-﻿namespace TFGClient
+
+namespace TFGClient
 {
     public partial class Registro : ContentPage
     {
         private string codigoGenerado = string.Empty;
+
+        readonly RellenarPickers rellenar = new();
+
         public Registro()
         {
             InitializeComponent();
+            cargarBBDD();
+        }
+
+        public void cargarBBDD()
+        {
+
+            CAPicker.ItemsSource = rellenar.CargarComunidades();
         }
 
         private async void OnVerificacionClicked(object sender, EventArgs e)
