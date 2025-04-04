@@ -7,7 +7,7 @@ namespace TFGClient
     class RellenarPickers
     {
         private string connectionString = "server=13.38.70.221;user=admin;database=DiscordDatabase;port=3306;password=User@123;";
-
+/*
         public ObservableCollection<Tareas> cargarComunidadAutonoma()
         {
             var tareas = new ObservableCollection<Tareas>();
@@ -18,7 +18,7 @@ namespace TFGClient
 
                 // Verifica si la tabla Departamento tiene datos
                 
-                using (var command = new MySqlConnection(Query, connection))
+                using (var command = new MySqlCommand(Query, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -36,5 +36,7 @@ namespace TFGClient
             }
             return tareas;
         }
+*/
     }
+
 }
