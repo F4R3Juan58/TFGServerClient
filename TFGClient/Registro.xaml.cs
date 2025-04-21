@@ -83,8 +83,6 @@ namespace TFGClient
 
                 await DisplayAlert("Éxito", "Correo enviado correctamente", "OK");
 
-                Formulario.IsVisible = false;
-                Verificacion.IsVisible = true;
             }
             catch (Exception ex)
             {

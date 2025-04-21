@@ -66,5 +66,15 @@ namespace TFGClient
             var hash = sha.ComputeHash(bytes);
             return Convert.ToBase64String(hash);
         }
+
+        private async void onModificarClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ModificarDatos());
+        }
+
+        private async void onRecuperarClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RecurperarPassword());
+        }
     }
 }
