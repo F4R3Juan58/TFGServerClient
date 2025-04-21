@@ -95,5 +95,33 @@ namespace TFGClient.Services
             var profesor = connection.QueryFirstOrDefault<string>("SELECT Email FROM Profesores WHERE Email = @Email", new { Email = email });
             return profesor != null;
         }
+
+        public bool ActualizarAlumno(int alumnoId, Alumno alumno)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var (setSql, parametros) = UpdateHelper.GenerarUpdateDinamico(alumno, "ID", alumnoId);
+
+            if (string.IsNullOrWhiteSpace(setSql))
+                return false;
+
+            string query = $"UPDATE Alumnos SET {setSql} WHERE ID = @ID";
+            return connection.Execute(query, parametros) > 0;
+        }
+
+        public bool ActualizarProfesor(int profesorId, Profesor profesor)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var (setSql, parametros) = UpdateHelper.GenerarUpdateDinamico(profesor, "ID", profesorId);
+
+            if (string.IsNullOrWhiteSpace(setSql))
+                return false;
+
+            string query = $"UPDATE Profesores SET {setSql} WHERE ID = @ID";
+            return connection.Execute(query, parametros) > 0;
+        }
     }
 }
