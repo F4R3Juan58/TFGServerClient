@@ -1,37 +1,77 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using System.Collections.ObjectModel;
+using TFGClient.Models;
+using TFGClient.Services;
 
 
 namespace TFGClient
 {
     public partial class Registro : ContentPage
     {
-        private string codigoGenerado = string.Empty;
+        private readonly RellenarPickers rellenar = new();
+        private ObservableCollection<string> cursosCompletos = new();
 
-        readonly RellenarPickers rellenar = new();
+        private string codigoGenerado = string.Empty;
 
         public Registro()
         {
             InitializeComponent();
+            InicializarEventos();
             cargarBBDD();
+        }
+
+        private void InicializarEventos()
+        {
+            CAPicker.SelectedIndexChanged += (s, e) => CargarLocalidades();
+            LocalidadPicker.SelectedIndexChanged += (s, e) => CargarInstitutos();
+
+            NivelPicker.SelectedIndexChanged += (s, e) => {
+                CargarFamilias();
+                CargarGrados();
+            };
+
+            FamiliaPicker.SelectedIndexChanged += (s, e) => CargarCursos();
+            GradoPicker.SelectedIndexChanged += (s, e) => CargarCursos();
         }
 
         public void cargarBBDD()
         {
-
-            CAPicker.ItemsSource = rellenar.CargarComunidades();
+            try
+            {
+                CAPicker.ItemsSource = rellenar.CargarNombreComunidades();
+                NivelPicker.ItemsSource = rellenar.CargarNiveles();
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar los datos de base: {ex.Message}", "OK");
+            }
         }
 
         private async void OnVerificacionClicked(object sender, EventArgs e)
         {
+            string email = EmailEntry.Text?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                await DisplayAlert("Error", "Introduce un correo válido.", "OK");
+                return;
+            }
+
+            if (db.ExisteEmail(email))
+            {
+                await DisplayAlert("Error", "Este correo ya está registrado.", "OK");
+                return;
+            }
+
             var random = new Random();
             codigoGenerado = random.Next(100000, 999999).ToString();
+
             try
             {
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress("tfg.educamadrid.org@gmail.com");
-                mail.To.Add(EmailEntry.Text);
+                mail.To.Add(email);
                 mail.Subject = "Tu código de verificación";
                 mail.Body = $"Tu código es: {codigoGenerado}";
 
@@ -42,13 +82,14 @@ namespace TFGClient
                 smtp.Send(mail);
 
                 await DisplayAlert("Éxito", "Correo enviado correctamente", "OK");
+
+                Formulario.IsVisible = false;
+                Verificacion.IsVisible = true;
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"No se pudo enviar el correo: {ex.Message}", "OK");
             }
-            Formulario.IsVisible = false;
-            Verificacion.IsVisible = true;
         }
 
         private void OnContinuarClicked(object sender, EventArgs e)
@@ -76,22 +117,224 @@ namespace TFGClient
             Formulario2.IsVisible = false;
         }
 
-        private void OnRegisterClicked(object sender, EventArgs e)
+        private string HashearContraseña(string contraseña)
         {
-            string name = NombreEntry.Text;
-            string subname = ApellidosEntry.Text;
-            string email = EmailEntry.Text;
-            string password = ContrasenaEntry.Text;
-            string ca = CAPicker.SelectedItem?.ToString();
-            string localidad = LocalidadPicker.SelectedItem?.ToString();
-            string instituto = InstitutoPicker.SelectedItem?.ToString();
-            string profealumno = PAPicker.SelectedItem?.ToString();
-            string nivel = NivelPicker.SelectedItem?.ToString();
-            string grado = FamiliaPicker.SelectedItem?.ToString();
-            string curso = CursoPicker.SelectedItem?.ToString();
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var bytes = System.Text.Encoding.UTF8.GetBytes(contraseña);
+            var hash = sha.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
+        private int ObtenerComunidadId(string nombre)
+        {
+            return db.ObtenerTodasLasComunidades()
+                     .FirstOrDefault(c => c.Nombre == nombre)?.ID ?? 0;
+        }
+
+        private int ObtenerInstitutoId(string nombre)
+        {
+            return db.ObtenerTodosLosInstitutos()
+                     .FirstOrDefault(i => i.Nombre == nombre)?.ID ?? 0;
+        }
+
+        private int ObtenerCursoId(string nombre)
+        {
+            return db.ObtenerTodosLosCursos()
+                     .FirstOrDefault(c => c.Nombre == nombre)?.ID ?? 0;
+        }
 
 
-            DisplayAlert("Registro", "Registro completado", "OK");
+        private readonly DatabaseService db = new();
+
+        private async void OnRegisterClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                string nombre = NombreEntry.Text?.Trim();
+                string apellidos = ApellidosEntry.Text?.Trim();
+                string email = EmailEntry.Text?.Trim();
+                string contraseña = ContrasenaEntry.Text?.Trim();
+
+                /*
+                string confirmacion = ContrasenaConfirmacionEntry.Text?.Trim();
+
+                if (contraseña != confirmacion)
+                {
+                    await DisplayAlert("Error", "Las contraseñas no coinciden.", "OK");
+                    return;
+                }*/
+
+                string comunidadNombre = CAPicker.SelectedItem?.ToString();
+                string localidad = LocalidadPicker.SelectedItem?.ToString();
+                string institutoNombre = InstitutoPicker.SelectedItem?.ToString();
+                string tipoUsuario = PAPicker.SelectedItem?.ToString();
+                string nivel = NivelPicker.SelectedItem?.ToString();
+                string grado = GradoPicker.SelectedItem?.ToString();
+                string familia = FamiliaPicker.SelectedItem?.ToString();
+                string cursoNombre = CursoPicker.SelectedItem?.ToString();
+
+                if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidos) || string.IsNullOrWhiteSpace(email) ||
+                    string.IsNullOrWhiteSpace(contraseña) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
+                    string.IsNullOrWhiteSpace(tipoUsuario) || string.IsNullOrWhiteSpace(nivel) || string.IsNullOrWhiteSpace(grado) ||
+                    string.IsNullOrWhiteSpace(familia) || string.IsNullOrWhiteSpace(cursoNombre))
+                {
+                    await DisplayAlert("Error", "Por favor, rellena todos los campos.", "OK");
+                    return;
+                }
+
+                if (db.ExisteEmail(email))
+                {
+                    await DisplayAlert("Error", "Este correo ya está registrado.", "OK");
+                    return;
+                }
+
+                // Hashear la contraseña
+                string contraseñaHash = HashearContraseña(contraseña);
+
+                // Obtener IDs reales
+                int comunidadId = ObtenerComunidadId(comunidadNombre);
+                int institutoId = ObtenerInstitutoId(institutoNombre);
+                int cursoId = ObtenerCursoId(cursoNombre);
+                int rolId = tipoUsuario == "Alumno" ? 1 : 2; // Ajusta si es necesario
+                string discordId = ""; // aún no disponible
+
+                if (tipoUsuario == "Alumno")
+                {
+                    var alumno = new Alumno
+                    {
+                        Nombre = nombre,
+                        Apellido = apellidos,
+                        Contraseña = contraseñaHash,
+                        Email = email,
+                        ComunidadID = comunidadId,
+                        InstiID = institutoId,
+                        RolID = rolId,
+                        IsDelegado = false,
+                        Puntos = 0,
+                        CursoID = cursoId,
+                        DiscordID = discordId
+                    };
+
+                    if (db.InsertarAlumno(alumno))
+                        await DisplayAlert("Éxito", "Alumno registrado correctamente.", "OK");
+                    else
+                        await DisplayAlert("Error", "No se pudo registrar el alumno.", "OK");
+                }
+                else if (tipoUsuario == "Profesor")
+                {
+                    var profesor = new Profesor
+                    {
+                        Nombre = nombre,
+                        Apellido = apellidos,
+                        Contraseña = contraseñaHash,
+                        Email = email,
+                        ComunidadID = comunidadId,
+                        InstiID = institutoId,
+                        RolID = rolId,
+                        IsJefe = false,
+                        IsTutor = false,
+                        CursoID = cursoId,
+                        DiscordID = discordId
+                    };
+
+                    if (db.InsertarProfesor(profesor))
+                        await DisplayAlert("Éxito", "Profesor registrado correctamente.", "OK");
+                    else
+                        await DisplayAlert("Error", "No se pudo registrar el profesor.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+            }
+        }
+
+        private void CargarLocalidades()
+        {
+            try
+            {
+                if (CAPicker.SelectedItem == null) return;
+
+                string nombreCA = (CAPicker.SelectedItem as string)!;
+                int comunidadId = ObtenerComunidadId(nombreCA);
+
+                if (comunidadId > 0)
+                {
+                    LocalidadPicker.ItemsSource = rellenar.CargarLocalidades(comunidadId);
+                }
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar las localidades: {ex.Message}", "OK");
+            }
+        }
+
+        private void CargarInstitutos()
+        {
+            try
+            {
+                if (CAPicker.SelectedItem == null || LocalidadPicker.SelectedItem == null) return;
+
+                string nombreCA = (CAPicker.SelectedItem as string)!;
+                string localidad = (LocalidadPicker.SelectedItem as string)!;
+
+                int comunidadId = ObtenerComunidadId(nombreCA);
+
+                if (comunidadId > 0)
+                {
+                    InstitutoPicker.ItemsSource = rellenar.CargarNombreInstitutos(comunidadId, localidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar los institutos: {ex.Message}", "OK");
+            }
+        }
+
+        private void CargarFamilias()
+        {
+            try
+            {
+                if (NivelPicker.SelectedItem == null) return;
+
+                string nivel = (NivelPicker.SelectedItem as string)!;
+                FamiliaPicker.ItemsSource = rellenar.CargarFamiliasPorNivel(nivel);
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar las familias: {ex.Message}", "OK");
+            }
+        }
+
+        private void CargarGrados()
+        {
+            try
+            {
+                GradoPicker.ItemsSource = rellenar.CargarGrados();
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar los grados: {ex.Message}", "OK");
+            }
+        }
+
+        private void CargarCursos()
+        {
+            try
+            {
+                if (NivelPicker.SelectedItem == null || GradoPicker.SelectedItem == null || FamiliaPicker.SelectedItem == null)
+                    return;
+
+                string nivel = (NivelPicker.SelectedItem as string)!;
+                string grado = (GradoPicker.SelectedItem as string)!;
+                string familia = (FamiliaPicker.SelectedItem as string)!;
+
+                CursoPicker.ItemsSource = rellenar.CargarCursos(grado, familia, nivel);
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", $"No se pudieron cargar los cursos: {ex.Message}", "OK");
+            }
         }
     }
 

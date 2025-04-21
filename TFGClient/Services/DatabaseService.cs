@@ -56,5 +56,44 @@ namespace TFGClient.Services
             var result = connection.Query<Rol>("SELECT * FROM Roles");
             return new ObservableCollection<Rol>(result);
         }
+        public bool InsertarAlumno(Alumno alumno)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string query = @"INSERT INTO Alumnos 
+                    (Nombre, Apellido, Contraseña, Email, ComunidadID, InstiID, CursoID, RolID, IsDelegado, Puntos, DiscordID) 
+                    VALUES 
+                    (@Nombre, @Apellido, @Contraseña, @Email, @ComunidadID, @InstiID, @CursoID, @RolID, @IsDelegado, @Puntos, @DiscordID)";
+
+            int rows = connection.Execute(query, alumno);
+            return rows > 0;
+        }
+
+        public bool InsertarProfesor(Profesor profesor)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string query = @"INSERT INTO Profesores 
+                    (Nombre, Apellido, Contraseña, Email, ComunidadID, InstiID, RolID, IsJefe, IsTutor, CursoID, DiscordID) 
+                    VALUES 
+                    (@Nombre, @Apellido, @Contraseña, @Email, @ComunidadID, @InstiID, @RolID, @IsJefe, @IsTutor, @CursoID, @DiscordID)";
+
+            int rows = connection.Execute(query, profesor);
+            return rows > 0;
+        }
+
+        public bool ExisteEmail(string email)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var alumno = connection.QueryFirstOrDefault<string>("SELECT Email FROM Alumnos WHERE Email = @Email", new { Email = email });
+            if (alumno != null) return true;
+
+            var profesor = connection.QueryFirstOrDefault<string>("SELECT Email FROM Profesores WHERE Email = @Email", new { Email = email });
+            return profesor != null;
+        }
     }
 }
