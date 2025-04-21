@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TFGClient.ModificarDatos"
+             Title="ModificarDatos">
+
+    <Grid VerticalOptions="FillAndExpand"
+          HorizontalOptions="FillAndExpand"
+          RowDefinitions="*,4*,*"
+        ColumnDefinitions="*,2*,*">
+
+        <!-- Formulario 1 -->
+        <Frame x:Name="Formulario"
+               IsVisible="True"
+               Grid.Row="1"
+               Grid.Column="1"
+               BackgroundColor="#050505"
+               Padding="20"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand">
+
+            <VerticalStackLayout>
+                <Label Text="Modificar Datos" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20"/>
+                <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Formulario 2 con ScrollView -->
+        <Frame x:Name="Formulario2"
+       IsVisible="false"
+       Grid.Row="1"
+       Grid.Column="1"
+       BackgroundColor="#050505"
+       Padding="20"
+       HorizontalOptions="FillAndExpand"
+       VerticalOptions="FillAndExpand">
+
+            <ScrollView VerticalOptions="FillAndExpand">
+                <VerticalStackLayout>
+
+                    <!-- Título -->
+                    <Label Text="Modificar Datos" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20"/>
+
+                    <!-- Campos -->
+                    <Entry Placeholder="Nombre" x:Name="nombreEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                    <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                    <Entry Placeholder="Email" x:Name="ModificarEmailEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+
+                    <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="CAPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                    <Label Text="Localidad" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="LocalidadPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                    <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="InstitutoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                    <Label Text="Nivel" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="NivelPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+
+                    <!-- ⚠️ Parte que salía cortada -->
+                    <Label Text="Familia" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="FamiliaPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+
+                    <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="20">
+                        <VerticalStackLayout HorizontalOptions="FillAndExpand" WidthRequest="200">
+                            <Label Text="Grado" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="White"/>
+                            <Picker x:Name="GradoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="FillAndExpand" WidthRequest="600">
+                            <Label Text="Curso" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="White"/>
+                            <Picker x:Name="CursoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <!-- Botón final -->
+                    <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+    </Grid>
+</ContentPage>

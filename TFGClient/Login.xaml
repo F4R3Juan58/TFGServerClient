@@ -24,6 +24,9 @@
 
                 <Button Text="Login" Clicked="onLoginClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#146dba" />
                 <Button Text="Registro" Clicked="onRegistroClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                <Button Text="Recuperar Contraseña" Clicked="onRecuperarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+
             </VerticalStackLayout>
         </Frame>
     </Grid>

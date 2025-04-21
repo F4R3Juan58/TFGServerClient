@@ -9,7 +9,13 @@
     <MauiXaml Update="Login.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="ModificarDatos.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="ProfesorHome.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="RecurperarPassword.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>
