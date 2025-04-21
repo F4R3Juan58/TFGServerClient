@@ -242,6 +242,7 @@ namespace TFGClient
                     else
                         await DisplayAlert("Error", "No se pudo registrar el profesor.", "OK");
                 }
+                await Navigation.PushAsync(new Login());
             }
             catch (Exception ex)
             {
