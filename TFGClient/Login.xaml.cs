@@ -1,29 +1,70 @@
-namespace TFGClient;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using TFGClient.Models;
+using TFGClient.Services;
 
-public partial class Login : ContentPage
+namespace TFGClient
 {
-	public Login()
-	{
-		InitializeComponent();
-	}
-
-    private async void onLoginClicked(object sender, EventArgs e)
+    public partial class Login : ContentPage
     {
-        
-        bool isProferor = true;
-        if (isProferor == false)
-        {
-            var uri = new Uri("https://discord.gg/f3YA784A"); //AÑADIR LOGICA PARA QUE LA INVITACION LA PILLE DEL BOT DE PYTHON
-            await Launcher.Default.OpenAsync(uri);
-        }
-        else
-        {
-            await Navigation.PushAsync(new ProfesorHome());
-        }
-    }
+        private readonly DatabaseService db = new();
 
-    private async void onRegistroClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new Registro());
+        public Login()
+        {
+            InitializeComponent();
+        }
+
+        private async void onLoginClicked(object sender, EventArgs e)
+        {
+            string email = EmailEntry.Text?.Trim() ?? "";
+            string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(contraseña))
+            {
+                await DisplayAlert("Error", "Introduce tu correo y contraseña.", "OK");
+                return;
+            }
+
+            string contraseñaHash = HashearContraseña(contraseña);
+
+            try
+            {
+                var alumno = db.ObtenerTodosLosAlumnos().FirstOrDefault(a => a.Email == email && a.Contraseña == contraseñaHash);
+                var profesor = db.ObtenerTodosLosProfesores().FirstOrDefault(p => p.Email == email && p.Contraseña == contraseñaHash);
+
+                if (alumno != null)
+                {
+                    var uri = new Uri("https://discord.gg/f3YA784A"); // Reemplazar con la lógica real
+                    await Launcher.Default.OpenAsync(uri);
+                }
+                else if (profesor != null)
+                {
+                    await Navigation.PushAsync(new ProfesorHome());
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Usuario o contraseña incorrectos.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error al intentar iniciar sesión: {ex.Message}", "OK");
+            }
+        }
+
+        private async void onRegistroClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Registro());
+        }
+
+        private string HashearContraseña(string contraseña)
+        {
+            using var sha = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(contraseña);
+            var hash = sha.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
     }
 }
