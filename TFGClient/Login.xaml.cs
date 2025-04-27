@@ -31,12 +31,12 @@ namespace TFGClient
 
             try
             {
-                var alumno = db.ObtenerTodosLosAlumnos().FirstOrDefault(a => a.Email == email && a.Contraseña == contraseñaHash);
-                var profesor = db.ObtenerTodosLosProfesores().FirstOrDefault(p => p.Email == email && p.Contraseña == contraseñaHash);
+                var alumno = db.ObtenerAlumnoPorEmailYContraseña(email, contraseñaHash);
+                var profesor = db.ObtenerProfesorPorEmailYContraseña(email, contraseñaHash);
 
                 if (alumno != null)
                 {
-                    var uri = new Uri("https://discord.gg/f3YA784A"); // Reemplazar con la lógica real
+                    var uri = new Uri("https://discord.gg/f3YA784A"); // Aquí tu lógica real después
                     await Launcher.Default.OpenAsync(uri);
                 }
                 else if (profesor != null)
