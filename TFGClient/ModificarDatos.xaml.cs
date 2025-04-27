@@ -12,6 +12,9 @@ public partial class ModificarDatos : ContentPage
     private ObservableCollection<string> cursosCompletos = new();
     private readonly DatabaseService db = new();
 
+    private Alumno? alumnoActual;
+    private Profesor? profesorActual;
+
     public ModificarDatos()
 	{
 		InitializeComponent();
@@ -152,9 +155,198 @@ public partial class ModificarDatos : ContentPage
                  .FirstOrDefault(c => c.Nombre == nombre)?.ID ?? 0;
     }
 
-    private void onModificarClicked(object sender, EventArgs e)
+    private async void onModificarClicked(object sender, EventArgs e)
     {
-        Formulario.IsVisible = false;
-        Formulario2.IsVisible = true;
+        try
+        {
+            string emailOriginal = EmailEntry.Text?.Trim() ?? "";
+            string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(contraseña))
+            {
+                await DisplayAlert("Error", "Debes introducir tu email y contraseña actual.", "OK");
+                return;
+            }
+
+            string contraseñaHash = HashearContraseña(contraseña);
+
+            alumnoActual = db.ObtenerAlumnoPorEmailYContraseña(emailOriginal, contraseñaHash);
+            profesorActual = db.ObtenerProfesorPorEmailYContraseña(emailOriginal, contraseñaHash);
+
+            if (alumnoActual != null)
+            {
+                RellenarFormularioAlumno(alumnoActual);
+                Formulario.IsVisible = false;
+                Formulario2.IsVisible = true;
+            }
+            else if (profesorActual != null)
+            {
+                RellenarFormularioProfesor(profesorActual);
+                Formulario.IsVisible = false;
+                Formulario2.IsVisible = true;
+            }
+            else
+            {
+                await DisplayAlert("Error", "Usuario no encontrado o credenciales incorrectas.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+        }
+    }
+
+    private void RellenarFormularioAlumno(Alumno alumno)
+    {
+        nombreEntry.Text = alumno.Nombre;
+        ApellidosEntry.Text = alumno.Apellido;
+        ModificarEmailEntry.Text = alumno.Email;
+
+        // Cargar Comunidad
+        var comunidad = db.ObtenerTodasLasComunidades().FirstOrDefault(c => c.ID == alumno.ComunidadID);
+        if (comunidad != null) CAPicker.SelectedItem = comunidad.Nombre;
+
+        // Cargar Localidad e Instituto
+        var instituto = db.ObtenerTodosLosInstitutos().FirstOrDefault(i => i.ID == alumno.InstiID);
+        if (instituto != null)
+        {
+            LocalidadPicker.ItemsSource = rellenar.CargarLocalidades(alumno.ComunidadID);
+            LocalidadPicker.SelectedItem = instituto.Localidad;
+
+            InstitutoPicker.ItemsSource = rellenar.CargarNombreInstitutos(alumno.ComunidadID, instituto.Localidad);
+            InstitutoPicker.SelectedItem = instituto.Nombre;
+        }
+
+        // Cargar Nivel, Familia, Grado y Curso
+        var curso = db.ObtenerTodosLosCursos().FirstOrDefault(c => c.ID == alumno.CursoID);
+        if (curso != null)
+        {
+            NivelPicker.SelectedItem = curso.Nivel;
+            FamiliaPicker.ItemsSource = rellenar.CargarFamiliasPorNivel(curso.Nivel);
+            FamiliaPicker.SelectedItem = curso.FamiliaProfesional;
+
+            GradoPicker.ItemsSource = rellenar.CargarGrados();
+            GradoPicker.SelectedItem = curso.Grado;
+
+            CursoPicker.ItemsSource = rellenar.CargarCursos(curso.Grado, curso.FamiliaProfesional, curso.Nivel);
+            CursoPicker.SelectedItem = curso.Nombre;
+        }
+    }
+
+    private void RellenarFormularioProfesor(Profesor profesor)
+    {
+        nombreEntry.Text = profesor.Nombre;
+        ApellidosEntry.Text = profesor.Apellido;
+        ModificarEmailEntry.Text = profesor.Email;
+
+        var comunidad = db.ObtenerTodasLasComunidades().FirstOrDefault(c => c.ID == profesor.ComunidadID);
+        if (comunidad != null) CAPicker.SelectedItem = comunidad.Nombre;
+
+        var instituto = db.ObtenerTodosLosInstitutos().FirstOrDefault(i => i.ID == profesor.InstiID);
+        if (instituto != null)
+        {
+            LocalidadPicker.ItemsSource = rellenar.CargarLocalidades(profesor.ComunidadID);
+            LocalidadPicker.SelectedItem = instituto.Localidad;
+
+            InstitutoPicker.ItemsSource = rellenar.CargarNombreInstitutos(profesor.ComunidadID, instituto.Localidad);
+            InstitutoPicker.SelectedItem = instituto.Nombre;
+        }
+
+        var curso = db.ObtenerTodosLosCursos().FirstOrDefault(c => c.ID == profesor.CursoID);
+        if (curso != null)
+        {
+            NivelPicker.SelectedItem = curso.Nivel;
+            FamiliaPicker.ItemsSource = rellenar.CargarFamiliasPorNivel(curso.Nivel);
+            FamiliaPicker.SelectedItem = curso.FamiliaProfesional;
+
+            GradoPicker.ItemsSource = rellenar.CargarGrados();
+            GradoPicker.SelectedItem = curso.Grado;
+
+            CursoPicker.ItemsSource = rellenar.CargarCursos(curso.Grado, curso.FamiliaProfesional, curso.Nivel);
+            CursoPicker.SelectedItem = curso.Nombre;
+        }
+    }
+
+    private async void OnGuardarModificacionClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            string emailOriginal = EmailEntry.Text?.Trim() ?? "";
+            string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(contraseña))
+            {
+                await DisplayAlert("Error", "Debes introducir tu email y contraseña actual.", "OK");
+                return;
+            }
+
+            string contraseñaHash = HashearContraseña(contraseña);
+
+            var alumno = db.ObtenerAlumnoPorEmailYContraseña(emailOriginal, contraseñaHash);
+            var profesor = db.ObtenerProfesorPorEmailYContraseña(emailOriginal, contraseñaHash);
+
+            if (alumno != null)
+            {
+                var alumnoActualizado = new Alumno
+                {
+                    Nombre = nombreEntry.Text?.Trim(),
+                    Apellido = ApellidosEntry.Text?.Trim(),
+                    Email = ModificarEmailEntry.Text?.Trim(),
+                    ComunidadID = ObtenerComunidadId((CAPicker.SelectedItem as string)!),
+                    InstiID = ObtenerInstitutoId((InstitutoPicker.SelectedItem as string)!),
+                    CursoID = ObtenerCursoId((CursoPicker.SelectedItem as string)!),
+
+                    RolID = alumno.RolID,
+                    DiscordID = alumno.DiscordID,
+                    IsDelegado = alumno.IsDelegado,
+                    Puntos = alumno.Puntos,
+                    Contraseña = alumno.Contraseña
+                };
+
+                if (db.ActualizarAlumno(alumno.ID, alumnoActualizado))
+                    await DisplayAlert("Éxito", "Datos modificados correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
+            }
+            else if (profesor != null)
+            {
+                var profesorActualizado = new Profesor
+                {
+                    Nombre = nombreEntry.Text?.Trim(),
+                    Apellido = ApellidosEntry.Text?.Trim(),
+                    Email = ModificarEmailEntry.Text?.Trim(),
+                    ComunidadID = ObtenerComunidadId((CAPicker.SelectedItem as string)!),
+                    InstiID = ObtenerInstitutoId((InstitutoPicker.SelectedItem as string)!),
+                    CursoID = ObtenerCursoId((CursoPicker.SelectedItem as string)!),
+
+                    RolID = profesor.RolID,
+                    DiscordID = profesor.DiscordID,
+                    IsJefe = profesor.IsJefe,
+                    IsTutor = profesor.IsTutor,
+                    Contraseña = profesor.Contraseña
+                };
+
+                if (db.ActualizarProfesor(profesor.ID, profesorActualizado))
+                    await DisplayAlert("Éxito", "Datos modificados correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "Usuario no encontrado o credenciales incorrectas.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+        }
+    }
+
+    private string HashearContraseña(string contraseña)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(contraseña);
+        var hash = sha.ComputeHash(bytes);
+        return Convert.ToBase64String(hash);
     }
 }

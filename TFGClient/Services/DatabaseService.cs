@@ -49,6 +49,46 @@ namespace TFGClient.Services
             return new ObservableCollection<Profesor>(result);
         }
 
+        public Alumno? ObtenerAlumnoPorEmailYContraseña(string email, string contraseñaHash)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            return connection.QueryFirstOrDefault<Alumno>(
+                "SELECT * FROM Alumnos WHERE Email = @Email AND Contraseña = @Contraseña",
+                new { Email = email, Contraseña = contraseñaHash });
+        }
+
+        public Profesor? ObtenerProfesorPorEmailYContraseña(string email, string contraseñaHash)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            return connection.QueryFirstOrDefault<Profesor>(
+                "SELECT * FROM Profesores WHERE Email = @Email AND Contraseña = @Contraseña",
+                new { Email = email, Contraseña = contraseñaHash });
+        }
+
+        public Alumno? ObtenerAlumnoPorEmail(string email)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection.QueryFirstOrDefault<Alumno>(
+                "SELECT * FROM Alumnos WHERE Email = @Email",
+                new { Email = email }
+            );
+        }
+
+        public Profesor? ObtenerProfesorPorEmail(string email)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection.QueryFirstOrDefault<Profesor>(
+                "SELECT * FROM Profesores WHERE Email = @Email",
+                new { Email = email }
+            );
+        }
+
         public ObservableCollection<Rol> ObtenerTodosLosRoles()
         {
             using var connection = new MySqlConnection(connectionString);

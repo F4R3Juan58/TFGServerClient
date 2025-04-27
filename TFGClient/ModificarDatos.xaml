@@ -77,7 +77,7 @@
                     </HorizontalStackLayout>
 
                     <!-- Botón final -->
-                    <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                    <Button Text="Modificar Datos" Clicked="OnGuardarModificacionClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
                 </VerticalStackLayout>
             </ScrollView>
         </Frame>
