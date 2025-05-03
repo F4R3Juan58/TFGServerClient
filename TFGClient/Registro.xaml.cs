@@ -88,6 +88,9 @@ namespace TFGClient
             {
                 await DisplayAlert("Error", $"No se pudo enviar el correo: {ex.Message}", "OK");
             }
+
+            Formulario.IsVisible = false;
+            Verificacion.IsVisible = true;
         }
 
         private void OnContinuarClicked(object sender, EventArgs e)
