@@ -197,7 +197,7 @@ namespace TFGClient
                 int institutoId = ObtenerInstitutoId(institutoNombre);
                 int cursoId = ObtenerCursoId(cursoNombre);
                 int rolId = tipoUsuario == "Alumno" ? 1 : 2; // Ajusta si es necesario
-                string discordId = ""; // aún no disponible
+                string discordId = null; // aún no disponible
 
                 if (tipoUsuario == "Alumno")
                 {
