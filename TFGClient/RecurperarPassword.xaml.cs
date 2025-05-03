@@ -69,10 +69,65 @@ public partial class RecurperarPassword : ContentPage
             }
         }       
     }
-    
 
-    private void OnGuardarCambioClicked(object sender, EventArgs e)
+    private async void OnGuardarCambioClicked(object sender, EventArgs e)
     {
+        try
+        {
+            string nuevaContraseña = ContraseñaEntry.Text?.Trim();
+            string confirmacion = ContraseñaConfirmacionEntry.Text?.Trim();
+            string email = EmailEntry.Text?.Trim();
 
+            if (string.IsNullOrWhiteSpace(nuevaContraseña) || string.IsNullOrWhiteSpace(confirmacion))
+            {
+                await DisplayAlert("Error", "Por favor, rellena ambas contraseñas.", "OK");
+                return;
+            }
+
+            if (nuevaContraseña != confirmacion)
+            {
+                await DisplayAlert("Error", "Las contraseñas no coinciden.", "OK");
+                return;
+            }
+
+            // Buscar al usuario (alumno o profesor)
+            var alumno = db.ObtenerAlumnoPorEmail(email);
+            var profesor = db.ObtenerProfesorPorEmail(email);
+
+
+            if (alumno != null)
+            {
+                alumno.Contraseña = HashearContraseña(nuevaContraseña);
+                if (db.ActualizarAlumno(alumno.ID, alumno))
+                    await DisplayAlert("Éxito", "Contraseña actualizada correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudo actualizar la contraseña.", "OK");
+            }
+            else if (profesor != null)
+            {
+                profesor.Contraseña = HashearContraseña(nuevaContraseña);
+                if (db.ActualizarProfesor(profesor.ID, profesor))
+                    await DisplayAlert("Éxito", "Contraseña actualizada correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudo actualizar la contraseña.", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se encontró el usuario.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+        }
     }
+
+    private string HashearContraseña(string contraseña)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(contraseña);
+        var hash = sha.ComputeHash(bytes);
+        return Convert.ToBase64String(hash);
+    }
+
 }

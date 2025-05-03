@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using MySql.Data.MySqlClient;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TFGClient.Models;
 using TFGClient.Services;
@@ -53,5 +54,4 @@ namespace TFGClient
             return new ObservableCollection<string>(cursos.Select(c => c.Nombre));
         }
     }
-
 }

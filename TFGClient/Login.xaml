@@ -17,7 +17,7 @@
                VerticalOptions="Center">
 
             <VerticalStackLayout>
-                <Label Text="LOGIN" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20"/>
+                <Label Text="LOGIN" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20" TextColor="White"/>
 
                 <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
                 <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
