@@ -41,7 +41,7 @@ namespace TFGClient
                 }
                 else if (profesor != null)
                 {
-                    await Navigation.PushAsync(new ProfesorHome());
+                    await Shell.Current.GoToAsync("Profesor");
                 }
                 else
                 {

@@ -1,20 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<!-- AppShell.xaml -->
 <Shell
     x:Class="TFGClient.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:TFGClient"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="TFGClient">
 
-    <ShellContent
-        ContentTemplate="{DataTemplate local:Login}"
-        Route="Login" />
-    <ShellContent
-        ContentTemplate="{DataTemplate local:Registro}"
-        Route="Registro" />
-    <ShellContent
-        ContentTemplate="{DataTemplate local:ProfesorHome}"
-        Route="ProfesorHome" />
+    <!-- Solo rutas, no visibles -->
+    <ShellContent Route="Login" ContentTemplate="{DataTemplate local:Login}" IsVisible="False" />
+    <ShellContent Route="Registro" ContentTemplate="{DataTemplate local:Registro}" IsVisible="False"/>
 
+    <!-- Roles -->
+    <FlyoutItem Title="Profesor" Icon="icon_profesor.png">
+        <ShellContent Title="Profesor" ContentTemplate="{DataTemplate local:Interfaz.Profesor}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Tutor" Icon="icon_tutor.png">
+        <ShellContent Title="Tutor" ContentTemplate="{DataTemplate local:Interfaz.Tutor}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Administrador" Icon="icon_admin.png">
+        <ShellContent Title="Administrador" ContentTemplate="{DataTemplate local:Interfaz.Administrador}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Jefe de Departamento" Icon="icon_jefedpto.png">
+        <ShellContent Title="Jefe de Departamento" ContentTemplate="{DataTemplate local:Interfaz.JefeDepartamento}" />
+    </FlyoutItem>
 </Shell>
