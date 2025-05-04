@@ -1,77 +1,141 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TFGClient.Interfaz.Profesor"
-             Title="Profesor">
+             Title="Profesor"
+             BackgroundColor="#F5F5F5">
+
+    <!-- Recursos compartidos (colores y estilos de EducaMadrid) -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#00539F</Color>
+            <Color x:Key="SecondaryColor">#00AEEF</Color>
+            <Color x:Key="AccentColor">#FFD200</Color>
+
+            <Style TargetType="Frame" x:Key="CardStyle">
+                <Setter Property="CornerRadius" Value="16" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="Margin" Value="12" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="BackgroundColor" Value="White" />
+            </Style>
+
+            <Style TargetType="Button" x:Key="PrimaryButton">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="Margin" Value="6" />
+            </Style>
+
+            <Style TargetType="Button" x:Key="SecondaryButton">
+                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="Margin" Value="6" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="SectionHeader">
+                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="Margin" Value="0,0,0,12" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="FieldLabel">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Margin" Value="0,0,8,0" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Padding="16" Spacing="20">
 
-            <!-- INICIAR CLASE -->
-            <Frame Margin="0,10">
-                <Button Text="Iniciar clase" Clicked="iniciarClase"/>
+            <!-- Iniciar Clase -->
+            <Frame Style="{StaticResource CardStyle}">
+                <Button Text="Iniciar clase"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="iniciarClase" />
             </Frame>
 
-            <!-- CREAR CANALES CUSTOM -->
-            <Frame Margin="0,10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Crear canales:" 
-                           FontAttributes="Bold"
-                           FontSize="18" />
+            <!-- Crear Canales Custom -->
+            <Frame Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Crear canales custom" Style="{StaticResource SectionHeader}" />
 
-                    <HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
                         <CheckBox x:Name="chkMusica" />
-                        <Label Text="Música" />
+                        <Label Text="Música" Style="{StaticResource FieldLabel}" />
                     </HorizontalStackLayout>
-
-                    <HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
                         <CheckBox x:Name="chkDeporte" />
-                        <Label Text="Deporte" />
+                        <Label Text="Deporte" Style="{StaticResource FieldLabel}" />
                     </HorizontalStackLayout>
-
-                    <HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
                         <CheckBox x:Name="chkCine" />
-                        <Label Text="Cine" />
+                        <Label Text="Cine" Style="{StaticResource FieldLabel}" />
                     </HorizontalStackLayout>
 
-                    <Button Text="Crear canales" Clicked="crearCanalesCustom" />
+                    <Button Text="Crear canales"
+                            Style="{StaticResource SecondaryButton}"
+                            Clicked="crearCanalesCustom" />
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- ELIMINAR CANALES CUSTOM -->
-            <Frame Margin="0,10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Selecciona canal para eliminar"/>
-                    <HorizontalStackLayout>
-                        <Picker x:Name="listaCanales" Title="Canales disponibles" WidthRequest="200"/>
-                        <Button Text="Eliminar" Clicked="eliminarCanalCustom"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- RESTABLECER ASIGNATURA -->
-            <Frame Margin="0,10">
-                <Button Text="Restablecer asignatura" Clicked="restablecerAsignatura"/>
-            </Frame>
-
-            <!-- EXPULSAR ALUMNO DE CLASE -->
-            <Frame Margin="0,10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Selecciona alumno para expulsar de Clase"/>
-                    <HorizontalStackLayout>
-                        <Picker x:Name="listaAlumnosClase" Title="Alumnos en clase" WidthRequest="200"/>
-                        <Button Text="Expulsar" Clicked="expulsarClase"/>
+            <!-- Eliminar Canales Custom -->
+            <Frame Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Eliminar canal custom" Style="{StaticResource SectionHeader}" />
+                    <HorizontalStackLayout Spacing="12">
+                        <Picker x:Name="listaCanales"
+                                Title="Canales disponibles"
+                                WidthRequest="200" />
+                        <Button Text="Eliminar"
+                                Style="{StaticResource SecondaryButton}"
+                                Clicked="eliminarCanalCustom" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- EXPULSAR ALUMNO DE ASIGNATURA -->
-            <Frame Margin="0,10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Selecciona alumno para expulsar de Asignatura"/>
-                    <HorizontalStackLayout>
-                        <Picker x:Name="listaAlumnosAsignatura" Title="Alumnos en asignatura" WidthRequest="200"/>
-                        <Button Text="Expulsar" Clicked="expulsarAsignatura"/>
+            <!-- Restablecer Asignatura -->
+            <Frame Style="{StaticResource CardStyle}">
+                <Button Text="Restablecer asignatura"
+                        Style="{StaticResource PrimaryButton}"
+                        Clicked="restablecerAsignatura" />
+            </Frame>
+
+            <!-- Expulsar Alumno Clase -->
+            <Frame Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Expulsar alumno de clase" Style="{StaticResource SectionHeader}" />
+                    <HorizontalStackLayout Spacing="12">
+                        <Picker x:Name="listaAlumnosClase"
+                                Title="Alumnos en clase"
+                                WidthRequest="200" />
+                        <Button Text="Expulsar"
+                                Style="{StaticResource SecondaryButton}"
+                                Clicked="expulsarClase" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Expulsar Alumno Asignatura -->
+            <Frame Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Expulsar alumno de asignatura" Style="{StaticResource SectionHeader}" />
+                    <HorizontalStackLayout Spacing="12">
+                        <Picker x:Name="listaAlumnosAsignatura"
+                                Title="Alumnos en asignatura"
+                                WidthRequest="200" />
+                        <Button Text="Expulsar"
+                                Style="{StaticResource SecondaryButton}"
+                                Clicked="expulsarAsignatura" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
