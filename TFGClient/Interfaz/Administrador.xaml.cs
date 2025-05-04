@@ -6,4 +6,9 @@ public partial class Administrador : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void OnAddServerEntry(object sender, EventArgs e)
+    {
+
+    }
 }
