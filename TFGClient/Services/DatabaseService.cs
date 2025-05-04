@@ -163,5 +163,62 @@ namespace TFGClient.Services
             string query = $"UPDATE Profesores SET {setSql} WHERE ID = @ID";
             return connection.Execute(query, parametros) > 0;
         }
+
+        public bool EliminarAlumno(int alumnoId)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string query = "DELETE FROM Alumnos WHERE ID = @ID";
+                int filasAfectadas = connection.Execute(query, new { ID = alumnoId });
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al eliminar alumno: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool EliminarProfesor(int profesorId)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string query = "DELETE FROM Profesores WHERE ID = @ID";
+                int filasAfectadas = connection.Execute(query, new { ID = profesorId });
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al eliminar profesor: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool EliminarServidorDiscord(int servidorId)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string query = "DELETE FROM ServidoresDiscord WHERE ID = @ID";
+                int filasAfectadas = connection.Execute(query, new { ID = servidorId });
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al eliminar servidor: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
