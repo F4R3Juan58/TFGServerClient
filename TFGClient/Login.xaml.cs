@@ -31,8 +31,8 @@ namespace TFGClient
 
             try
             {
-                var alumno = db.ObtenerAlumnoPorEmailYContraseña(email, contraseñaHash);
-                var profesor = db.ObtenerProfesorPorEmailYContraseña(email, contraseñaHash);
+                var alumno = db.ObtenerAlumnoPorEmailYPassword(email, contraseñaHash);
+                var profesor = db.ObtenerProfesorPorEmailYPassword(email, contraseñaHash);
 
                 if (alumno != null)
                 {

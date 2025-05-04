@@ -26,4 +26,9 @@ public partial class Tutor : ContentPage
     {
 
     }
+
+    private void crearCanalFCT(object sender, EventArgs e)
+    {
+
+    }
 }
