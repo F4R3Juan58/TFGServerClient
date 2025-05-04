@@ -97,7 +97,7 @@ public partial class RecurperarPassword : ContentPage
 
             if (alumno != null)
             {
-                alumno.Contraseña = HashearContraseña(nuevaContraseña);
+                alumno.Password = HashearContraseña(nuevaContraseña);
                 if (db.ActualizarAlumno(alumno.ID, alumno))
                     await DisplayAlert("Éxito", "Contraseña actualizada correctamente.", "OK");
                 else
@@ -105,7 +105,7 @@ public partial class RecurperarPassword : ContentPage
             }
             else if (profesor != null)
             {
-                profesor.Contraseña = HashearContraseña(nuevaContraseña);
+                profesor.Password = HashearContraseña(nuevaContraseña);
                 if (db.ActualizarProfesor(profesor.ID, profesor))
                     await DisplayAlert("Éxito", "Contraseña actualizada correctamente.", "OK");
                 else

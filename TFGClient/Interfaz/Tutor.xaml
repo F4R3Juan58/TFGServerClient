@@ -8,15 +8,20 @@
 
             <!-- 1. Picker con alumnos -->
             <Frame>
-                <HorizontalStackLayout>
+                <VerticalStackLayout>
                     <Label Text="Selecciona un alumno:" FontAttributes="Bold" />
                     <Picker/>
+
+
+                <HorizontalStackLayout>
+                    <Button
+                    Text="Crear canal temporal (texto + voz)"
+                    Clicked="crearCanalTemporal" />
                 </HorizontalStackLayout>
+                </VerticalStackLayout>
             </Frame>
             <!-- 2. Crear canal temporal -->
-            <Button
-                Text="Crear canal temporal (texto + voz)"
-                Clicked="crearCanalTemporal" />
+            
 
             <!-- 3. Administrar rol de delegado -->
             <Frame>
@@ -48,7 +53,7 @@
             <!-- 5. Crear Canal de FCT -->
             <Frame>
                 <Button
-    Text="Crear Canal de FCT" Clicked="crearCanalFCT" />
+    Text="Crear Canal de FCT"  />
             </Frame>
 
             <!-- 6. Checkboxes para rol FCT “curso” -->

@@ -49,24 +49,24 @@ namespace TFGClient.Services
             return new ObservableCollection<Profesor>(result);
         }
 
-        public Alumno? ObtenerAlumnoPorEmailYContraseña(string email, string contraseñaHash)
+        public Alumno? ObtenerAlumnoPorEmailYPassword(string email, string contraseñaHash)
         {
             using var connection = new MySqlConnection(connectionString);
             connection.Open();
 
             return connection.QueryFirstOrDefault<Alumno>(
-                "SELECT * FROM Alumnos WHERE Email = @Email AND Contraseña = @Contraseña",
-                new { Email = email, Contraseña = contraseñaHash });
+                "SELECT * FROM Alumnos WHERE Email = @Email AND password = @password",
+                new { Email = email, password = contraseñaHash });
         }
 
-        public Profesor? ObtenerProfesorPorEmailYContraseña(string email, string contraseñaHash)
+        public Profesor? ObtenerProfesorPorEmailYPassword(string email, string contraseñaHash)
         {
             using var connection = new MySqlConnection(connectionString);
             connection.Open();
 
             return connection.QueryFirstOrDefault<Profesor>(
-                "SELECT * FROM Profesores WHERE Email = @Email AND Contraseña = @Contraseña",
-                new { Email = email, Contraseña = contraseñaHash });
+                "SELECT * FROM Profesores WHERE Email = @Email AND password = @password",
+                new { Email = email, password = contraseñaHash });
         }
 
         public Alumno? ObtenerAlumnoPorEmail(string email)
@@ -102,9 +102,9 @@ namespace TFGClient.Services
             connection.Open();
 
             string query = @"INSERT INTO Alumnos 
-                    (Nombre, Apellido, Contraseña, Email, ComunidadID, InstiID, CursoID, RolID, IsDelegado, Puntos, DiscordID) 
+                    (Nombre, Apellido, password, Email, ComunidadID, InstiID, CursoID, RolID, IsDelegado, Puntos, DiscordID) 
                     VALUES 
-                    (@Nombre, @Apellido, @Contraseña, @Email, @ComunidadID, @InstiID, @CursoID, @RolID, @IsDelegado, @Puntos, @DiscordID)";
+                    (@Nombre, @Apellido, @password, @Email, @ComunidadID, @InstiID, @CursoID, @RolID, @IsDelegado, @Puntos, @DiscordID)";
 
             int rows = connection.Execute(query, alumno);
             return rows > 0;
@@ -116,9 +116,9 @@ namespace TFGClient.Services
             connection.Open();
 
             string query = @"INSERT INTO Profesores 
-                    (Nombre, Apellido, Contraseña, Email, ComunidadID, InstiID, RolID, IsJefe, IsTutor, CursoID, DiscordID) 
+                    (Nombre, Apellido, password, Email, ComunidadID, InstiID, RolID, IsJefe, IsTutor, CursoID, DiscordID) 
                     VALUES 
-                    (@Nombre, @Apellido, @Contraseña, @Email, @ComunidadID, @InstiID, @RolID, @IsJefe, @IsTutor, @CursoID, @DiscordID)";
+                    (@Nombre, @Apellido, @password, @Email, @ComunidadID, @InstiID, @RolID, @IsJefe, @IsTutor, @CursoID, @DiscordID)";
 
             int rows = connection.Execute(query, profesor);
             return rows > 0;

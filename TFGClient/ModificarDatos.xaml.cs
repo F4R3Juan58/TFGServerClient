@@ -160,18 +160,18 @@ public partial class ModificarDatos : ContentPage
         try
         {
             string emailOriginal = EmailEntry.Text?.Trim() ?? "";
-            string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
+            string password = ContrasenaEntry.Text?.Trim() ?? "";
 
-            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(contraseña))
+            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(password))
             {
-                await DisplayAlert("Error", "Debes introducir tu email y contraseña actual.", "OK");
+                await DisplayAlert("Error", "Debes introducir tu email y password actual.", "OK");
                 return;
             }
 
-            string contraseñaHash = HashearContraseña(contraseña);
+            string contrasenaHash = HashearContrasena(password);
 
-            alumnoActual = db.ObtenerAlumnoPorEmailYContraseña(emailOriginal, contraseñaHash);
-            profesorActual = db.ObtenerProfesorPorEmailYContraseña(emailOriginal, contraseñaHash);
+            alumnoActual = db.ObtenerAlumnoPorEmailYPassword(emailOriginal, contrasenaHash);
+            profesorActual = db.ObtenerProfesorPorEmailYPassword(emailOriginal, contrasenaHash);
 
             if (alumnoActual != null)
             {
@@ -192,7 +192,7 @@ public partial class ModificarDatos : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"Ocurrin un error: {ex.Message}", "OK");
         }
     }
 
@@ -272,18 +272,18 @@ public partial class ModificarDatos : ContentPage
         try
         {
             string emailOriginal = EmailEntry.Text?.Trim() ?? "";
-            string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
+            string password = ContrasenaEntry.Text?.Trim() ?? "";
 
-            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(contraseña))
+            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(password))
             {
-                await DisplayAlert("Error", "Debes introducir tu email y contraseña actual.", "OK");
+                await DisplayAlert("Error", "Debes introducir tu email y password actual.", "OK");
                 return;
             }
 
-            string contraseñaHash = HashearContraseña(contraseña);
+            string contrasenaHash = HashearContrasena(password);
 
-            var alumno = db.ObtenerAlumnoPorEmailYContraseña(emailOriginal, contraseñaHash);
-            var profesor = db.ObtenerProfesorPorEmailYContraseña(emailOriginal, contraseñaHash);
+            var alumno = db.ObtenerAlumnoPorEmailYPassword(emailOriginal, contrasenaHash);
+            var profesor = db.ObtenerProfesorPorEmailYPassword(emailOriginal, contrasenaHash);
 
             if (alumno != null)
             {
@@ -300,11 +300,11 @@ public partial class ModificarDatos : ContentPage
                     DiscordID = alumno.DiscordID,
                     IsDelegado = alumno.IsDelegado,
                     Puntos = alumno.Puntos,
-                    Contraseña = alumno.Contraseña
+                    Password = alumno.Password
                 };
 
                 if (db.ActualizarAlumno(alumno.ID, alumnoActualizado))
-                    await DisplayAlert("Éxito", "Datos modificados correctamente.", "OK");
+                    await DisplayAlert("nxito", "Datos modificados correctamente.", "OK");
                 else
                     await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
             }
@@ -323,11 +323,11 @@ public partial class ModificarDatos : ContentPage
                     DiscordID = profesor.DiscordID,
                     IsJefe = profesor.IsJefe,
                     IsTutor = profesor.IsTutor,
-                    Contraseña = profesor.Contraseña
+                    Password = profesor.Password
                 };
 
                 if (db.ActualizarProfesor(profesor.ID, profesorActualizado))
-                    await DisplayAlert("Éxito", "Datos modificados correctamente.", "OK");
+                    await DisplayAlert("nxito", "Datos modificados correctamente.", "OK");
                 else
                     await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
             }
@@ -338,14 +338,14 @@ public partial class ModificarDatos : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"Ocurrin un error: {ex.Message}", "OK");
         }
     }
 
-    private string HashearContraseña(string contraseña)
+    private string HashearContrasena(string password)
     {
         using var sha = System.Security.Cryptography.SHA256.Create();
-        var bytes = System.Text.Encoding.UTF8.GetBytes(contraseña);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(password);
         var hash = sha.ComputeHash(bytes);
         return Convert.ToBase64String(hash);
     }
