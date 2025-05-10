@@ -38,5 +38,5 @@ def decrypt_token(encrypted_token: str, password: str) -> str:
     decrypted_token = fernet.decrypt(encrypted_token.encode())
     return decrypted_token.decode()
 
-decrypted_token = decrypt_token(config.Token, password)
+decrypted_token = decrypt_token(config.Bot, password)
 bot.run(decrypted_token)
