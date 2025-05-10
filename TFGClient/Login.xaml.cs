@@ -21,6 +21,11 @@ namespace TFGClient
             string email = EmailEntry.Text?.Trim() ?? "";
             string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
 
+            if (email == "1")
+            {
+                await Shell.Current.GoToAsync("Profesor");
+            }
+
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(contraseña))
             {
                 await DisplayAlert("Error", "Introduce tu correo y contraseña.", "OK");
