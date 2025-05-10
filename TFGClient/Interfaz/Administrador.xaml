@@ -1,153 +1,410 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shapes="clr-namespace:Microsoft.Maui.Controls.Shapes;assembly=Microsoft.Maui.Controls"
              x:Class="TFGClient.Interfaz.Administrador"
-             Title="Administrador"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             Shell.NavBarIsVisible="False">
 
-    <!-- Recursos de la página -->
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <!-- Colores EducaMadrid -->
-            <Color x:Key="PrimaryColor">#00539F</Color>
-            <Color x:Key="SecondaryColor">#00AEEF</Color>
-            <Color x:Key="AccentColor">#FFD200</Color>
-            <Style TargetType="Frame" x:Key="CardStyle">
-                <Setter Property="CornerRadius" Value="16" />
-                <Setter Property="Padding" Value="20" />
-                <Setter Property="Margin" Value="12" />
-                <Setter Property="HasShadow" Value="True" />
-                <Setter Property="BackgroundColor" Value="White" />
-            </Style>
-            <Style TargetType="Button" x:Key="PrimaryButton">
-                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="Margin" Value="6" />
-            </Style>
-            <Style TargetType="Button" x:Key="SecondaryButton">
-                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}" />
-                <Setter Property="TextColor" Value="White" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="HeightRequest" Value="50" />
-                <Setter Property="Margin" Value="6" />
-            </Style>
-            <Style TargetType="Label" x:Key="SectionHeader">
-                <Setter Property="FontSize" Value="22" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="Margin" Value="0,0,0,12" />
-            </Style>
-            <Style TargetType="Label" x:Key="FieldLabel">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="TextColor" Value="Black" />
-                <Setter Property="Margin" Value="0,0,8,0" />
-            </Style>
+        <!-- Estilo para los botones del menú lateral -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
 
-            <Style TargetType="Entry" x:Key="FieldEntry">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="TextColor" Value="Black" />
-                <Setter Property="Margin" Value="0,0,8,0" />
-            </Style>
+        <!-- Estilo para el botón seleccionado -->
+        <Style x:Key="SidebarButtonSelectedStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="#296ACC" />
+            <!-- Color de fondo al seleccionar -->
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
 
-            <Style TargetType="Picker" x:Key="FieldPicker">
-                <Setter Property="FontSize" Value="16" />
-                <Setter Property="VerticalOptions" Value="Center" />
-                <Setter Property="TextColor" Value="Black" />
-                <Setter Property="Margin" Value="0,0,8,0" />
-                <Setter Property="BackgroundColor" Value="LightGray"/>
-            </Style>
-        </ResourceDictionary>
+        <!-- Botones de las cards -->
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#296ACC" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6" />
+        </Style>
     </ContentPage.Resources>
 
-    <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="24">
+    <!-- GRID PRINCIPAL: HEADER (60px) + CUERPO -->
+    <Grid RowDefinitions="60, *" ColumnDefinitions="200, *">
 
-            <!-- Sección Servidor -->
-            <Frame Style="{StaticResource CardStyle}">
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="#296ACC">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Logo + Título -->
+            <HorizontalStackLayout
+                Grid.Column="0"
+                VerticalOptions="Center"
+                Spacing="10"
+                Padding="10,0">
+                <shapes:Ellipse
+                    WidthRequest="32"
+                    HeightRequest="32"
+                    Fill="LightGray" />
+                <Label
+                    Text="EDUCORD"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Usuario -->
+            <HorizontalStackLayout
+                Grid.Column="2"
+                VerticalOptions="Center"
+                Spacing="10"
+                Padding="0,0,10,0">
+                <Label
+                    Text="Administrador"
+                    FontSize="14"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+                <shapes:Ellipse
+                    WidthRequest="32"
+                    HeightRequest="32"
+                    Fill="#CCCCCC" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- ===== SIDEBAR ===== -->
+        <VerticalStackLayout
+            Grid.Row="1"
+            Grid.Column="0"
+            BackgroundColor="#FFFFFF"
+            Spacing="0"
+            Margin="20,20,0,0"
+            Padding="10,0">
+
+            <!-- Botón: Crear el servidor -->
+            <Button
+                Text="Crear el servidor"
+                x:Name="SideBarCrearServidor"
+                Style="{StaticResource SidebarButtonStyle}"
+                Clicked="OnSidebarCrearServidorTapped"/>
+
+            <!-- Botón: Permisos -->
+            <Button
+                Text="Permisos"
+                x:Name="SideBarPermisos"
+                Style="{StaticResource SidebarButtonStyle}"
+                Clicked="OnSidebarPermisosTapped"/>
+
+            <!-- Botón: Incidencias -->
+            <Button
+                Text="Incidencias"
+                x:Name="SideBarIncidencias"
+                Style="{StaticResource SidebarButtonStyle}"
+                Clicked="OnSidebarIncidenciasTapped"/>
+
+            <!-- Botón: Logs -->
+            <Button
+                Text="Logs"
+                x:Name="SideBarLog"
+                Style="{StaticResource SidebarButtonStyle}"
+                Clicked="OnSidebarLogsTapped"/>
+        </VerticalStackLayout>
+
+        <!-- ===== ÁREA PRINCIPAL ===== -->
+        <ScrollView
+            Grid.Row="1"
+            Grid.Column="1"
+            Padding="20"
+            x:Name="AreaPrincipal"
+            IsVisible="True">
+            
+            <VerticalStackLayout Spacing="15">
+                <!-- Card: Crear el servidor -->
+                <Frame
+                    CornerRadius="4"
+                    BorderColor="#DDD"
+                    BackgroundColor="White"
+                    Padding="12"
+                    HasShadow="False">
+                    <Grid ColumnDefinitions="*,*, Auto">
+                        <VerticalStackLayout>
+                            <Label
+                                 Text="Crear el servidor"
+                                 FontSize="16"
+                                 FontAttributes="Bold"
+                                 TextColor="#333333" />
+                            <Label
+                                 Text="Crea un servidor de Discord vinculado con esta aplicación"
+                                 LineBreakMode="WordWrap"
+                                 TextColor="#666666" />
+                        </VerticalStackLayout>
+                                
+                        <Button
+                            Grid.Column="2"
+                            Text="Crear servidor"
+                            Style="{StaticResource CardButtonStyle}"
+                            WidthRequest="140"
+                            Clicked="OnCrearServidorButtonClicked" />          
+                    </Grid>
+                   
+                </Frame>
+
+                <!-- Card: Permisos -->
+                <Frame
+                    CornerRadius="4"
+                    BorderColor="#DDD"
+                    BackgroundColor="White"
+                    Padding="12"
+                    HasShadow="False">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label
+                            Text="Permisos"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#333333"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            Text="Gestionar permisos"
+                            Style="{StaticResource CardButtonStyle}"
+                            WidthRequest="150"
+                            Clicked="OnGestionarPermisosButtonClicked" />
+                    </Grid>
+                </Frame>
+
+                <!-- Card: Incidencias -->
+                <Frame
+                    CornerRadius="4"
+                    BorderColor="#DDD"
+                    BackgroundColor="White"
+                    Padding="12"
+                    HasShadow="False">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Incidencias"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#333333" />
+
+                        <!-- Lista de incidencias -->
+                        <VerticalStackLayout Spacing="4">
+                            <HorizontalStackLayout Spacing="0">
+                                <Label Text="Alex" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
+                                <Label Text="Problema con la configuración del servidor"
+                                       LineBreakMode="WordWrap"
+                                       HorizontalOptions="StartAndExpand"
+                                       TextColor="#666666" />
+                                <Label Text="✔" TextColor="#28A745" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="0">
+                                <Label Text="María" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
+                                <Label Text="Error al subir un documento"
+                                       LineBreakMode="WordWrap"
+                                       HorizontalOptions="StartAndExpand"
+                                       TextColor="#666666" />
+                                <Label Text="✔" TextColor="#28A745" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="0">
+                                <Label Text="John" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
+                                <Label Text="El audio no funciona en clase"
+                                       LineBreakMode="WordWrap"
+                                       HorizontalOptions="StartAndExpand"
+                                       TextColor="#666666" />
+                                <Label Text="✔" TextColor="#28A745" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="0">
+                                <Label Text="Emma" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
+                                <Label Text="No puede unirse al canal de voz"
+                                       LineBreakMode="WordWrap"
+                                       HorizontalOptions="StartAndExpand"
+                                       TextColor="#666666" />
+                                <BoxView WidthRequest="16" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
+                        <!-- Link a incidencias resueltas -->
+                        <Label
+                            Text="Incidencias resueltas"
+                            FontAttributes="Bold"
+                            TextColor="#296ACC"
+                            HorizontalOptions="End"
+                            Margin="0,8,0,0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnVerIncidenciasResueltasTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Card: Logs -->
+                <Frame
+                    CornerRadius="4"
+                    BorderColor="#DDD"
+                    BackgroundColor="White"
+                    Padding="12"
+                    HasShadow="False">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label
+                            Text="Logs"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#333333"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            Text="Acceso al sistema de logs"
+                            Style="{StaticResource CardButtonStyle}"
+                            WidthRequest="180"
+                            Clicked="OnAccederLogsButtonClicked" />
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ScrollView
+            Grid.Row="1"
+            Grid.Column="1"
+            Padding="20"
+            x:Name="AreaCrearServidor"
+            IsVisible="False">
+            <Frame BackgroundColor="White">
                 <VerticalStackLayout>
-                    <Label Text="Gestión de Servidor" Style="{StaticResource SectionHeader}" />
-                    <HorizontalStackLayout Spacing="12">
-                        <VerticalStackLayout WidthRequest="120">
-                            <Label Text="Familia" Style="{StaticResource FieldLabel}" />
-                            <Picker x:Name="pickerFamilia" Style="{StaticResource FieldPicker}"/>
-                        </VerticalStackLayout>
-                        <VerticalStackLayout WidthRequest="120">
-                            <Label Text="Curso" Style="{StaticResource FieldLabel}" />
-                            <Picker x:Name="pickerCurso" Style="{StaticResource FieldPicker}"/>
-                        </VerticalStackLayout>
-                        <Button Text="+" Style="{StaticResource SecondaryButton}" WidthRequest="48" Clicked="OnAddServerEntry"/>
-                    </HorizontalStackLayout>
+                    <Label HorizontalOptions="Center" Text="CREAR SERVIDOR" FontSize="30" TextColor="Black"/>
+                    <Label Text="Añadir curso" TextColor="Black" FontSize="20"/>
 
-                    <!-- Colección de entradas servidor -->
-                    <CollectionView x:Name="collectionServerEntries"
-                                    Margin="0,16,0,0"
-                                    ItemsLayout="VerticalList"
-                                    SelectionMode="None">
+                    <Grid Padding="20" ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                        <!-- Nivel -->
+                        <Label Text="Nivel" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="0" Margin="0,10,0,10"/>
+                        <Picker x:Name="NivelPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" Margin="0,0,0,20"/>
+
+                        <!-- Familia -->
+                        <Label Text="Familia" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10"/>
+                        <Picker x:Name="FamiliaPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" Margin="0,0,0,20"/>
+
+                        <!-- Curso -->
+                        <Label Text="Curso" HorizontalOptions="FillAndExpand" TextColor="Black" Grid.Row="0" Grid.Column="2" Margin="0,10,0,10"/>
+
+                        <!-- Curso 1º -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                            <HorizontalStackLayout HorizontalOptions="Start" VerticalOptions="Center" Spacing="10">
+                                <CheckBox x:Name="Curso1" IsChecked="{Binding Opciones1[0].EsSeleccionado}" />
+                                <Label Text="1º" TextColor="Black" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+
+                            <!-- Curso 2º -->
+                            <HorizontalStackLayout HorizontalOptions="Start" VerticalOptions="Center" Spacing="10">
+                                <CheckBox x:Name="Curso2" IsChecked="{Binding Opciones2[0].EsSeleccionado}" />
+                                <Label Text="2º" TextColor="Black" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+                        
+                        <!-- Grado -->
+                        <Label Text="Grado" HorizontalOptions="FillAndExpand" TextColor="Black" Grid.Row="0" Grid.Column="3" Margin="0,10,0,10"/>
+                        <Picker x:Name="CursoPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="3" WidthRequest="400" Margin="0,0,0,20"/>
+
+                        <!-- Botón "+" (Este ocupa 3 filas y es más grande) -->
+                        <Button Text="+" FontSize="60" BackgroundColor="Transparent" Clicked="AddCurso" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" HorizontalOptions="FillAndExpand"/>
+                    </Grid>
+
+
+
+                    <!-- CollectionView para mostrar los cursos añadidos -->
+                    <CollectionView x:Name="CursosCollectionView" ItemsSource="{Binding Cursos}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame CornerRadius="8" Padding="12" Margin="0,4"
-                                       BackgroundColor="{StaticResource SecondaryColor}">
-                                    <HorizontalStackLayout>
-                                        <Label Text="{Binding Familia}" TextColor="White" FontAttributes="Bold" />
-                                        <Label Text=", " TextColor="White" />
-                                        <Label Text="{Binding Curso}" TextColor="White" />
-                                    </HorizontalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                <Frame BorderColor="#DDD" BackgroundColor="White" Padding="10" Margin="5">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
 
-                    <HorizontalStackLayout HorizontalOptions="Center" Margin="0,24,0,0">
-                        <Button Text="Crear Servidor" Style="{StaticResource PrimaryButton}" WidthRequest="140"/>
-                        <Button Text="Modificar Servidor" Style="{StaticResource SecondaryButton}" WidthRequest="140"/>
-                        <Button Text="Restablecer Servidor" Style="{StaticResource SecondaryButton}" WidthRequest="140"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
+                                        <!-- Botón para eliminar (en la parte superior derecha) -->
+                                        <Button Text="X" 
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            BackgroundColor="Transparent"
+                            TextColor="Red"
+                            BorderColor="Transparent"
+                            Clicked="OnEliminarCursoClicked" 
+                            WidthRequest="30" HeightRequest="30"/>
 
-            <!-- Sección Usuarios -->
-            <Frame Style="{StaticResource CardStyle}">
-                <VerticalStackLayout>
-                    <Label Text="Administrar Usuarios" Style="{StaticResource SectionHeader}" />
-                    <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                        <Label Text="Nombre" Style="{StaticResource FieldLabel}" />
-                        <Entry x:Name="entryUserName" Placeholder="Introduce nombre" HorizontalOptions="FillAndExpand" Style="{StaticResource FieldEntry}" />
-                        <Button Text="Buscar" Style="{StaticResource SecondaryButton}" WidthRequest="80" />
-                    </HorizontalStackLayout>
-
-                    <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0">
-                        <Button Text="Añadir Usuario" Style="{StaticResource PrimaryButton}" WidthRequest="160"/>
-                        <Button Text="Modificar Usuario" Style="{StaticResource SecondaryButton}" WidthRequest="160"/>
-                        <Button Text="Eliminar Usuario" Style="{StaticResource SecondaryButton}" WidthRequest="160"/>
-                    </HorizontalStackLayout>
-
-                    <!-- Colección de usuarios -->
-                    <CollectionView x:Name="collectionUsers"
-                                    Margin="0,16,0,0"
-                                    ItemsLayout="VerticalList"
-                                    SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame CornerRadius="8" Padding="12" Margin="0,4">
-                                    <Grid ColumnDefinitions="Auto, *, Auto">
-                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" Grid.Column="0"/>
-                                        <Label Text="{Binding Curso}" Grid.Column="1" HorizontalOptions="EndAndExpand"/>
-                                        <Button Text="Editar" Style="{StaticResource SecondaryButton}" Grid.Column="2" WidthRequest="60"/>
+                                        <!-- Información del curso -->
+                                        <VerticalStackLayout Grid.Row="1">
+                                            <Label Text="{Binding Nivel}" FontSize="16" TextColor="Black"/>
+                                            <Label Text="{Binding Familia}" FontSize="16" TextColor="Black"/>
+                                            <Label Text="{Binding CursosSeleccionados}" FontSize="16" TextColor="Black"/>
+                                            <Label Text="{Binding Grado}" FontSize="16" TextColor="Black"/>
+                                        </VerticalStackLayout>
                                     </Grid>
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
+                    <Button 
+                        Style="{StaticResource CardButtonStyle}"
+                        Text="Crear Servidor"
+                        Clicked="CrearSercidorDiscord"/>
+                </VerticalStackLayout>
+
+            </Frame>
+
+
+        </ScrollView>
+
+        <ScrollView
+    Grid.Row="1"
+    Grid.Column="1"
+    Padding="20"
+    x:Name="AreaPermisos"
+    IsVisible="False">
+
+            <Frame BackgroundColor="White">
+                <VerticalStackLayout>
+                    <Label HorizontalOptions="Center" Text="PERMISOS" FontSize="30" TextColor="Black"/>
+                    <Label Text="Administrar Alumnos" TextColor="Black" FontSize="20"/>
+
+                    <!-- Búsqueda de usuario -->
+                    <HorizontalStackLayout>
+                        <Label Text="Nombre:" TextColor="Black" VerticalOptions="Center" Margin="10"/>
+                        <Entry x:Name="NombreEntry" Placeholder="Nombre que buscar" BackgroundColor="LightCyan" TextColor="Black"/>
+                        <Button Text="&#x1F50E;" BackgroundColor="LightCyan" Clicked="BuscarAlumno"/>
+                    </HorizontalStackLayout>
+
+                    <!-- CollectionView para mostrar la lista de alumnos -->
+                    <CollectionView x:Name="AlumnosCollectionView"
+                            ItemsSource="{Binding Alumnos}"
+                            Margin="10,20,10,10">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="#DDD" BackgroundColor="White" Padding="10" Margin="5">
+                                    <HorizontalStackLayout>
+                                        <Label Text="{Binding Nombre}" FontSize="16" TextColor="Black" HorizontalOptions="StartAndExpand" Margin="5,0,5,0"/>
+                                        <Label Text="{Binding Apellido}" FontSize="16" TextColor="Black" HorizontalOptions="End"/>
+                                    </HorizontalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
             </Frame>
 
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+
+    </Grid>
 </ContentPage>

@@ -6,6 +6,18 @@
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="AsignarDelegado.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Cuestionario.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="ExpulsarAlumnoClase.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="ExpulsarAlumnoAsignatura.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Interfaz\Administrador.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -25,6 +37,9 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="RecurperarPassword.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="SubirArchivoPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

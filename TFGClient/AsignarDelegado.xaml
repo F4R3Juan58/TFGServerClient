@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TFGClient.AsignarDelegado"
+             BackgroundColor="#80000000">
+
+    <ContentPage.Resources>
+        <!-- Botones de las cards -->
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#296ACC" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6" />
+        </Style>
+    </ContentPage.Resources>
+
+    
+    <Frame
+        WidthRequest="800"
+        HeightRequest="800"
+        BackgroundColor="White"
+        CornerRadius="20"
+        Padding="20"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        HasShadow="True">
+
+        <VerticalStackLayout>
+            <Label Text="Alumnos" TextColor="Black" FontSize="18" HorizontalOptions="Center" />
+
+            <CollectionView x:Name="AlumnosCollectionView"
+                        SelectionMode="Single"
+                        SelectionChanged="OnAlumnoSeleccionado">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="10">
+                            <Label Text="{Binding Nombre}" FontSize="16" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button x:Name="AsignarDelegadoButton"
+                Text="Asignar Delegado"
+                IsEnabled="False"
+                Clicked="AsignarDelegado_Clicked" 
+                    Style="{StaticResource CardButtonStyle}"/>
+
+            <Button Text="Cerrar"
+                Clicked="CerrarModal_Clicked"
+                    Style="{StaticResource CardButtonStyle}"/>
+        </VerticalStackLayout>
+    </Frame>
+</ContentPage>
