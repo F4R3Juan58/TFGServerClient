@@ -1,2 +1,2 @@
-Token = "gAAAAABoH6LLOhyJan2HMDOZgZtqYzUyenv6jigtiy8ULXGbFrw6Dfq_agPlqKgRDScH1XvM4Q-7xsnXvdbkf4mIv35jiKjbZu7_O73-jhnry5u7vbRU-y-Bjj3bGut-XC2bTua4R30CII2IJUWwljDTKZuwDxgtx0RVmVvxDI7D8-bJqYJnQ90="
+Bot = "gAAAAABoH6LLOhyJan2HMDOZgZtqYzUyenv6jigtiy8ULXGbFrw6Dfq_agPlqKgRDScH1XvM4Q-7xsnXvdbkf4mIv35jiKjbZu7_O73-jhnry5u7vbRU-y-Bjj3bGut-XC2bTua4R30CII2IJUWwljDTKZuwDxgtx0RVmVvxDI7D8-bJqYJnQ90="
 Password = "tfg"
