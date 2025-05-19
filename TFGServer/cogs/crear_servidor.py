@@ -1,36 +1,48 @@
 from disnake.ext import commands
 import disnake
+from db_connection import Database  # tu conexión
 
 class CrearServidor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.db = Database()
 
-    @commands.command(name="crear_servidor")
-    async def crear_servidor(self, ctx, *, nombre_instituto: str):
-        """Simula la creación de un servidor con nombre del instituto y 2 canales por defecto"""
+    async def _crear_servidor(self, nombre_instituto: str, insti_id: int) -> str | None:
+        # 1. Verificar en la base de datos si ya existe servidor para ese instituto
+        if await self.db.check_server_exists(insti_id):
+            print(f"⚠️ Ya existe un servidor para instituto ID {insti_id}")
+            return None
 
-        # 1. Buscar si ya existe un servidor con ese nombre
+        # 2. Crear el servidor en Discord
         for guild in self.bot.guilds:
             if guild.name.lower() == nombre_instituto.lower():
-                await ctx.send(f"❌ Ya existe un servidor llamado **{nombre_instituto}**.")
-                return
+                print(f"⚠️ Ya existe un servidor con el nombre '{nombre_instituto}'")
+                return None
 
-        # 2. Crear el servidor (Guild)
         try:
             nuevo_guild = await self.bot.create_guild(name=nombre_instituto)
-            await ctx.send(f"✅ Servidor **{nombre_instituto}** creado correctamente.")
+            print(f"✅ Servidor '{nombre_instituto}' creado.")
 
-            # 3. Obtener el canal por defecto y crear canales adicionales
+            # Borrar canales por defecto
             for channel in nuevo_guild.channels:
                 await channel.delete()
 
-            await nuevo_guild.create_text_channel("📌・general")
+            # Crear canales nuevos
+            canal_general = await nuevo_guild.create_text_channel("📌・general")
             await nuevo_guild.create_text_channel("❓・dudas")
+            print(f"📂 Canales creados en '{nombre_instituto}'.")
 
-            await ctx.send(f"📂 Canales creados en **{nombre_instituto}**.")
+            # Crear invitación para canal general
+            invite = await canal_general.create_invite(max_age=0, max_uses=0, unique=True)
+
+            # Guardar en la base de datos el servidor creado
+            await self.db.save_server(insti_id, nombre_instituto, nuevo_guild.id)
+
+            return invite.url
 
         except disnake.HTTPException as e:
-            await ctx.send(f"❌ Error al crear el servidor: {str(e)}")
+            print(f"❌ Error al crear servidor '{nombre_instituto}': {e}")
+            return None
 
 def setup(bot):
     bot.add_cog(CrearServidor(bot))

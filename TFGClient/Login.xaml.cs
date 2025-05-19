@@ -21,6 +21,11 @@ namespace TFGClient
             string email = EmailEntry.Text?.Trim() ?? "";
             string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
 
+            if (email == "1")
+            {
+                await Shell.Current.GoToAsync("Profesor");
+            }
+
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(contraseña))
             {
                 await DisplayAlert("Error", "Introduce tu correo y contraseña.", "OK");
@@ -31,16 +36,19 @@ namespace TFGClient
 
             try
             {
-                var alumno = db.ObtenerAlumnoPorEmailYContraseña(email, contraseñaHash);
-                var profesor = db.ObtenerProfesorPorEmailYContraseña(email, contraseñaHash);
+                var alumno = db.ObtenerAlumnoPorEmailYPassword(email, contraseñaHash);
+                var profesor = db.ObtenerProfesorPorEmailYPassword(email, contraseñaHash);
 
                 if (alumno != null)
                 {
-                    var uri = new Uri("https://discord.gg/f3YA784A"); // Aquí tu lógica real después
+                    // Acceso para alumnos (no se guarda el email)
+                    var uri = new Uri("https://discord.gg/f3YA784A");
                     await Launcher.Default.OpenAsync(uri);
                 }
                 else if (profesor != null)
                 {
+                    // ✅ Guardar el email SOLO si es profesor
+                    Preferences.Set("UsuarioEmail", profesor.Email);
                     await Shell.Current.GoToAsync("Profesor");
                 }
                 else

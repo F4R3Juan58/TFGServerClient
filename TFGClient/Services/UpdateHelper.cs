@@ -19,7 +19,8 @@ namespace TFGClient.Services
                 string nombre = prop.Name;
                 object valor = prop.GetValue(objeto);
 
-                if (nombre == idNombre) continue; // Evitar modificar la PK
+                var ignorar = new[] { idNombre, "Roles" };
+                if (ignorar.Contains(nombre)) continue;
 
                 if (valor is string str && !string.IsNullOrWhiteSpace(str))
                 {
