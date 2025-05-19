@@ -1,2 +1,2 @@
-Token = "MTM1MTIxMTg1Mzk1NDQyMDc2Nw.GK3-Ug.LrQJeeAGiJ_iJL6AD0MZQoFKSO43VFs34U7iCg"
+Token = ""
 

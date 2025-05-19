@@ -118,10 +118,10 @@ namespace TFGClient
             Formulario2.IsVisible = false;
         }
 
-        private string HashearContraseña(string contraseña)
+        private string HashearContraseña(string password)
         {
             using var sha = System.Security.Cryptography.SHA256.Create();
-            var bytes = System.Text.Encoding.UTF8.GetBytes(contraseña);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(password);
             var hash = sha.ComputeHash(bytes);
             return Convert.ToBase64String(hash);
         }
@@ -154,12 +154,12 @@ namespace TFGClient
                 string nombre = NombreEntry.Text?.Trim();
                 string apellidos = ApellidosEntry.Text?.Trim();
                 string email = EmailEntry.Text?.Trim();
-                string contraseña = ContrasenaEntry.Text?.Trim();
+                string password = ContrasenaEntry.Text?.Trim();
 
                 /*
                 string confirmacion = ContrasenaConfirmacionEntry.Text?.Trim();
 
-                if (contraseña != confirmacion)
+                if (password != confirmacion)
                 {
                     await DisplayAlert("Error", "Las contraseñas no coinciden.", "OK");
                     return;
@@ -175,7 +175,7 @@ namespace TFGClient
                 string cursoNombre = CursoPicker.SelectedItem?.ToString();
 
                 if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidos) || string.IsNullOrWhiteSpace(email) ||
-                    string.IsNullOrWhiteSpace(contraseña) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
+                    string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
                     string.IsNullOrWhiteSpace(tipoUsuario) || string.IsNullOrWhiteSpace(nivel) || string.IsNullOrWhiteSpace(grado) ||
                     string.IsNullOrWhiteSpace(familia) || string.IsNullOrWhiteSpace(cursoNombre))
                 {
@@ -189,8 +189,8 @@ namespace TFGClient
                     return;
                 }
 
-                // Hashear la contraseña
-                string contraseñaHash = HashearContraseña(contraseña);
+                // Hashear la password
+                string contraseñaHash = HashearContraseña(password);
 
                 // Obtener IDs reales
                 int comunidadId = ObtenerComunidadId(comunidadNombre);
@@ -205,7 +205,7 @@ namespace TFGClient
                     {
                         Nombre = nombre,
                         Apellido = apellidos,
-                        Contraseña = contraseñaHash,
+                        Password = contraseñaHash,
                         Email = email,
                         ComunidadID = comunidadId,
                         InstiID = institutoId,
@@ -227,7 +227,7 @@ namespace TFGClient
                     {
                         Nombre = nombre,
                         Apellido = apellidos,
-                        Contraseña = contraseñaHash,
+                        Password = contraseñaHash,
                         Email = email,
                         ComunidadID = comunidadId,
                         InstiID = institutoId,

@@ -10,7 +10,6 @@ namespace TFGClient.Models
     {
         public int ID { get; set; }
         public string NombreRol { get; set; }
-        public string DiscordRoleID { get; set; }
     }
 }
 
