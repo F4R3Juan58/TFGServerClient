@@ -128,6 +128,7 @@
             IsVisible="True">
             
             <VerticalStackLayout Spacing="15">
+<<<<<<< HEAD
                 <!-- NUEVA SECCIÓN: Crear Servidor -->
                 <Frame
                     CornerRadius="4"
@@ -146,6 +147,9 @@
                 </Frame>
 
                 <!-- SECCIÓN RENOMBRADA: Configurar servidor -->
+=======
+                <!-- Card: Crear el servidor -->
+>>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 <Frame
                     CornerRadius="4"
                     BorderColor="#DDD"
@@ -155,11 +159,16 @@
                     <Grid ColumnDefinitions="*,*, Auto">
                         <VerticalStackLayout>
                             <Label
+<<<<<<< HEAD
                                  Text="Configurar servidor"
+=======
+                                 Text="Crear el servidor"
+>>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                                  FontSize="16"
                                  FontAttributes="Bold"
                                  TextColor="#333333" />
                             <Label
+<<<<<<< HEAD
                                  Text="Configura las opciones y cursos del servidor de Discord"
                                  LineBreakMode="WordWrap"
                                  TextColor="#666666" />
@@ -173,6 +182,21 @@
                             Clicked="ConfigurarServidor" />
                     </Grid>
 
+=======
+                                 Text="Crea un servidor de Discord vinculado con esta aplicación"
+                                 LineBreakMode="WordWrap"
+                                 TextColor="#666666" />
+                        </VerticalStackLayout>
+                                
+                        <Button
+                            Grid.Column="2"
+                            Text="Crear servidor"
+                            Style="{StaticResource CardButtonStyle}"
+                            WidthRequest="140"
+                            Clicked="OnCrearServidorButtonClicked" />          
+                    </Grid>
+                   
+>>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 </Frame>
 
                 <!-- Card: Permisos -->
@@ -375,7 +399,11 @@
                     <Button 
                         Style="{StaticResource CardButtonStyle}"
                         Text="Crear Servidor"
+<<<<<<< HEAD
                         Clicked="CrearServidorDiscord"/>
+=======
+                        Clicked="CrearSercidorDiscord"/>
+>>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 </VerticalStackLayout>
 
             </Frame>
