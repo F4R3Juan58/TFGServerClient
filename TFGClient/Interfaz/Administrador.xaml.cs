@@ -228,8 +228,6 @@ namespace TFGClient.Interfaz
             }
         }
 
-
-<<<<<<< HEAD
         private async void CrearServidorDiscord(object sender, EventArgs e)
         {
             try
@@ -315,26 +313,19 @@ namespace TFGClient.Interfaz
         {
             try
             {
-                string cursosGradosConcatenados = ObtenerDatosConcatenados();
-
-=======
-        private async void CrearSercidorDiscord(object sender, EventArgs e)
-        {
-            try
-            {
                 // Concatenar todos los cursos y grados seleccionados
                 string cursosGradosConcatenados = ObtenerDatosConcatenados();
 
                 // Crear el objeto que vamos a enviar al servidor Flask
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 var dataToSend = new
                 {
                     cursosGrados = cursosGradosConcatenados
                 };
 
-<<<<<<< HEAD
+                // Hacer la llamada HTTP para enviar los datos al servidor Flask
                 var response = await EnviarDatosAlServidorFlask(dataToSend);
 
+                // Mostrar una respuesta de éxito o error
                 if (response.IsSuccessStatusCode)
                 {
                     await DisplayAlert("Éxito", "Datos enviados correctamente.", "OK");
@@ -342,29 +333,12 @@ namespace TFGClient.Interfaz
                 else
                 {
                     await DisplayAlert("Error", "Hubo un problema al enviar los datos.", "OK");
-=======
-                // Hacer la llamada HTTP para enviar los datos al servidor Flask
-                var response = await EnviarDatosAlServidorFlask(dataToSend);
-
-                // Mostrar una respuesta de éxito o error
-                if (response.IsSuccessStatusCode)
-                {
-                    DisplayAlert("Éxito", "Datos enviados correctamente.", "OK");
-                }
-                else
-                {
-                    DisplayAlert("Error", "Hubo un problema al enviar los datos.", "OK");
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 }
             }
             catch (Exception ex)
             {
-<<<<<<< HEAD
-                await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
-=======
                 // Manejar cualquier error
-                DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
+                await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
             }
         }
 
