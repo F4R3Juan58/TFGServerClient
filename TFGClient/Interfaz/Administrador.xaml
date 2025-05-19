@@ -121,108 +121,87 @@
 
         <!-- ===== ÁREA PRINCIPAL ===== -->
         <ScrollView
-            Grid.Row="1"
-            Grid.Column="1"
-            Padding="20"
-            x:Name="AreaPrincipal"
-            IsVisible="True">
-            
+    Grid.Row="1"
+    Grid.Column="1"
+    Padding="20"
+    x:Name="AreaPrincipal"
+    IsVisible="True">
+
             <VerticalStackLayout Spacing="15">
-<<<<<<< HEAD
+
                 <!-- NUEVA SECCIÓN: Crear Servidor -->
                 <Frame
-                    CornerRadius="4"
-                    BorderColor="#DDD"
-                    BackgroundColor="White"
-                    Padding="12"
-                    HasShadow="False">
+            CornerRadius="4"
+            BorderColor="#DDD"
+            BackgroundColor="White"
+            Padding="12"
+            HasShadow="False">
                     <VerticalStackLayout>
                         <Button
-                            Text="Crear Servidor"
-                            Style="{StaticResource CardButtonStyle}"
-                            WidthRequest="200"
-                            HorizontalOptions="Center"
-                            Clicked="CrearServidorDiscord" />
+                    Text="Crear Servidor"
+                    Style="{StaticResource CardButtonStyle}"
+                    WidthRequest="200"
+                    HorizontalOptions="Center"
+                    Clicked="CrearServidorDiscord" />
                     </VerticalStackLayout>
                 </Frame>
 
                 <!-- SECCIÓN RENOMBRADA: Configurar servidor -->
-=======
-                <!-- Card: Crear el servidor -->
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 <Frame
-                    CornerRadius="4"
-                    BorderColor="#DDD"
-                    BackgroundColor="White"
-                    Padding="12"
-                    HasShadow="False">
+            CornerRadius="4"
+            BorderColor="#DDD"
+            BackgroundColor="White"
+            Padding="12"
+            HasShadow="False">
                     <Grid ColumnDefinitions="*,*, Auto">
                         <VerticalStackLayout>
                             <Label
-<<<<<<< HEAD
-                                 Text="Configurar servidor"
-=======
-                                 Text="Crear el servidor"
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
-                                 FontSize="16"
-                                 FontAttributes="Bold"
-                                 TextColor="#333333" />
+                        Text="Configurar servidor"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        TextColor="#333333" />
                             <Label
-<<<<<<< HEAD
-                                 Text="Configura las opciones y cursos del servidor de Discord"
-                                 LineBreakMode="WordWrap"
-                                 TextColor="#666666" />
+                        Text="Configura las opciones y cursos del servidor de Discord"
+                        LineBreakMode="WordWrap"
+                        TextColor="#666666" />
                         </VerticalStackLayout>
 
                         <Button
-                            Grid.Column="2"
-                            Text="Configurar servidor"
-                            Style="{StaticResource CardButtonStyle}"
-                            WidthRequest="140"
-                            Clicked="ConfigurarServidor" />
+                    Grid.Column="2"
+                    Text="Configurar servidor"
+                    Style="{StaticResource CardButtonStyle}"
+                    WidthRequest="140"
+                    Clicked="ConfigurarServidor" />
                     </Grid>
-
-=======
-                                 Text="Crea un servidor de Discord vinculado con esta aplicación"
-                                 LineBreakMode="WordWrap"
-                                 TextColor="#666666" />
-                        </VerticalStackLayout>
-                                
-                        <Button
-                            Grid.Column="2"
-                            Text="Crear servidor"
-                            Style="{StaticResource CardButtonStyle}"
-                            WidthRequest="140"
-                            Clicked="OnCrearServidorButtonClicked" />          
-                    </Grid>
-                   
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 </Frame>
 
                 <!-- Card: Permisos -->
                 <Frame
-                    CornerRadius="4"
-                    BorderColor="#DDD"
-                    BackgroundColor="White"
-                    Padding="12"
-                    HasShadow="False">
+            CornerRadius="4"
+            BorderColor="#DDD"
+            BackgroundColor="White"
+            Padding="12"
+            HasShadow="False">
                     <Grid ColumnDefinitions="*, Auto">
                         <Label
-                            Text="Permisos"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            TextColor="#333333"
-                            VerticalOptions="Center" />
+                    Text="Permisos"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#333333"
+                    VerticalOptions="Center" />
                         <Button
-                            Grid.Column="1"
-                            Text="Gestionar permisos"
-                            Style="{StaticResource CardButtonStyle}"
-                            WidthRequest="150"
-                            Clicked="OnGestionarPermisosButtonClicked" />
+                    Grid.Column="1"
+                    Text="Gestionar permisos"
+                    Style="{StaticResource CardButtonStyle}"
+                    WidthRequest="150"
+                    Clicked="OnGestionarPermisosButtonClicked" />
                     </Grid>
                 </Frame>
 
-                <!-- Card: Incidencias -->
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Card: Incidencias -->
                 <Frame
                     CornerRadius="4"
                     BorderColor="#DDD"
@@ -311,8 +290,6 @@
                             Clicked="OnAccederLogsButtonClicked" />
                     </Grid>
                 </Frame>
-            </VerticalStackLayout>
-        </ScrollView>
 
         <ScrollView
             Grid.Row="1"
@@ -399,11 +376,7 @@
                     <Button 
                         Style="{StaticResource CardButtonStyle}"
                         Text="Crear Servidor"
-<<<<<<< HEAD
                         Clicked="CrearServidorDiscord"/>
-=======
-                        Clicked="CrearSercidorDiscord"/>
->>>>>>> 99b42340ac2750ea87c2234fb46f58edd447a4d5
                 </VerticalStackLayout>
 
             </Frame>
