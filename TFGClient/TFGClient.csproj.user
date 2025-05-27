@@ -6,28 +6,46 @@
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
-    <MauiXaml Update="AsignarDelegado.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\BloquearCanal.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Cuestionario.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\Editar.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="ExpulsarAlumnoClase.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\AsignarAsignaturaProfesor.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="ExpulsarAlumnoAsignatura.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\ModificarHorario.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Administrador.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\BloquearAsignatura.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\JefeDepartamento.xaml">
+    <MauiXaml Update="Interfaz\JefeDepartamento\NuevoTutor.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor.xaml">
+    <MauiXaml Update="Interfaz\Tutor\AsignarDelegado.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Tutor.xaml">
+    <MauiXaml Update="Interfaz\Profesor\Cuestionario.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoClase.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoAsignatura.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\Administracion\Administrador.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\JefeDepartamento\JefeDepartamento.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\Profesor\Profesor.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Interfaz\Tutor\Tutor.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Login.xaml">
@@ -39,7 +57,7 @@
     <MauiXaml Update="RecurperarPassword.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="SubirArchivoPopup.xaml">
+    <MauiXaml Update="Interfaz\Profesor\SubirArchivoPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

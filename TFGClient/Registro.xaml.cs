@@ -19,6 +19,14 @@ namespace TFGClient
             InitializeComponent();
             InicializarEventos();
             cargarBBDD();
+            // Ocultar botón de atrás
+            NavigationPage.SetHasBackButton(this, false);
+
+            // Ocultar barra de navegación completa
+            NavigationPage.SetHasNavigationBar(this, false);
+
+            // O en caso de Shell:
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
         }
 
         private void InicializarEventos()

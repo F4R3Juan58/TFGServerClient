@@ -14,6 +14,18 @@ namespace TFGClient
         public Login()
         {
             InitializeComponent();
+            // Ocultar botón de atrás
+            Shell.SetBackButtonBehavior(this, new BackButtonBehavior
+            {
+                IsVisible = false
+            });
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+
+            // Ocultar barra de navegación completa
+            NavigationPage.SetHasNavigationBar(this, false);
+
+            
         }
 
         private async void onLoginClicked(object sender, EventArgs e)

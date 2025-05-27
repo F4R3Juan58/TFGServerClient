@@ -99,7 +99,7 @@
                 <VerticalStackLayout>
                     <Label x:Name="Tutoria" Text="Tutoria Curso Grado" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" FontSize="30" Margin="20"/>
                     <Grid
-                    IsVisible="true"
+                    IsVisible="True"
           Padding="16"
           RowDefinitions="Auto, Auto, Auto"
           ColumnDefinitions="*, *"
@@ -153,6 +153,7 @@
                         <!-- Fila 2: Botones de acción -->
                         <Button
 Grid.Row="2" Grid.Column="0"
+                            IsVisible="False"
 Text="FCT"
 ImageSource="icon_delegado.png"
 ContentLayout="Left,10"
@@ -167,6 +168,7 @@ HorizontalOptions="Fill" />
 
                         <Button
 Grid.Row="2" Grid.Column="1"
+                            IsVisible="False"
 Text="TFG"
 ImageSource="icon_votacion.png"
 ContentLayout="Left,10"
@@ -183,7 +185,7 @@ HorizontalOptions="Fill" />
 
 
                     <Grid
-                    IsVisible="false"
+                    IsVisible="False"
                     Padding="16"
                     RowDefinitions="Auto, Auto"
                     ColumnDefinitions="*, *"
