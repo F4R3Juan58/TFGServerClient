@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TFGClient.BloquearCanal"
+    BackgroundColor="#80000000">
+    <!-- Fondo semitransparente para simular popup -->
+
+
+    <ContentPage.Resources>
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#296ACC" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="OutlinedButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="TextColor" Value="#296ACC" />
+            <Setter Property="BorderColor" Value="#296ACC" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Frame
+        WidthRequest="500"
+        HeightRequest="500"
+        BackgroundColor="White"
+        CornerRadius="20"
+        Padding="20"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        HasShadow="True">
+
+        <VerticalStackLayout Spacing="15">
+
+            <Label Text="Bloquear canal"
+                   TextColor="Black"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Grado -->
+            <Label Text="Grado" TextColor="Black"/>
+            <Picker x:Name="gradoPicker" BackgroundColor="Red"/>
+
+            <!-- Curso y Asignatura en la misma fila -->
+            <HorizontalStackLayout Spacing="15">
+                <VerticalStackLayout WidthRequest="200">
+                    <Label Text="Curso" TextColor="Black"/>
+                    <Picker x:Name="cursoPicker" BackgroundColor="red"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout WidthRequest="200">
+                    <Label Text="Asignatura" TextColor="Black"/>
+                    <Picker x:Name="asignaturaPicker" BackgroundColor="red" />
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+
+            <!-- Canal -->
+            <Label Text="Canal" TextColor="Black"/>
+            <Picker x:Name="canalPicker" BackgroundColor="Red"/>
+
+            <!-- Botones -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,0">
+                <Button Text="Bloquear" Style="{StaticResource CardButtonStyle}" Clicked="Bloquear_Clicked" />
+                <Button Text="Cancelar" Style="{StaticResource OutlinedButtonStyle}" Clicked="Cancelar_Clicked" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Frame>
+</ContentPage>

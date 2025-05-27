@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="TFGClient.Interfaz.Profesor"
+             x:Class="TFGClient.Interfaz.JefeDepartamento"
              BackgroundColor="#F5F5F5"
-             Shell.NavBarIsVisible="False">
-
+                Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <!-- Estilo para los botones del menú lateral -->
         <Style x:Key="SidebarButtonStyle" TargetType="Label">
-            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="TextColor" Value="#296ACC" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="HorizontalOptions" Value="FillAndExpand" />
             <Setter Property="Padding" Value="10,0" />
@@ -32,6 +30,8 @@
             <Setter Property="CornerRadius" Value="4" />
             <Setter Property="Padding" Value="6" />
         </Style>
+        
+        
     </ContentPage.Resources>
 
     <!-- GRID PRINCIPAL: HEADER + CUERPO -->
@@ -41,7 +41,7 @@
         <Grid
       Grid.Row="0"
       ColumnDefinitions="Auto, *, Auto"
-      BackgroundColor="#D32F2F"
+      BackgroundColor="#296ACC"
       HeightRequest="60">
 
             <!-- LOGO -->
@@ -72,19 +72,22 @@
 
         <!-- CUERPO: MENÚ LATERAL + ÁREA PRINCIPAL -->
         <Grid Grid.Row="1" ColumnDefinitions="250, *">
-            
+
             <VerticalStackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="#FFFFFF" Spacing="10" Margin="20,20,0,0" Padding="10,0">
 
-                <Label Text="ASIGNATURAS" Style="{StaticResource SidebarButtonStyle}"/>
-                <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single" SelectionChanged="OnAsignaturaSelected">
+                <Label Text="ADMINISTRAR"  TextColor="#296ACC" FontSize="20"/>
+                <Button Text="Gestión académica" TextColor="#296ACC" BackgroundColor="LightGray" Clicked="MostrarGestionAcademica"/>
+                <Label Text="TUTORES" Style="{StaticResource SidebarButtonStyle}"/>
+                <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Label Text="{Binding}" Padding="10" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                
 
-                <Label Text="ALUMNOS" Style="{StaticResource SidebarButtonStyle}" Margin="0,20,0,0"/>
+                <Label Text="PROFESORES" Style="{StaticResource SidebarButtonStyle}" Margin="0,20,0,0"/>
                 <CollectionView x:Name="AlumnosCollection">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -97,27 +100,8 @@
 
 
             <!-- ÁREA PRINCIPAL -->
-            <ScrollView Grid.Column="1">
+            <ScrollView Grid.Column="1" IsVisible="true" x:Name="GestionAcademica">
                 <StackLayout Padding="16" Spacing="16">
-
-                    <!-- Título de la asignatura -->
-                    <Label
-                        x:Name="AsignaturaLabel"
-            Text=""
-            FontSize="24"
-            FontAttributes="Bold"
-            TextColor="#000" />
-
-                    <!-- Botón Iniciar Clase -->
-                    <Button
-            Text="INICIAR CLASE"
-            Clicked="iniciarClase"
-            BackgroundColor="#D32F2F"
-            TextColor="White"
-            FontAttributes="Bold"
-            CornerRadius="8"
-            HeightRequest="50"
-            HorizontalOptions="Fill" />
 
                     <!-- Botones de acciones -->
                     <Grid
@@ -126,33 +110,32 @@
             RowSpacing="16"
             ColumnSpacing="16">
 
-                        <!-- Fila 2 -->
                         <Button
-              Grid.Row="0" Grid.Column="0"
-              Text="Subir documento"
-              ImageSource="icon_upload.png"
-              ContentLayout="Left,10"
-              BorderColor="#D32F2F"
-              BorderWidth="2"
-              CornerRadius="8"
-              BackgroundColor="Transparent"
-              TextColor="#D32F2F"
-              FontAttributes="Bold"
-              HeightRequest="60"
-                            Clicked="AbrirPopupSubirDocumento"
-              HorizontalOptions="Fill" />
+            Grid.Row="0" Grid.Column="0"
+            Text="Nuevo tutor"
+                            Clicked="NuevoTutor"
+            BackgroundColor="White"
+            BorderColor="#296ACC"
+                            BorderWidth="2"
+            TextColor="#296ACC"
+            FontAttributes="Bold"
+            CornerRadius="8"
+            HeightRequest="50"
+            HorizontalOptions="Fill" />
+
 
                         <Button
               Grid.Row="0" Grid.Column="1"
-                            Clicked="ReestablecerAsignatura"
-              Text="Reestablecer asignatura"
+
+              Text="Administrar profesor"
+                            Clicked="MostrarAdministrarProfesores"
               ImageSource="icon_reset.png"
               ContentLayout="Left,10"
-              BorderColor="#D32F2F"
+            BackgroundColor="White"
+            BorderColor="#296ACC"
+            TextColor="#296ACC"
               BorderWidth="2"
               CornerRadius="8"
-              BackgroundColor="Transparent"
-              TextColor="#D32F2F"
               FontAttributes="Bold"
               HeightRequest="60"
               HorizontalOptions="Fill" />
@@ -160,51 +143,81 @@
                         <!-- Fila 3 -->
                         <Button
               Grid.Row="1" Grid.Column="0"
-              Text="Expulsar alumno de Clase"
-                Clicked="ExpulsarAlumno"            
+              Text="Asignar asignatura a profesores"
+                Clicked="AsignarAsignaturaProfesor"
               ImageSource="icon_remove.png"
               ContentLayout="Left,10"
-              BorderColor="#D32F2F"
+              BorderColor="#296ACC"
               BorderWidth="2"
               CornerRadius="8"
-              BackgroundColor="Transparent"
-              TextColor="#D32F2F"
+              BackgroundColor="#296ACC"
+              TextColor="White"
               FontAttributes="Bold"
               HeightRequest="60"
               HorizontalOptions="Fill" />
 
                         <Button
             Grid.Row="1" Grid.Column="1"
-            Text="Expulsar alumno de Asignatura"
-              Clicked="ExpulsarAlumnoAsignatura"            
+            Text="Modificar el horario académico"    
+            Clicked="ModificarHorario"
             ImageSource="icon_remove.png"
             ContentLayout="Left,10"
-            BorderColor="#D32F2F"
+            BorderColor="#296ACC"
             BorderWidth="2"
             CornerRadius="8"
-            BackgroundColor="Transparent"
-            TextColor="#D32F2F"
+            BackgroundColor="#296ACC"
+            TextColor="White"
             FontAttributes="Bold"
             HeightRequest="60"
             HorizontalOptions="Fill" />
 
                         <Button
-              Grid.Row="2" Grid.Column="1"
-              Text="Abrir cuestionario"
-                            Clicked="AbrirCuestionario"
+              Grid.Row="2" Grid.Column="0"
+              Text="Bloquear asignatura"
+                            Clicked="BloquearAsignatura"
               ImageSource="icon_checklist.png"
               ContentLayout="Left,10"
-              BorderColor="#D32F2F"
+              BorderColor="#296ACC"
               BorderWidth="2"
               CornerRadius="8"
               BackgroundColor="Transparent"
-              TextColor="#D32F2F"
+              TextColor="#296ACC"
+              FontAttributes="Bold"
+              HeightRequest="60"
+              HorizontalOptions="Fill" />
+
+                        <Button
+              Grid.Row="2" Grid.Column="1"
+              Text="Bloquear canal"
+                            Clicked="BloquearCanal"
+              ImageSource="icon_checklist.png"
+              ContentLayout="Left,10"
+              BorderColor="#296ACC"
+              BorderWidth="2"
+              CornerRadius="8"
+              BackgroundColor="Transparent"
+              TextColor="#296ACC"
               FontAttributes="Bold"
               HeightRequest="60"
               HorizontalOptions="Fill" />
 
                     </Grid>
                 </StackLayout>
+            </ScrollView>
+
+            <ScrollView IsVisible="False" Grid.Column="1" x:Name="AdministrarProfesores">
+                <VerticalStackLayout  Padding="16" Spacing="16">
+                    <Label Text="Listado de profesores" FontSize="20" TextColor="Black"/>
+                    <CollectionView>
+
+                    </CollectionView>
+                    <HorizontalStackLayout>
+                        <Button Text="Editar"  Style="{StaticResource CardButtonStyle}" Clicked="Editar"/>
+                        <Button Text="Salir"  Style="{StaticResource CardButtonStyle}" Clicked="VolverGestionAcademica"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+
             </ScrollView>
         </Grid>
     </Grid>

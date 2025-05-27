@@ -67,10 +67,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="ExpulsarAlumnoClase.xaml.cs">
+	  <Compile Update="Interfaz\JefeDepartamento\BloquearCanal.xaml.cs">
+	    <DependentUpon>BloquearCanal.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\JefeDepartamento\Editar.xaml.cs">
+	    <DependentUpon>Editar.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\JefeDepartamento\AsignarAsignaturaProfesor.xaml.cs">
+	    <DependentUpon>AsignarAsignaturaProfesor.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\JefeDepartamento\ModificarHorario.xaml.cs">
+	    <DependentUpon>ModificarHorario.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\JefeDepartamento\BloquearAsignatura.xaml.cs">
+	    <DependentUpon>BloquearAsignatura.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\JefeDepartamento\NuevoTutor.xaml.cs">
+	    <DependentUpon>NuevoTutor.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Interfaz\Profesor\ExpulsarAlumnoClase.xaml.cs">
 	    <DependentUpon>ExpulsarAlumnoClase.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="ExpulsarAlumnoAsignatura.xaml.cs">
+	  <Compile Update="Interfaz\Profesor\ExpulsarAlumnoAsignatura.xaml.cs">
 	    <DependentUpon>ExpulsarAlumnoAsignatura.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Registro.xaml.cs">
@@ -79,28 +97,46 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="AsignarDelegado.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\BloquearCanal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Cuestionario.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\Editar.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="ExpulsarAlumnoClase.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\AsignarAsignaturaProfesor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="ExpulsarAlumnoAsignatura.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\ModificarHorario.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Interfaz\Administrador.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\BloquearAsignatura.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Interfaz\JefeDepartamento.xaml">
+	  <MauiXaml Update="Interfaz\JefeDepartamento\NuevoTutor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Interfaz\Profesor.xaml">
+	  <MauiXaml Update="Interfaz\Tutor\AsignarDelegado.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Interfaz\Tutor.xaml">
+	  <MauiXaml Update="Interfaz\Profesor\Cuestionario.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoClase.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoAsignatura.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\Administracion\Administrador.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\JefeDepartamento\JefeDepartamento.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\Profesor\Profesor.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Interfaz\Tutor\Tutor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Login.xaml">
@@ -112,7 +148,7 @@
 	  <MauiXaml Update="RecurperarPassword.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="SubirArchivoPopup.xaml">
+	  <MauiXaml Update="Interfaz\Profesor\SubirArchivoPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

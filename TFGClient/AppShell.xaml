@@ -20,11 +20,12 @@
         <ShellContent Title="Tutor" ContentTemplate="{DataTemplate local:Interfaz.Tutor}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Administrador" Icon="icon_admin.png">
-        <ShellContent Title="Administrador" ContentTemplate="{DataTemplate local:Interfaz.Administrador}" />
-    </FlyoutItem>
 
     <FlyoutItem Title="Jefe de Departamento" Icon="icon_jefedpto.png">
         <ShellContent Title="Jefe de Departamento" ContentTemplate="{DataTemplate local:Interfaz.JefeDepartamento}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Administrador" Icon="icon_admin.png">
+        <ShellContent Title="Administrador" ContentTemplate="{DataTemplate local:Interfaz.Administrador}" />
     </FlyoutItem>
 </Shell>

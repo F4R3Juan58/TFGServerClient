@@ -104,19 +104,7 @@
                 Style="{StaticResource SidebarButtonStyle}"
                 Clicked="OnSidebarPermisosTapped"/>
 
-            <!-- Botón: Incidencias -->
-            <Button
-                Text="Incidencias"
-                x:Name="SideBarIncidencias"
-                Style="{StaticResource SidebarButtonStyle}"
-                Clicked="OnSidebarIncidenciasTapped"/>
 
-            <!-- Botón: Logs -->
-            <Button
-                Text="Logs"
-                x:Name="SideBarLog"
-                Style="{StaticResource SidebarButtonStyle}"
-                Clicked="OnSidebarLogsTapped"/>
         </VerticalStackLayout>
 
         <!-- ===== ÁREA PRINCIPAL ===== -->
@@ -171,7 +159,7 @@
                     Text="Configurar servidor"
                     Style="{StaticResource CardButtonStyle}"
                     WidthRequest="140"
-                    Clicked="ConfigurarServidor" />
+                    Clicked="OnSidebarCrearServidorTapped" />
                     </Grid>
                 </Frame>
 
@@ -200,96 +188,6 @@
 
             </VerticalStackLayout>
         </ScrollView>
-
-        <!-- Card: Incidencias -->
-                <Frame
-                    CornerRadius="4"
-                    BorderColor="#DDD"
-                    BackgroundColor="White"
-                    Padding="12"
-                    HasShadow="False">
-                    <VerticalStackLayout Spacing="8">
-                        <Label
-                            Text="Incidencias"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            TextColor="#333333" />
-
-                        <!-- Lista de incidencias -->
-                        <VerticalStackLayout Spacing="4">
-                            <HorizontalStackLayout Spacing="0">
-                                <Label Text="Alex" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
-                                <Label Text="Problema con la configuración del servidor"
-                                       LineBreakMode="WordWrap"
-                                       HorizontalOptions="StartAndExpand"
-                                       TextColor="#666666" />
-                                <Label Text="✔" TextColor="#28A745" />
-                            </HorizontalStackLayout>
-
-                            <HorizontalStackLayout Spacing="0">
-                                <Label Text="María" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
-                                <Label Text="Error al subir un documento"
-                                       LineBreakMode="WordWrap"
-                                       HorizontalOptions="StartAndExpand"
-                                       TextColor="#666666" />
-                                <Label Text="✔" TextColor="#28A745" />
-                            </HorizontalStackLayout>
-
-                            <HorizontalStackLayout Spacing="0">
-                                <Label Text="John" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
-                                <Label Text="El audio no funciona en clase"
-                                       LineBreakMode="WordWrap"
-                                       HorizontalOptions="StartAndExpand"
-                                       TextColor="#666666" />
-                                <Label Text="✔" TextColor="#28A745" />
-                            </HorizontalStackLayout>
-
-                            <HorizontalStackLayout Spacing="0">
-                                <Label Text="Emma" FontAttributes="Bold" WidthRequest="70" TextColor="#333333" />
-                                <Label Text="No puede unirse al canal de voz"
-                                       LineBreakMode="WordWrap"
-                                       HorizontalOptions="StartAndExpand"
-                                       TextColor="#666666" />
-                                <BoxView WidthRequest="16" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-
-                        <!-- Link a incidencias resueltas -->
-                        <Label
-                            Text="Incidencias resueltas"
-                            FontAttributes="Bold"
-                            TextColor="#296ACC"
-                            HorizontalOptions="End"
-                            Margin="0,8,0,0">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnVerIncidenciasResueltasTapped" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Card: Logs -->
-                <Frame
-                    CornerRadius="4"
-                    BorderColor="#DDD"
-                    BackgroundColor="White"
-                    Padding="12"
-                    HasShadow="False">
-                    <Grid ColumnDefinitions="*, Auto">
-                        <Label
-                            Text="Logs"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            TextColor="#333333"
-                            VerticalOptions="Center" />
-                        <Button
-                            Grid.Column="1"
-                            Text="Acceso al sistema de logs"
-                            Style="{StaticResource CardButtonStyle}"
-                            WidthRequest="180"
-                            Clicked="OnAccederLogsButtonClicked" />
-                    </Grid>
-                </Frame>
 
         <ScrollView
             Grid.Row="1"
