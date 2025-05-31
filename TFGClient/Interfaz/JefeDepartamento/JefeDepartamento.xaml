@@ -72,32 +72,32 @@
 
         <!-- CUERPO: MENÚ LATERAL + ÁREA PRINCIPAL -->
         <Grid Grid.Row="1" ColumnDefinitions="250, *">
-
             <VerticalStackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="#FFFFFF" Spacing="10" Margin="20,20,0,0" Padding="10,0">
-
                 <Label Text="ADMINISTRAR"  TextColor="#296ACC" FontSize="20"/>
                 <Button Text="Gestión académica" TextColor="#296ACC" BackgroundColor="LightGray" Clicked="MostrarGestionAcademica"/>
                 <Label Text="TUTORES" Style="{StaticResource SidebarButtonStyle}"/>
-                <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single">
+                <CollectionView ItemsSource="{Binding Tutores}" SelectionMode="Single" x:Name="TutoresCollectionView" HeightRequest="200">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding}" Padding="10" />
+                            <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
+                                <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                
+
 
                 <Label Text="PROFESORES" Style="{StaticResource SidebarButtonStyle}" Margin="0,20,0,0"/>
-                <CollectionView x:Name="AlumnosCollection">
+                <CollectionView ItemsSource="{Binding Profesores}" SelectionMode="Single" x:Name="ProfesoresCollectionView" HeightRequest="300">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding}" Padding="10" />
+                            <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
+                                <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </VerticalStackLayout>
-
 
             <!-- ÁREA PRINCIPAL -->
             <ScrollView Grid.Column="1" IsVisible="true" x:Name="GestionAcademica">

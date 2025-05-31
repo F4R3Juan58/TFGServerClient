@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using Newtonsoft.Json;
 using TFGClient.Models;
 using TFGClient.Services;
@@ -14,8 +16,8 @@ namespace TFGClient.Interfaz
         public ObservableCollection<Profesor> Profesores { get; set; }
         private readonly RellenarPickers rellenar = new();
         private ObservableCollection<string> cursosCompletos = new();
-        public ObservableCollection<Opcion> Opciones1 { get; set; } // Opciones para 1º
-        public ObservableCollection<Opcion> Opciones2 { get; set; } // Opciones para 2º
+        public ObservableCollection<Opcion> Opciones1 { get; set; }
+        public ObservableCollection<Opcion> Opciones2 { get; set; }
 
         public ObservableCollection<Curso> Cursos { get; set; }
 
@@ -232,15 +234,15 @@ namespace TFGClient.Interfaz
         {
             try
             {
-                string email = Preferences.Get("UsuarioEmail", "");
+                string emailsesion = Preferences.Get("UsuarioEmail", "");
 
-                if (string.IsNullOrWhiteSpace(email))
+                if (string.IsNullOrWhiteSpace(emailsesion))
                 {
                     await DisplayAlert("Error", "No se encontró el correo del usuario.", "OK");
                     return;
                 }
 
-                var profesor = _databaseService.ObtenerProfesorPorEmail(email);
+                var profesor = _databaseService.ObtenerProfesorPorEmail(emailsesion);
                 if (profesor == null)
                 {
                     await DisplayAlert("Acceso denegado", "Solo los profesores pueden crear servidores de Discord.", "OK");
@@ -249,6 +251,7 @@ namespace TFGClient.Interfaz
 
                 int usuarioId = profesor.ID;
                 int instiId = profesor.InstiID;
+                String email = profesor.Email;
 
                 var institutos = _databaseService.ObtenerTodosLosInstitutos();
                 var instituto = institutos.FirstOrDefault(i => i.ID == instiId);
@@ -261,11 +264,13 @@ namespace TFGClient.Interfaz
 
                 string nombreInstituto = instituto.Nombre;
 
+                // Agregamos el email al objeto que enviamos al backend
                 var dataToSend = new
                 {
                     nombre = nombreInstituto,
                     usuario_id = usuarioId,
-                    insti_id = instiId  // <-- Esto es importante
+                    insti_id = instiId,
+                    email
                 };
 
                 using var httpClient = new HttpClient();
@@ -308,53 +313,97 @@ namespace TFGClient.Interfaz
             }
         }
 
-        // Nuevo método para la sección "Configurar servidor"
         private async void ConfigurarServidor(object sender, EventArgs e)
         {
             try
             {
-                // Concatenar todos los cursos y grados seleccionados
-                string cursosGradosConcatenados = ObtenerDatosConcatenados();
+                string emailsesion = Preferences.Get("UsuarioEmail", "");
 
-                // Crear el objeto que vamos a enviar al servidor Flask
-                var dataToSend = new
+                if (string.IsNullOrWhiteSpace(emailsesion))
                 {
-                    cursosGrados = cursosGradosConcatenados
-                };
-
-                // Hacer la llamada HTTP para enviar los datos al servidor Flask
-                var response = await EnviarDatosAlServidorFlask(dataToSend);
-
-                // Mostrar una respuesta de éxito o error
-                if (response.IsSuccessStatusCode)
-                {
-                    await DisplayAlert("Éxito", "Datos enviados correctamente.", "OK");
+                    await DisplayAlert("Error", "No se encontró el correo del usuario.", "OK");
+                    return;
                 }
-                else
+
+                var cursosLista = ObtenerDatosCursos();
+
+                if (cursosLista.Count == 0)
                 {
-                    await DisplayAlert("Error", "Hubo un problema al enviar los datos.", "OK");
+                    await DisplayAlert("Error", "No se han seleccionado cursos o grados.", "OK");
+                    return;
+                }
+
+                var dataToSend = new Dictionary<string, object>
+        {
+            { "email", emailsesion },
+            { "cursos", cursosLista }
+        };
+
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.PostAsJsonAsync("http://localhost:5000/configurar-servidor", dataToSend);
+                    var responseText = await response.Content.ReadAsStringAsync();
+
+                    await DisplayAlert("Cursos enviados", Newtonsoft.Json.JsonConvert.SerializeObject(cursosLista), "OK");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        await DisplayAlert("✅ Configuración completada", "El servidor ha sido configurado correctamente con los roles y categorías.", "OK");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var json = JsonDocument.Parse(responseText);
+                            var root = json.RootElement;
+
+                            if (root.TryGetProperty("invite_url", out var inviteUrl))
+                            {
+                                bool abrir = await Application.Current.MainPage.DisplayAlert(
+                                    "🔗 El bot aún no está en el servidor",
+                                    "Antes de continuar, debes invitar al bot a tu servidor.\n\nPulsa en 'Invitar Bot' para abrir el enlace.\n\nDespués, vuelve a esta pantalla y pulsa el botón de 'Configurar Servidor' de nuevo.",
+                                    "Invitar Bot", "Cancelar");
+
+                                if (abrir)
+                                {
+                                    await Launcher.Default.OpenAsync(inviteUrl.GetString());
+                                    await DisplayAlert("📌 Importante",
+                                        "Una vez que hayas invitado al bot, vuelve aquí y pulsa nuevamente el botón 'Configurar Servidor' para aplicar los cambios.",
+                                        "Entendido");
+                                }
+                            }
+                            else
+                            {
+                                await DisplayAlert("Error", root.GetProperty("error").GetString(), "OK");
+                            }
+                        }
+                        catch
+                        {
+                            await DisplayAlert("Error", "Hubo un problema al procesar la respuesta del servidor.", "OK");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Manejar cualquier error
                 await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
             }
         }
 
-        private string ObtenerDatosConcatenados()
+        private List<object> ObtenerDatosCursos()
         {
-            // Obtener todos los cursos y grados seleccionados
-            var cursosGrados = new List<string>();
+            var listaCursos = new List<object>();
 
-            // Concatenar los cursos
             foreach (var curso in Cursos)
             {
-                cursosGrados.Add(curso.CursosSeleccionados); // Puedes agregar otros campos como `Grado` si es necesario
+                listaCursos.Add(new
+                {
+                    grado = curso.CursosSeleccionados?.Trim(),
+                    curso = curso.Grado?.Trim()
+                });
             }
 
-            // Crear una cadena con los cursos y grados concatenados
-            return string.Join(", ", cursosGrados);
+            return listaCursos;
         }
 
         private async Task<HttpResponseMessage> EnviarDatosAlServidorFlask(object data)

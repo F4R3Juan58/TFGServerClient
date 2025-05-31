@@ -226,7 +226,7 @@
                             </HorizontalStackLayout>
 
                         </VerticalStackLayout>
-                        
+
                         <!-- Grado -->
                         <Label Text="Grado" HorizontalOptions="FillAndExpand" TextColor="Black" Grid.Row="0" Grid.Column="3" Margin="0,10,0,10"/>
                         <Picker x:Name="CursoPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="3" WidthRequest="400" Margin="0,0,0,20"/>
@@ -274,9 +274,8 @@
                     <Button 
                         Style="{StaticResource CardButtonStyle}"
                         Text="Crear Servidor"
-                        Clicked="CrearServidorDiscord"/>
+                        Clicked="ConfigurarServidor"/>
                 </VerticalStackLayout>
-
             </Frame>
 
 

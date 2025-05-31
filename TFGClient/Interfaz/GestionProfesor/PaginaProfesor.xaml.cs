@@ -9,12 +9,12 @@ using TFGClient.Services;
 
 namespace TFGClient.Interfaz;
 
-public partial class Profesor : ContentPage
+public partial class PaginaProfesor : ContentPage
 {
     private string categoriaId;
     private string Asignatura;
 
-    public Profesor()
+    public PaginaProfesor()
 	{
 		InitializeComponent();
 	}

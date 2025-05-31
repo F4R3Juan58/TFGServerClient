@@ -13,7 +13,7 @@
 
     <!-- Roles -->
     <FlyoutItem Title="Profesor" Icon="icon_profesor.png">
-        <ShellContent Title="Profesor" ContentTemplate="{DataTemplate local:Interfaz.Profesor}" />
+        <ShellContent Title="Profesor" ContentTemplate="{DataTemplate local:Interfaz.PaginaProfesor}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Tutor" Icon="icon_tutor.png">
