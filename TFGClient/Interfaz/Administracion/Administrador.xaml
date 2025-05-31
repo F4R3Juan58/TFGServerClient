@@ -99,7 +99,7 @@
 
             <!-- Botón: Permisos -->
             <Button
-                Text="Permisos"
+                Text="Gestión Usuarios"
                 x:Name="SideBarPermisos"
                 Style="{StaticResource SidebarButtonStyle}"
                 Clicked="OnSidebarPermisosTapped"/>
@@ -144,12 +144,12 @@
                     <Grid ColumnDefinitions="*,*, Auto">
                         <VerticalStackLayout>
                             <Label
-                        Text="Configurar servidor"
+                        Text=""
                         FontSize="16"
                         FontAttributes="Bold"
                         TextColor="#333333" />
                             <Label
-                        Text="Configura las opciones y cursos del servidor de Discord"
+                        Text=""
                         LineBreakMode="WordWrap"
                         TextColor="#666666" />
                         </VerticalStackLayout>
@@ -172,14 +172,14 @@
             HasShadow="False">
                     <Grid ColumnDefinitions="*, Auto">
                         <Label
-                    Text="Permisos"
+                    Text=""
                     FontSize="16"
                     FontAttributes="Bold"
                     TextColor="#333333"
                     VerticalOptions="Center" />
                         <Button
                     Grid.Column="1"
-                    Text="Gestionar permisos"
+                    Text="Gestionar Usuarios"
                     Style="{StaticResource CardButtonStyle}"
                     WidthRequest="150"
                     Clicked="OnGestionarPermisosButtonClicked" />
@@ -197,7 +197,11 @@
             IsVisible="False">
             <Frame BackgroundColor="White">
                 <VerticalStackLayout>
-                    <Label HorizontalOptions="Center" Text="CREAR SERVIDOR" FontSize="30" TextColor="Black"/>
+                    <Label HorizontalOptions="Center" Text="MODIFICAR SERVIDOR" FontSize="30" TextColor="Black"/>
+                    <Label Text="Eliminar Curso" TextColor="Black" FontSize="20"/>
+                    <CollectionView x:Name="EliminarCurso">
+
+                    </CollectionView>
                     <Label Text="Añadir curso" TextColor="Black" FontSize="20"/>
 
                     <Grid Padding="20" ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
@@ -274,8 +278,9 @@
                     <Button 
                         Style="{StaticResource CardButtonStyle}"
                         Text="Crear Servidor"
-                        Clicked="ConfigurarServidor"/>
+                        Clicked="CrearServidorDiscord"/>
                 </VerticalStackLayout>
+
             </Frame>
 
 
