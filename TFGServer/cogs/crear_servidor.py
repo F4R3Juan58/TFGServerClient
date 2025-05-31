@@ -31,11 +31,12 @@ class CrearServidor(commands.Cog):
 
             # Crear canales nuevos
             canal_general = await nuevo_guild.create_text_channel("📌・general")
-            await nuevo_guild.create_text_channel("❓・dudas")
             print(f"📂 Canales creados en '{nombre_instituto}'.")
 
             # Crear rol admin con permisos de administrador
             admin_role = await nuevo_guild.create_role(name="admin", permissions=disnake.Permissions(administrator=True))
+            profesor_role = await nuevo_guild.create_role(name="profesor")
+            alumno_role = await nuevo_guild.create_role(name="alumno")
             print(f"🔑 Rol 'admin' creado en '{nombre_instituto}'.")
 
             # Guardamos el guild id en set para saber que aún no hemos asignado admin a nadie

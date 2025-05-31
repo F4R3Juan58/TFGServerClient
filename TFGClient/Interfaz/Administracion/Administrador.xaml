@@ -101,6 +101,12 @@ Spacing="8">
                 Clicked="OnSidebarCrearServidorTapped"/>
 
                 <Button
+                Text="Eliminar Servidor"
+                x:Name="SideBarEliminarServidor"
+                Style="{StaticResource SidebarButtonStyle}"
+                Clicked="OnSidebarEliminarServidorTapped"/>
+
+                <Button
                 Text="Añadir Cursos"
                 x:Name="SideBarAñadirCurso"
                 Style="{StaticResource SidebarButtonStyle}"
@@ -201,6 +207,27 @@ Spacing="8">
                         <Label x:Name="ServidorNombreEntry" TextColor="Black" HorizontalOptions="Center" FontSize="20" FontAttributes="Italic" />
 
                         <Button Text="Crear Servidor" Style="{StaticResource CardButtonStyle}" Clicked="CrearServidorDiscord" HorizontalOptions="Center" WidthRequest="200"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </ScrollView>
+
+
+
+            <ScrollView
+    Grid.Row="1"
+    Grid.Column="1"
+    Padding="20"
+    x:Name="AreaEliminarServidor"
+    IsVisible="False">
+
+                <Frame BackgroundColor="White">
+                    <VerticalStackLayout Spacing="20" Padding="10">
+                        <Label Text="ELIMINAR SERVIDOR EN DISCORD" FontSize="30" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold"/>
+
+                        <!-- Aquí podrías poner los controles para crear un servidor -->
+                        <Label x:Name="ServidorNombreEntryEliminar" TextColor="Black" HorizontalOptions="Center" FontSize="20" FontAttributes="Italic" />
+
+                        <Button Text="Eliminar Servidor" Style="{StaticResource CardButtonStyle}" Clicked="EliminarServidorDiscord" HorizontalOptions="Center" WidthRequest="200"/>
                     </VerticalStackLayout>
                 </Frame>
             </ScrollView>

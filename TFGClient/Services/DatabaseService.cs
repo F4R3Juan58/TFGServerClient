@@ -242,5 +242,27 @@ namespace TFGClient.Services
             }
         }
 
+        public bool EliminarServidor(int institutoId)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                // Comando DELETE para eliminar el servidor asociado al instituto
+                string query = "DELETE FROM ServidoresDiscord WHERE InstiID = @InstiID";
+
+                int filasAfectadas = connection.Execute(query, new { InstiID = institutoId });
+
+                return filasAfectadas > 0; // Devuelve true si se eliminó al menos un registro
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al eliminar el servidor: {ex.Message}");
+                return false;
+            }
+        }
+
+
     }
 }

@@ -111,6 +111,7 @@ namespace TFGClient.Interfaz
         private void ResetSidebarButtonsBackground()
         {
             SideBarCrearServidor.BackgroundColor = Colors.Transparent;
+            SideBarEliminarServidor.BackgroundColor = Colors.Transparent;
             SideBarAñadirCurso.BackgroundColor = Colors.Transparent;
             SideBarEliminarCurso.BackgroundColor = Colors.Transparent;
             SideBarGestionAlumnos.BackgroundColor = Colors.Transparent;
@@ -133,6 +134,15 @@ namespace TFGClient.Interfaz
             ServidorNombreEntry.Text = institutoName;
             SideBarCrearServidor.BackgroundColor = Colors.LightGray;
             AreaCrearServidor.IsVisible = true;
+        }
+
+        private void OnSidebarEliminarServidorTapped(object sender, EventArgs e)
+        {
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+            ServidorNombreEntryEliminar.Text = institutoName;
+            SideBarEliminarServidor.BackgroundColor = Colors.LightGray;
+            AreaEliminarServidor.IsVisible = true;
         }
 
         private void OnSidebarAñadirCursoTapped(object sender, EventArgs e)
@@ -229,10 +239,6 @@ namespace TFGClient.Interfaz
             }
         }
 
-
-
-
-
         private void OnSidebarGestionAlumnosTapped(object sender, EventArgs e)
         {
             ResetSidebarButtonsBackground();
@@ -251,21 +257,6 @@ namespace TFGClient.Interfaz
             AreaGestionProfesores.IsVisible = true;
         }
 
-
-        // Métodos vacíos para los botones
-        private void OnCrearServidorButtonClicked(object sender, EventArgs e)
-        {
-            AreaPrincipal.IsVisible = false;
-            AreaCrearServidor.IsVisible = true;
-            SideBarCrearServidor.BackgroundColor = Colors.LightGray;
-        }
-        private void OnGestionarPermisosButtonClicked(object sender, EventArgs e)
-        {
-            AreaPrincipal.IsVisible = false;
-            AreaCrearServidor.IsVisible = false;
-            SideBarCrearServidor.BackgroundColor = Colors.Transparent;
-
-        }
         private void OnVerIncidenciasResueltasTapped(object sender, EventArgs e) { }
         private void OnAccederLogsButtonClicked(object sender, EventArgs e) { }
 
@@ -698,6 +689,59 @@ namespace TFGClient.Interfaz
             else
             {
                 await DisplayAlert("Error", "No se pudo eliminar el profesor localmente.", "OK");
+            }
+        }
+
+        private async void EliminarServidorDiscord(object sender, EventArgs e)
+        {
+            try
+            {
+                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+                if (profesor == null)
+                {
+                    await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
+                    return;
+                }
+
+                bool confirmar = await DisplayAlert("Confirmar eliminación",
+                    $"¿Quieres eliminar el servidor Discord asociado al instituto {profesor.InstiID}?",
+                    "Sí", "No");
+                if (!confirmar)
+                    return;
+
+                var dataToSend = new
+                {
+                    InstiID = profesor.InstiID
+                };
+
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                using var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:5000/eliminar-servidor", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Si se eliminó en Discord, también eliminamos localmente el registro de la base de datos
+                    bool eliminadoLocal = _databaseService.EliminarServidor(profesor.InstiID);
+                    if (eliminadoLocal)
+                    {
+                        await DisplayAlert("Éxito", "Servidor Discord eliminado correctamente y registro local borrado.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Advertencia", "Servidor eliminado en Discord, pero no se pudo borrar el registro local.", "OK");
+                    }
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"Error al eliminar el servidor: {error}", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error conectando con servidor: {ex.Message}", "OK");
             }
         }
 

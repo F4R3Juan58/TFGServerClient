@@ -66,6 +66,58 @@ def crear_servidor_api():
         print(f"Error en crear-servidor: {e}")
         return jsonify({"error": f"Error al crear el servidor: {str(e)}"}), 500
 
+@app.route("/eliminar-servidor", methods=["POST"])
+def eliminar_servidor():
+    data = request.get_json(force=True)
+    insti_id = data.get("InstiID")
+
+    if not insti_id:
+        return jsonify({"error": "Falta InstiID"}), 400
+
+    try:
+        servidor = asyncio.run_coroutine_threadsafe(
+            db.obtener_servidor_por_insti_id(insti_id),
+            bot.loop
+        ).result()
+
+        if not servidor:
+            return jsonify({"error": "No existe servidor asociado al instituto."}), 404
+
+        discord_id = int(servidor['DiscordID'])
+        guild = bot.get_guild(discord_id)
+        async def procesar_servidor():
+            # Expulsar a todos los miembros que no sean bots
+            for member in guild.members:
+                if not member.bot:
+                    try:
+                        await member.kick(reason="Servidor eliminado desde panel")
+                    except Exception as e:
+                        print(f"Error expulsando {member.name}: {e}")
+
+            # Eliminar canales
+            for channel in guild.channels:
+                try:
+                    await channel.delete()
+                except Exception as e:
+                    print(f"Error eliminando canal {channel.name}: {e}")
+
+            # Eliminar roles excepto @everyone
+            for role in guild.roles:
+                if role.is_default():
+                    continue
+                try:
+                    await role.delete()
+                except Exception as e:
+                    print(f"Error eliminando rol {role.name}: {e}")
+
+        asyncio.run_coroutine_threadsafe(procesar_servidor(), bot.loop).result()
+
+        return jsonify({"status": "OK", "message": "Servidor procesado y limpiado."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/vincular-discordid", methods=["POST"])
 def vincular_discordid_api():
     data = request.json
@@ -101,9 +153,6 @@ def configurar_servidor_api():
     insti_id = data.get("InstiID")
     cursos_raw = data.get("cursosGrados")  # Aquí recibes string: "1º DAM, 2º ASIR"
 
-    print(f"InstiID: {insti_id}")
-    print("Cursos raw: "+str(cursos_raw))
-
     if not insti_id or not cursos_raw:
         return jsonify({"error": "Faltan datos"}), 400
 
@@ -135,7 +184,6 @@ def configurar_servidor_api():
 
     except Exception as e:
         return jsonify({"error": f"Error al configurar el servidor: {str(e)}"}), 500
-
 
 @app.route("/obtener-categorias", methods=["POST"])  # POST porque recibes insti_id en body JSON
 def obtener_categorias():
