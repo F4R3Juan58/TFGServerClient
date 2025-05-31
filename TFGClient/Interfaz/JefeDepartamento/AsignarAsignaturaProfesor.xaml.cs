@@ -1,14 +1,17 @@
+using TFGClient.Models;
 namespace TFGClient
 {
     public partial class AsignarAsignaturaProfesor : ContentPage
     {
-
-        public AsignarAsignaturaProfesor()
+        private List<Profesor> _profesores;
+        public AsignarAsignaturaProfesor(List<Profesor> listaProfesores)
         {
             InitializeComponent();
+
+            ProfesorPicker.ItemsSource = listaProfesores;
+            ProfesorPicker.ItemDisplayBinding = new Binding("NombreCompleto");
         }
 
-       
 
         private async void Cancelar_Clicked(object sender, EventArgs e)
         {

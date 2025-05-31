@@ -40,32 +40,23 @@
 
         <VerticalStackLayout Spacing="15">
 
-            <Label Text="Bloquear asignatura"
+            <Label Text="Eliminar asignatura"
                    TextColor="Black"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
-            <!-- Grado -->
-            <Label Text="Grado" TextColor="Black"/>
-            <Picker x:Name="gradoPicker" BackgroundColor="Red"/>
+            <VerticalStackLayout>
+                <Label Text=" Grado y Curso" TextColor="Black"/>
+                <Picker x:Name="cursoPicker" BackgroundColor="Red"/>
 
-            <!-- Curso y Asignatura en la misma fila -->
-            <HorizontalStackLayout Spacing="15">
-                <VerticalStackLayout WidthRequest="200">
-                    <Label Text="Curso" TextColor="Black"/>
-                    <Picker x:Name="cursoPicker" BackgroundColor="Red"/>
-                </VerticalStackLayout>
-
-                <VerticalStackLayout WidthRequest="200">
-                    <Label Text="Asignatura" TextColor="Black"/>
+                <Label Text="Asignatura" TextColor="Black"/>
                     <Picker x:Name="asignaturaPicker" BackgroundColor="Red"/>
                 </VerticalStackLayout>
-            </HorizontalStackLayout>
 
-            <!-- Botones -->
+                <!-- Botones -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,0">
-                <Button Text="Bloquear" Style="{StaticResource CardButtonStyle}" Clicked="Bloquear_Clicked" />
+                <Button Text="Eliminar" Style="{StaticResource CardButtonStyle}" Clicked="Bloquear_Clicked" />
                 <Button Text="Cancelar" Style="{StaticResource OutlinedButtonStyle}" Clicked="Cancelar_Clicked" />
             </HorizontalStackLayout>
 

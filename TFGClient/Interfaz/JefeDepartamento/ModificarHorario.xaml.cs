@@ -1,13 +1,16 @@
 using Microsoft.Maui.Controls;
+using TFGClient.Models;
 
 namespace TFGClient
 {
     public partial class ModificarHorario : ContentPage
     {
-
-        public ModificarHorario()
+        public ModificarHorario(List<Profesor> listaProfesores)
         {
             InitializeComponent();
+
+            profesorPicker.ItemsSource = listaProfesores;
+            profesorPicker.ItemDisplayBinding = new Binding("NombreCompleto");
         }
 
         private async void Guardar_Clicked(object sender, EventArgs e)

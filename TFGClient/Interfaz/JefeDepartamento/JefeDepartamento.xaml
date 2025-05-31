@@ -39,65 +39,79 @@
 
         <!-- HEADER -->
         <Grid
-      Grid.Row="0"
-      ColumnDefinitions="Auto, *, Auto"
-      BackgroundColor="#296ACC"
-      HeightRequest="60">
+  Grid.Row="0"
+  ColumnDefinitions="Auto, *, Auto"
+  BackgroundColor="#296ACC"
+  HeightRequest="60">
 
-            <!-- LOGO -->
-            <Image
-        Source="EducordLogo.png"
-        HeightRequest="40"
-        VerticalOptions="Center"
-        Margin="16,0" />
+            <HorizontalStackLayout
+HorizontalOptions="Center"
+VerticalOptions="Center"
+Spacing="8">
+                <!-- Ajusta el espaciado a tu gusto -->
+
+                <Image
+    Source="logo.png"
+    HeightRequest="40"
+    VerticalOptions="Center"
+    Margin="16,0" />
+
+                <Label
+    Text="EDUCORD"
+    VerticalOptions="Center"
+    TextColor="White"
+    FontAttributes="Bold"
+    FontSize="20" />
+                <!-- Ajusta el tamaño de fuente si quieres -->
+            </HorizontalStackLayout>
+
 
             <!-- USUARIO -->
             <StackLayout
-        Grid.Column="2"
-        Orientation="Horizontal"
-        VerticalOptions="Center"
-        Spacing="8"
-        Margin="0,0,16,0">
-                <Image
-          Source="user.png"
-          HeightRequest="24"
-          VerticalOptions="Center" />
+    Grid.Column="2"
+    Orientation="Horizontal"
+    VerticalOptions="Center"
+    Spacing="8"
+    Margin="0,0,16,0">
+
                 <Label
-          Text="Profesor"
-          TextColor="White"
-          FontAttributes="Bold"
-          VerticalOptions="Center" />
+                x:Name="NombreProfesor"
+        Text=""
+        TextColor="White"
+        FontAttributes="Bold"
+        VerticalOptions="Center" />
+
             </StackLayout>
         </Grid>
 
         <!-- CUERPO: MENÚ LATERAL + ÁREA PRINCIPAL -->
         <Grid Grid.Row="1" ColumnDefinitions="250, *">
-
             <VerticalStackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="#FFFFFF" Spacing="10" Margin="20,20,0,0" Padding="10,0">
-
                 <Label Text="ADMINISTRAR"  TextColor="#296ACC" FontSize="20"/>
                 <Button Text="Gestión académica" TextColor="#296ACC" BackgroundColor="LightGray" Clicked="MostrarGestionAcademica"/>
                 <Label Text="TUTORES" Style="{StaticResource SidebarButtonStyle}"/>
-                <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single">
+                <CollectionView ItemsSource="{Binding Tutores}" SelectionMode="Single" x:Name="TutoresCollectionView" HeightRequest="200">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding}" Padding="10" />
+                            <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
+                                <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                
+
 
                 <Label Text="PROFESORES" Style="{StaticResource SidebarButtonStyle}" Margin="0,20,0,0"/>
-                <CollectionView x:Name="AlumnosCollection">
+                <CollectionView ItemsSource="{Binding Profesores}" SelectionMode="Single" x:Name="ProfesoresCollectionView" HeightRequest="300">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding}" Padding="10" />
+                            <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
+                                <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
             </VerticalStackLayout>
-
 
             <!-- ÁREA PRINCIPAL -->
             <ScrollView Grid.Column="1" IsVisible="true" x:Name="GestionAcademica">
@@ -172,9 +186,9 @@
             HorizontalOptions="Fill" />
 
                         <Button
-              Grid.Row="2" Grid.Column="0"
-              Text="Bloquear asignatura"
-                            Clicked="BloquearAsignatura"
+              Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+              Text="Eliminar asignatura"
+                            Clicked="EliminarAsignatura"
               ImageSource="icon_checklist.png"
               ContentLayout="Left,10"
               BorderColor="#296ACC"
@@ -186,20 +200,6 @@
               HeightRequest="60"
               HorizontalOptions="Fill" />
 
-                        <Button
-              Grid.Row="2" Grid.Column="1"
-              Text="Bloquear canal"
-                            Clicked="BloquearCanal"
-              ImageSource="icon_checklist.png"
-              ContentLayout="Left,10"
-              BorderColor="#296ACC"
-              BorderWidth="2"
-              CornerRadius="8"
-              BackgroundColor="Transparent"
-              TextColor="#296ACC"
-              FontAttributes="Bold"
-              HeightRequest="60"
-              HorizontalOptions="Fill" />
 
                     </Grid>
                 </StackLayout>
@@ -208,16 +208,20 @@
             <ScrollView IsVisible="False" Grid.Column="1" x:Name="AdministrarProfesores">
                 <VerticalStackLayout  Padding="16" Spacing="16">
                     <Label Text="Listado de profesores" FontSize="20" TextColor="Black"/>
-                    <CollectionView>
-
+                    <CollectionView ItemsSource="{Binding Profesores}" SelectionMode="Single" x:Name="ListaProfesoresCollectionView" HeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
+                                    <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
                     </CollectionView>
                     <HorizontalStackLayout>
                         <Button Text="Editar"  Style="{StaticResource CardButtonStyle}" Clicked="Editar"/>
                         <Button Text="Salir"  Style="{StaticResource CardButtonStyle}" Clicked="VolverGestionAcademica"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
-
-
             </ScrollView>
         </Grid>
     </Grid>

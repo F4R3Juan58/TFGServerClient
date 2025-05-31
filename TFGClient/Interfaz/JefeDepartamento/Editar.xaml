@@ -28,44 +28,14 @@
 
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="Editar" TextColor="Black" FontSize="18" />
-            <Grid RowSpacing="10" ColumnSpacing="10" Padding="10">
-                <!-- Definición columnas: 4 columnas -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Label Text="Modificar Asignación de Asignatura" TextColor="Black" FontSize="20" FontAttributes="Bold"/>
 
-                <!-- Definición filas: 4 filas -->
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <Label Text="Nombre de Profesor" TextColor="Black" FontSize="16" x:Name="NombreProfesor"/>
+            <Label Text="Asignaturas Actuales:" TextColor="Black"/>
+            <Picker x:Name="Asignaturas" TextColor="Black" BackgroundColor="Red"/>
 
-                <!-- Fila 0 -->
-                <Label Text="Nombre" TextColor="Black" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" />
-                <Entry BackgroundColor="Red" Grid.Row="0" Grid.Column="1" />
-                <Label Text="Apellidos" TextColor="Black" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" />
-                <Entry BackgroundColor="Red" Grid.Row="0" Grid.Column="3" />
-
-                <!-- Fila 1 -->
-                <Label Text="Correo" TextColor="Black" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" />
-                <Entry BackgroundColor="Red" Grid.Row="1" Grid.Column="1" />
-                <Label Text="" Grid.Row="1" Grid.Column="2" />
-
-                <!-- Fila 2 -->
-                <Label Text="Formacion" TextColor="Black" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" />
-                <Entry BackgroundColor="Red" Grid.Row="2" Grid.Column="1" />
-
-                <!-- Fila 3 -->
-                <Button Text="Eliminar" BackgroundColor="Red" Grid.Row="1" Grid.Column="3" />
-            </Grid>
-
-
+            <Label Text="Todas las Asignaturas:" TextColor="Black"/>
+            <Picker x:Name="AsignaturasTotales" TextColor="Black" BackgroundColor="Red"/>
 
             <HorizontalStackLayout>
                 <Button Text="Guardar" TextColor="Black" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}"/>

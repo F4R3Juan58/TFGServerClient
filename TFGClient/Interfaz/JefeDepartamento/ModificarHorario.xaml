@@ -39,27 +39,28 @@
             <Label Text="Profesor" TextColor="Black"/>
             <Picker x:Name="profesorPicker" BackgroundColor="Red"/>
 
-            <!-- Asignatura -->
-            <Label Text="Asignatura" TextColor="Black"/>
-            <Picker x:Name="asignaturaPicker" BackgroundColor="Red" />
 
             <!-- Día -->
-            <Label Text="Día" TextColor="Black"/>
+            <Label Text="Franja Horaria" TextColor="Black"/>
             <Picker x:Name="diaPicker"  BackgroundColor="Red">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
-                        <x:String>Lunes</x:String>
-                        <x:String>Martes</x:String>
-                        <x:String>Miércoles</x:String>
-                        <x:String>Jueves</x:String>
-                        <x:String>Viernes</x:String>
+                        <x:String>Vespertino</x:String>
+                        <x:String>Diurno</x:String>
                     </x:Array>
                 </Picker.ItemsSource>
             </Picker>
 
             <!-- Horario -->
             <Label Text="Horario" TextColor="Black"/>
-            <Picker x:Name="horarioPicker"  BackgroundColor="Red"/>
+            <Picker x:Name="horarioPicker"  BackgroundColor="Red">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>8:15 - 15:15</x:String>
+                        <x:String>15:30 - 21:30</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
 
             <!-- Botones -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,0">

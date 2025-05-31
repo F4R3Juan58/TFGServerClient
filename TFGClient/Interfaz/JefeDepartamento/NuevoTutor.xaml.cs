@@ -1,14 +1,19 @@
+using TFGClient.Models;
+
 namespace TFGClient
 {
     public partial class NuevoTutor : ContentPage
     {
-
-        public NuevoTutor()
+        private List<Profesor> _profesores;
+        public NuevoTutor(List<Profesor> listaProfesores)
         {
             InitializeComponent();
+
+            profesorPicker.ItemsSource = listaProfesores;
+            profesorPicker.ItemDisplayBinding = new Binding("NombreCompleto");
         }
 
-       
+
 
         private async void Cerrar_Clicked(object sender, EventArgs e)
         {

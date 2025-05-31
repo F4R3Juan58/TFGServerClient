@@ -25,7 +25,7 @@ namespace TFGClient
             // Ocultar barra de navegación completa
             NavigationPage.SetHasNavigationBar(this, false);
 
-            
+
         }
 
         private async void onLoginClicked(object sender, EventArgs e)
@@ -61,6 +61,7 @@ namespace TFGClient
                 {
                     // ✅ Guardar el email SOLO si es profesor
                     Preferences.Set("UsuarioEmail", profesor.Email);
+                    SesionUsuario.Instancia.ProfesorLogueado = profesor;
                     await Shell.Current.GoToAsync("Profesor");
                 }
                 else
@@ -96,5 +97,25 @@ namespace TFGClient
         {
             await Navigation.PushAsync(new RecurperarPassword());
         }
+    }
+
+    public class SesionUsuario
+    {
+        public static SesionUsuario _instancia;
+
+        public static SesionUsuario Instancia
+        {
+            get
+            {
+                if (_instancia == null)
+                    _instancia = new SesionUsuario();
+
+                return _instancia;
+            }
+        }
+
+        public Profesor ProfesorLogueado { get; set; }
+
+        public SesionUsuario() { }
     }
 }
