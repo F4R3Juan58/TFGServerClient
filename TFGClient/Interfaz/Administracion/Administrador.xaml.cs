@@ -16,8 +16,11 @@ namespace TFGClient.Interfaz
         private ObservableCollection<string> cursosCompletos = new();
         public ObservableCollection<Opcion> Opciones1 { get; set; } // Opciones para 1º
         public ObservableCollection<Opcion> Opciones2 { get; set; } // Opciones para 2º
+        public ObservableCollection<string> CategoriasParaEliminar { get; set; } = new ObservableCollection<string>();
+
 
         public ObservableCollection<Curso> Cursos { get; set; }
+        string institutoName;
 
         public Administrador()
         {
@@ -26,6 +29,12 @@ namespace TFGClient.Interfaz
             _databaseService = new DatabaseService();
             Alumnos = new ObservableCollection<Alumno>();
             Profesores = new ObservableCollection<Profesor>();
+            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            if (profesor != null)
+            {
+                NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
+                institutoName = _databaseService.ObtenerNombreInstituto(profesor.InstiID);
+            }
             Opciones1 = new ObservableCollection<Opcion>
     {
         new Opcion { Nombre = "1º", EsSeleccionado = false },
@@ -41,13 +50,15 @@ namespace TFGClient.Interfaz
             cargarBBDD();
 
         }
+        
 
-        private void InicializarEventos()
+        private async void InicializarEventos()
         {
             NivelPicker.SelectedIndexChanged += (s, e) =>
             {
                 CargarFamilias();
             };
+            await CargarCursosParaEliminarDesdeServidorAsync();
 
             FamiliaPicker.SelectedIndexChanged += (s, e) => CargarCursos();
         }
@@ -97,38 +108,149 @@ namespace TFGClient.Interfaz
             }
         }
 
-        // Métodos para manejar el clic en los botones del menú lateral
+        private void ResetSidebarButtonsBackground()
+        {
+            SideBarCrearServidor.BackgroundColor = Colors.Transparent;
+            SideBarAñadirCurso.BackgroundColor = Colors.Transparent;
+            SideBarEliminarCurso.BackgroundColor = Colors.Transparent;
+            SideBarGestionAlumnos.BackgroundColor = Colors.Transparent;
+            SideBarGestionProfesores.BackgroundColor = Colors.Transparent;
+        }
+
+        private void HideAllAreas()
+        {
+            AreaCrearServidor.IsVisible = false;
+            AreaAñadirCurso.IsVisible = false;
+            AreaEliminarCurso.IsVisible = false;
+            AreaGestionAlumnos.IsVisible = false;
+            AreaGestionProfesores.IsVisible = false;
+        }
+
         private void OnSidebarCrearServidorTapped(object sender, EventArgs e)
         {
-            SelectedMenuItem = "CrearServidor";
-            AreaPrincipal.IsVisible = false;
-            AreaCrearServidor.IsVisible = true;
-            AreaPermisos.IsVisible = false;
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+            ServidorNombreEntry.Text = institutoName;
             SideBarCrearServidor.BackgroundColor = Colors.LightGray;
-            SideBarPermisos.BackgroundColor = Colors.Transparent;
+            AreaCrearServidor.IsVisible = true;
         }
 
-        private void OnSidebarPermisosTapped(object sender, EventArgs e)
+        private void OnSidebarAñadirCursoTapped(object sender, EventArgs e)
         {
-            SelectedMenuItem = "Permisos";
-            AreaPrincipal.IsVisible = false;
-            AreaCrearServidor.IsVisible = false;
-            AreaPermisos.IsVisible = true;
-            SideBarCrearServidor.BackgroundColor = Colors.Transparent;
-            SideBarPermisos.BackgroundColor = Colors.LightGray;
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+
+            SideBarAñadirCurso.BackgroundColor = Colors.LightGray;
+            AreaAñadirCurso.IsVisible = true;
         }
 
-        private void OnSidebarIncidenciasTapped(object sender, EventArgs e)
+        private async void OnSidebarEliminarCursoTapped(object sender, EventArgs e)
         {
-            SelectedMenuItem = "Incidencias";
-            OnPropertyChanged(nameof(SelectedMenuItem));
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+
+            SideBarEliminarCurso.BackgroundColor = Colors.LightGray;
+            AreaEliminarCurso.IsVisible = true;
+
+            await CargarCursosParaEliminarDesdeServidorAsync();
+
         }
 
-        private void OnSidebarLogsTapped(object sender, EventArgs e)
+
+        private async Task CargarCursosParaEliminarDesdeServidorAsync()
         {
-            SelectedMenuItem = "Logs";
-            OnPropertyChanged(nameof(SelectedMenuItem));
+            try
+            {
+                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+
+                if (profesor == null)
+                {
+                    await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
+                    return;
+                }
+
+                var dataToSend = new
+                {
+                    InstiID = profesor.InstiID,
+                };
+
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                using var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:5000/obtener-categorias", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var categorias = JsonConvert.DeserializeObject<List<string>>(json);
+
+                    if (categorias != null)
+                    {
+                        Cursos.Clear();
+
+                        foreach (var cat in categorias)
+                        {
+                            string nivel = "";
+                            string familia = "";
+                            string cursosSeleccionados = "";
+                            string grado = "";
+
+                            var partes = cat.Split(' ', 2);
+                            if (partes.Length == 2)
+                            {
+                                cursosSeleccionados = partes[0];
+                                grado = partes[1];
+                            }
+                            else
+                            {
+                                cursosSeleccionados = cat;
+                            }
+
+                            Cursos.Add(new Curso
+                            {
+                                Nivel = nivel,
+                                Familia = familia,
+                                CursosSeleccionados = cursosSeleccionados,
+                                Grado = grado
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se pudieron obtener las categorías del servidor.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error al cargar categorías: {ex.Message}", "OK");
+            }
         }
+
+
+
+
+
+        private void OnSidebarGestionAlumnosTapped(object sender, EventArgs e)
+        {
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+
+            SideBarGestionAlumnos.BackgroundColor = Colors.LightGray;
+            AreaGestionAlumnos.IsVisible = true;
+        }
+
+        private void OnSidebarGestionProfesoresTapped(object sender, EventArgs e)
+        {
+            ResetSidebarButtonsBackground();
+            HideAllAreas();
+
+            SideBarGestionProfesores.BackgroundColor = Colors.LightGray;
+            AreaGestionProfesores.IsVisible = true;
+        }
+
 
         // Métodos vacíos para los botones
         private void OnCrearServidorButtonClicked(object sender, EventArgs e)
@@ -136,15 +258,13 @@ namespace TFGClient.Interfaz
             AreaPrincipal.IsVisible = false;
             AreaCrearServidor.IsVisible = true;
             SideBarCrearServidor.BackgroundColor = Colors.LightGray;
-            SideBarPermisos.BackgroundColor = Colors.Transparent;
         }
         private void OnGestionarPermisosButtonClicked(object sender, EventArgs e)
         {
             AreaPrincipal.IsVisible = false;
             AreaCrearServidor.IsVisible = false;
-            AreaPermisos.IsVisible = true;
             SideBarCrearServidor.BackgroundColor = Colors.Transparent;
-            SideBarPermisos.BackgroundColor = Colors.LightGray;
+
         }
         private void OnVerIncidenciasResueltasTapped(object sender, EventArgs e) { }
         private void OnAccederLogsButtonClicked(object sender, EventArgs e) { }
@@ -208,25 +328,58 @@ namespace TFGClient.Interfaz
         }
 
         // Método para manejar el clic en el botón de eliminar
-        private void OnEliminarCursoClicked(object sender, EventArgs e)
+        private async void OnEliminarCursoClicked(object sender, EventArgs e)
         {
-            // Encontrar el botón clickeado
             var button = sender as Button;
-
             if (button == null) return;
+            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
 
-            // Obtener el objeto Curso asociado a ese botón
             var cursoAEliminar = button.BindingContext as Curso;
+            if (cursoAEliminar == null) return;
 
-            if (cursoAEliminar != null)
+            // Confirmar con el usuario antes de eliminar
+            bool confirmar = await DisplayAlert("Confirmar eliminación",
+                $"¿Quieres eliminar la categoría '{cursoAEliminar.CursosSeleccionados} {cursoAEliminar.Grado}' del servidor Discord?",
+                "Sí", "No");
+
+            if (!confirmar) return;
+
+            try
             {
-                // Eliminar el curso de la colección
-                Cursos.Remove(cursoAEliminar);
+                // Preparar objeto JSON con los datos necesarios para eliminar
+                var dataToSend = new
+                {
+                    InstiID = profesor.InstiID,
+                    categoria = $"{cursoAEliminar.CursosSeleccionados} {cursoAEliminar.Grado}"
+                };
 
-                // Opcional: Si tienes algún mensaje que mostrar o un comportamiento adicional
-                DisplayAlert("Eliminado", "El curso fue eliminado.", "OK");
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                using var httpClient = new HttpClient();
+
+                // Cambia esta URL por la de tu endpoint Flask para eliminar categorías
+                var response = await httpClient.PostAsync("http://localhost:5000/eliminar-categoria", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Eliminar localmente de la colección para actualizar UI
+                    Cursos.Remove(cursoAEliminar);
+
+                    await DisplayAlert("Éxito", "Categoría eliminada correctamente del servidor Discord.", "OK");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"Error en servidor: {error}", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Excepción al conectar con servidor: {ex.Message}", "OK");
             }
         }
+
 
         private async void CrearServidorDiscord(object sender, EventArgs e)
         {
@@ -247,7 +400,7 @@ namespace TFGClient.Interfaz
                     return;
                 }
 
-                int usuarioId = profesor.ID;
+                string usuarioEmail = profesor.Email;
                 int instiId = profesor.InstiID;
 
                 var institutos = _databaseService.ObtenerTodosLosInstitutos();
@@ -264,7 +417,7 @@ namespace TFGClient.Interfaz
                 var dataToSend = new
                 {
                     nombre = nombreInstituto,
-                    usuario_id = usuarioId,
+                    email = usuarioEmail,
                     insti_id = instiId  // <-- Esto es importante
                 };
 
@@ -309,82 +462,79 @@ namespace TFGClient.Interfaz
         }
 
         // Nuevo método para la sección "Configurar servidor"
-        private async void ConfigurarServidor(object sender, EventArgs e)
+        private async void AñadirCursos(object sender, EventArgs e)
         {
+            
             try
             {
                 // Concatenar todos los cursos y grados seleccionados
                 string cursosGradosConcatenados = ObtenerDatosConcatenados();
 
+                // Mostrar los cursos concatenados antes de enviarlos
+                await DisplayAlert("Cursos a enviar", cursosGradosConcatenados, "OK");
+
+                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+
                 // Crear el objeto que vamos a enviar al servidor Flask
                 var dataToSend = new
                 {
+                    InstiID = profesor.InstiID,
                     cursosGrados = cursosGradosConcatenados
                 };
 
-                // Hacer la llamada HTTP para enviar los datos al servidor Flask
-                var response = await EnviarDatosAlServidorFlask(dataToSend);
+                // Serializar a JSON
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                Console.WriteLine("JSON enviado: " + jsonData);
 
-                // Mostrar una respuesta de éxito o error
+
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Crear cliente HTTP y hacer POST a Flask (localhost:5000)
+                using var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:5000/añadir-cursos", content);
+
+                // Manejar respuesta
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Éxito", "Datos enviados correctamente.", "OK");
+                    await DisplayAlert("Éxito", "Cursos enviados correctamente al servidor Flask.", "OK");
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Hubo un problema al enviar los datos.", "OK");
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"Fallo en servidor Flask: {error}", "OK");
                 }
+                Cursos.Clear();
             }
             catch (Exception ex)
             {
-                // Manejar cualquier error
-                await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Excepción al conectar con Flask: {ex.Message}", "OK");
             }
         }
+
+
 
         private string ObtenerDatosConcatenados()
         {
-            // Obtener todos los cursos y grados seleccionados
-            var cursosGrados = new List<string>();
+            var listaConcat = Cursos
+                .Select(c => $"{c.CursosSeleccionados} {c.Grado}")
+                .ToList();
 
-            // Concatenar los cursos
-            foreach (var curso in Cursos)
-            {
-                cursosGrados.Add(curso.CursosSeleccionados); // Puedes agregar otros campos como `Grado` si es necesario
-            }
-
-            // Crear una cadena con los cursos y grados concatenados
-            return string.Join(", ", cursosGrados);
+            return string.Join(", ", listaConcat);
         }
 
-        private async Task<HttpResponseMessage> EnviarDatosAlServidorFlask(object data)
-        {
-            // Usar HttpClient para enviar los datos a tu servidor Flask
-            using (var client = new HttpClient())
-            {
-                // Configura la URL de tu servidor Flask
-                var url = "localhost/crearServidor"; // Cambia la URL a la de tu servidor Flask
-
-                // Crear el contenido a enviar (se asume que Flask espera JSON)
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-
-                // Enviar la solicitud HTTP POST
-                return await client.PostAsync(url, content);
-            }
-        }
 
         // Método para buscar alumnos por nombre
-        private void BuscarAlumno(object sender, EventArgs e)
+        private void BuscarAlumno_Clicked(object sender, EventArgs e)
         {
             // Obtener el nombre de la búsqueda
-            string nombreBusqueda = NombreEntry.Text;
-
+            string nombreBusqueda = BuscarAlumnoEntry.Text;
+            var profe = SesionUsuario.Instancia.ProfesorLogueado;
             // Si el nombre no está vacío, realizar la búsqueda
             if (!string.IsNullOrEmpty(nombreBusqueda))
             {
                 // Consultamos a la base de datos por alumnos cuyo nombre coincida con la búsqueda
                 var alumnosEncontrados = _databaseService.ObtenerTodosLosAlumnos()
-                    .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase)) // Buscar por nombre
+                    .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
                     .ToList();
 
                 // Limpiamos la colección actual
@@ -408,77 +558,149 @@ namespace TFGClient.Interfaz
             }
         }
 
-
-        // Método para obtener los roles de Discord del servidor Flask
-        private async Task<List<string>> ObtenerRolesDiscord(string discordId)
+        private void BuscarProfesor_Clicked(object sender, EventArgs e)
         {
-            var roles = new List<string>();
+            // Obtener el nombre de la búsqueda
+            string nombreBusqueda = BuscarProfesorEntry.Text;
+            var profe = SesionUsuario.Instancia.ProfesorLogueado;
 
-            // Realizar la solicitud HTTP a Flask para obtener los roles
-            var url = "http://your-flask-server-url/roles";  // URL de tu servidor Flask
-            var client = new HttpClient();
-            var response = await client.GetAsync($"{url}?discordId={discordId}");
-
-            if (response.IsSuccessStatusCode)
+            // Si el nombre no está vacío, realizar la búsqueda
+            if (!string.IsNullOrEmpty(nombreBusqueda))
             {
-                var result = await response.Content.ReadAsStringAsync();
-                roles = JsonConvert.DeserializeObject<List<string>>(result);
-            }
+                // Consultamos a la base de datos por alumnos cuyo nombre coincida con la búsqueda
+                var profesoresEncontrados = _databaseService.ObtenerTodosLosProfesores()
+                    .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
+                    .ToList();
 
-            return roles;
-        }
+                // Limpiamos la colección actual
+                Profesores.Clear();
 
-
-        private async void OnAlumnoTapped(object sender, ItemTappedEventArgs e)
-        {
-            var alumno = e.Item as Alumno;
-            if (alumno != null)
-            {
-                var roles = await ObtenerRolesDiscord(alumno.DiscordID);
-                alumno.Roles = new ObservableCollection<string>(roles);
-                // Actualiza la UI, si es necesario
-            }
-        }
-
-        private async void OnRemoveRoleClicked(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            var role = button?.BindingContext as string;
-            var alumno = button?.Parent?.BindingContext as Alumno;
-            var profesor = button?.Parent?.BindingContext as Profesor;
-
-            if (alumno != null && role != null)
-            {
-                alumno.Roles.Remove(role);
-                await EliminarRolDelServidor(role, alumno.DiscordID);
-            }
-        }
-
-        private async Task EliminarRolDelServidor(string role, string discordId)
-        {
-            var url = "http://your-flask-server-url/remove-role";
-            var client = new HttpClient();
-
-            var data = new
-            {
-                DiscordId = discordId,
-                Role = role
-            };
-
-            var jsonData = JsonConvert.SerializeObject(data);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-            var response = await client.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                DisplayAlert("Éxito", $"Rol {role} eliminado correctamente.", "OK");
+                // Añadimos los resultados a la colección
+                foreach (var profesor in profesoresEncontrados)
+                {
+                    Profesores.Add(profesor);
+                }
             }
             else
             {
-                DisplayAlert("Error", "No se pudo eliminar el rol.", "OK");
+                // Si no se encuentra ningún nombre en la búsqueda, mostrar todos los alumnos
+                var todosLosProfesores = _databaseService.ObtenerTodosLosProfesores();
+                Profesores.Clear();
+                foreach (var profesor in todosLosProfesores)
+                {
+                    Profesores.Add(profesor);
+                }
             }
         }
+
+        private async void OnEliminarAlumnoClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null) return;
+
+            var alumno = button.BindingContext as Alumno;
+            if (alumno == null) return;
+
+            bool confirmar = await DisplayAlert("Confirmar", $"¿Quieres eliminar al alumno {alumno.Nombre} {alumno.Apellido} y expulsarlo del Discord?", "Sí", "No");
+            if (!confirmar) return;
+            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            try
+            {
+                // Preparar JSON con el DiscordID para expulsar del servidor Discord vía Flask
+                var dataToSend = new
+                {
+                    InstiID = profesor.InstiID,
+                    discordId = alumno.DiscordID  // Asegúrate que tienes esta propiedad en Alumno
+                };
+
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                using var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:5000/expulsar-usuario", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"No se pudo expulsar del Discord: {error}", "OK");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error conectando con servidor Discord: {ex.Message}", "OK");
+                return;
+            }
+
+            // Si todo va bien, elimina de la base de datos local
+            bool eliminado = _databaseService.EliminarAlumno(alumno.ID);
+            if (eliminado)
+            {
+                Alumnos.Remove(alumno);
+                await DisplayAlert("Éxito", "Alumno eliminado y expulsado del Discord correctamente.", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo eliminar el alumno localmente.", "OK");
+            }
+        }
+
+
+        private async void OnEliminarProfesorClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null)
+                return;
+
+            var profesor = button.BindingContext as Profesor;
+            if (profesor == null)
+                return;
+
+            bool confirmar = await DisplayAlert("Confirmar", $"¿Quieres eliminar al profesor {profesor.Nombre} {profesor.Apellido} y expulsarlo del Discord?", "Sí", "No");
+            if (!confirmar)
+                return;
+
+            try
+            {
+                // Preparar JSON con DiscordID para expulsar al usuario vía Flask
+                var dataToSend = new
+                {
+                    InstiID = profesor.InstiID,
+                    discordId = profesor.DiscordID  // Asegúrate que Profesor tiene esta propiedad
+                };
+
+                var jsonData = JsonConvert.SerializeObject(dataToSend);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                using var httpClient = new HttpClient();
+                var response = await httpClient.PostAsync("http://localhost:5000/expulsar-usuario", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"No se pudo expulsar del Discord: {error}", "OK");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error conectando con servidor Discord: {ex.Message}", "OK");
+                return;
+            }
+
+            // Si la expulsión fue exitosa, eliminar localmente
+            bool eliminado = _databaseService.EliminarProfesor(profesor.ID);
+            if (eliminado)
+            {
+                Profesores.Remove(profesor);
+                await DisplayAlert("Éxito", "Profesor eliminado y expulsado del Discord correctamente.", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo eliminar el profesor localmente.", "OK");
+            }
+        }
+
 
     }
     // Clase que representa un curso

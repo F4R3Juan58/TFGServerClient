@@ -32,13 +32,13 @@
             <Label Text="Profesor" TextColor="Black"/>
             <Picker x:Name="profesorPicker"  BackgroundColor="red" TextColor="Black"/>
 
-                <VerticalStackLayout>
-                    <Label Text="Curso y Grado" TextColor="Black"/>
-                    <Picker BackgroundColor="red"/>
-                </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Curso y Grado" TextColor="Black"/>
+                <Picker BackgroundColor="red"/>
+            </VerticalStackLayout>
 
 
-                <HorizontalStackLayout>
+            <HorizontalStackLayout>
                 <Button Text="Confirmar" TextColor="White" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
                 <Button Text="Cerrar" TextColor="White" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
             </HorizontalStackLayout>

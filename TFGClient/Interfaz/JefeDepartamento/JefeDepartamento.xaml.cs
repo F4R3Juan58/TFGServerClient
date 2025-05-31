@@ -125,13 +125,11 @@ public partial class JefeDepartamento : ContentPage
         }
 
         // Obtén el nombre del profesor
-        string nombreProfesor = profesorSeleccionado.NombreCompleto;
+        string nombreProfesor = profesorSeleccionado.Nombre + " " + profesorSeleccionado.Apellido;
 
         // Abre la página de edición y pásale el nombre como parámetro
         await Application.Current.MainPage.Navigation.PushModalAsync(new Editar(nombreProfesor));
     }
-
-
 
     private async void ModificarHorario(object sender, EventArgs e)
     {

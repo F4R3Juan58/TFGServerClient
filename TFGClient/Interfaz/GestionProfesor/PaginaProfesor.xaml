@@ -39,34 +39,48 @@
 
         <!-- HEADER -->
         <Grid
-      Grid.Row="0"
-      ColumnDefinitions="Auto, *, Auto"
-      BackgroundColor="#D32F2F"
-      HeightRequest="60">
+  Grid.Row="0"
+  ColumnDefinitions="Auto, *, Auto"
+  BackgroundColor="#D32F2F"
+  HeightRequest="60">
 
-            <!-- LOGO -->
-            <Image
-        Source="EducordLogo.png"
-        HeightRequest="40"
-        VerticalOptions="Center"
-        Margin="16,0" />
+            <HorizontalStackLayout
+HorizontalOptions="Center"
+VerticalOptions="Center"
+Spacing="8">
+                <!-- Ajusta el espaciado a tu gusto -->
+
+                <Image
+    Source="logo.png"
+    HeightRequest="40"
+    VerticalOptions="Center"
+    Margin="16,0" />
+
+                <Label
+    Text="EDUCORD"
+    VerticalOptions="Center"
+    TextColor="White"
+    FontAttributes="Bold"
+    FontSize="20" />
+                <!-- Ajusta el tamaño de fuente si quieres -->
+            </HorizontalStackLayout>
+
 
             <!-- USUARIO -->
             <StackLayout
-        Grid.Column="2"
-        Orientation="Horizontal"
-        VerticalOptions="Center"
-        Spacing="8"
-        Margin="0,0,16,0">
-                <Image
-          Source="user.png"
-          HeightRequest="24"
-          VerticalOptions="Center" />
+    Grid.Column="2"
+    Orientation="Horizontal"
+    VerticalOptions="Center"
+    Spacing="8"
+    Margin="0,0,16,0">
+
                 <Label
-          Text="Profesor"
-          TextColor="White"
-          FontAttributes="Bold"
-          VerticalOptions="Center" />
+                x:Name="NombreProfesor"
+        Text=""
+        TextColor="White"
+        FontAttributes="Bold"
+        VerticalOptions="Center" />
+
             </StackLayout>
         </Grid>
 

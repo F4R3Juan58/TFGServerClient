@@ -7,17 +7,8 @@ namespace TFGClient
         public Editar(string Nombre)
         {
             InitializeComponent();
-            nombreProfesor = Nombre;
+            NombreProfesor.Text = Nombre;
         }
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-            NombreProfesor.Text = nombreProfesor;
-        }
-
-
-
 
         private async void Cerrar_Clicked(object sender, EventArgs e)
         {
@@ -26,7 +17,7 @@ namespace TFGClient
 
         private void Confirmar_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("ACCIÓN REALIZADA CON ÉXITO","","OK");
+            DisplayAlert("ACCIÓN REALIZADA CON ÉXITO", "", "OK");
         }
     }
 }

@@ -14,7 +14,12 @@ public partial class Tutor : ContentPage
 	public Tutor()
 	{
 		InitializeComponent();
-	}
+        var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+        if (profesor != null)
+        {
+            NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
+        }
+    }
 
     private void crearCanalTemporal(object sender, EventArgs e)
     {

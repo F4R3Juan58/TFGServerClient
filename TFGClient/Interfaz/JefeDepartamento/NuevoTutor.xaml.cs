@@ -13,8 +13,6 @@ namespace TFGClient
             profesorPicker.ItemDisplayBinding = new Binding("NombreCompleto");
         }
 
-
-
         private async void Cerrar_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopModalAsync();

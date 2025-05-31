@@ -17,7 +17,12 @@ public partial class PaginaProfesor : ContentPage
     public PaginaProfesor()
 	{
 		InitializeComponent();
-	}
+        var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+        if (profesor != null)
+        {
+            NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
+        }
+    }
 
     private async void OnAppearing(object sender, EventArgs e)
     {

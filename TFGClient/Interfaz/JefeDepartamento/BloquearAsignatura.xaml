@@ -51,10 +51,10 @@
                 <Picker x:Name="cursoPicker" BackgroundColor="Red"/>
 
                 <Label Text="Asignatura" TextColor="Black"/>
-                    <Picker x:Name="asignaturaPicker" BackgroundColor="Red"/>
-                </VerticalStackLayout>
+                <Picker x:Name="asignaturaPicker" BackgroundColor="Red"/>
+            </VerticalStackLayout>
 
-                <!-- Botones -->
+            <!-- Botones -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,0">
                 <Button Text="Eliminar" Style="{StaticResource CardButtonStyle}" Clicked="Bloquear_Clicked" />
                 <Button Text="Cancelar" Style="{StaticResource OutlinedButtonStyle}" Clicked="Cancelar_Clicked" />

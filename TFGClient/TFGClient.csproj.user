@@ -27,13 +27,13 @@
     <MauiXaml Update="Interfaz\Tutor\AsignarDelegado.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor\Cuestionario.xaml">
+    <MauiXaml Update="Interfaz\GestionProfesor\Cuestionario.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoClase.xaml">
+    <MauiXaml Update="Interfaz\GestionProfesor\ExpulsarAlumnoClase.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor\ExpulsarAlumnoAsignatura.xaml">
+    <MauiXaml Update="Interfaz\GestionProfesor\ExpulsarAlumnoAsignatura.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Interfaz\Administracion\Administrador.xaml">
@@ -42,7 +42,7 @@
     <MauiXaml Update="Interfaz\JefeDepartamento\JefeDepartamento.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor\Profesor.xaml">
+    <MauiXaml Update="Interfaz\GestionProfesor\PaginaProfesor.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Interfaz\Tutor\Tutor.xaml">
@@ -57,7 +57,7 @@
     <MauiXaml Update="RecurperarPassword.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Interfaz\Profesor\SubirArchivoPopup.xaml">
+    <MauiXaml Update="Interfaz\GestionProfesor\SubirArchivoPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>
