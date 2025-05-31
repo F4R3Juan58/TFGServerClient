@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TFGClient.Editar"
+    BackgroundColor="#80000000">
+    <!-- Fondo semitransparente para simular popup -->
+
+    <ContentPage.Resources>
+        <!-- Botones de las cards -->
+        <Style x:Key="CardButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#296ACC" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="6" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Frame
+        WidthRequest="500"
+        HeightRequest="400"
+        BackgroundColor="White"
+        CornerRadius="20"
+        Padding="20"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        HasShadow="True">
+
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Modificar Asignación de Asignatura" TextColor="Black" FontSize="20" FontAttributes="Bold"/>
+
+            <Label Text="Nombre de Profesor" TextColor="Black" FontSize="16" x:Name="NombreProfesor"/>
+            <Label Text="Asignaturas Actuales:" TextColor="Black"/>
+            <Picker x:Name="Asignaturas" TextColor="Black" BackgroundColor="Red"/>
+
+            <Label Text="Todas las Asignaturas:" TextColor="Black"/>
+            <Picker x:Name="AsignaturasTotales" TextColor="Black" BackgroundColor="Red"/>
+
+            <HorizontalStackLayout>
+                <Button Text="Guardar" TextColor="Black" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
+                <Button Text="Cancelar" TextColor="Black" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Frame>
+</ContentPage>
