@@ -13,7 +13,13 @@ public partial class RecurperarPassword : ContentPage
     public RecurperarPassword()
 	{
 		InitializeComponent();
-	}
+
+        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+
+        // Ocultar barra de navegación completa
+        NavigationPage.SetHasNavigationBar(this, false);
+
+    }
 
     private void OnContinuarClicked(object sender, EventArgs e)
     {
@@ -115,6 +121,7 @@ public partial class RecurperarPassword : ContentPage
             {
                 await DisplayAlert("Error", "No se encontró el usuario.", "OK");
             }
+            await Navigation.PushAsync(new Login());
         }
         catch (Exception ex)
         {

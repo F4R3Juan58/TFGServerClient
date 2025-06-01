@@ -58,7 +58,6 @@ namespace TFGClient.Interfaz
             {
                 CargarFamilias();
             };
-            await CargarCursosParaEliminarDesdeServidorAsync();
 
             FamiliaPicker.SelectedIndexChanged += (s, e) => CargarCursos();
         }
@@ -131,6 +130,9 @@ namespace TFGClient.Interfaz
         {
             ResetSidebarButtonsBackground();
             HideAllAreas();
+
+            Console.WriteLine("⏩ Cambiando a Crear Servidor");
+
             ServidorNombreEntry.Text = institutoName;
             SideBarCrearServidor.BackgroundColor = Colors.LightGray;
             AreaCrearServidor.IsVisible = true;
@@ -140,6 +142,9 @@ namespace TFGClient.Interfaz
         {
             ResetSidebarButtonsBackground();
             HideAllAreas();
+
+            Console.WriteLine("⏩ Cambiando a Eliminar Servidor");
+
             ServidorNombreEntryEliminar.Text = institutoName;
             SideBarEliminarServidor.BackgroundColor = Colors.LightGray;
             AreaEliminarServidor.IsVisible = true;
@@ -697,6 +702,17 @@ namespace TFGClient.Interfaz
             try
             {
                 var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+                // Si se eliminó en Discord, también eliminamos localmente el registro de la base de datos
+                bool eliminadoLocal = _databaseService.EliminarServidor(profesor.InstiID);
+                if (eliminadoLocal)
+                {
+                    await DisplayAlert("Éxito", "Servidor Discord eliminado correctamente y registro local borrado.", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Advertencia", "Servidor eliminado en Discord, pero no se pudo borrar el registro local.", "OK");
+                }
+                
                 if (profesor == null)
                 {
                     await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
@@ -720,24 +736,6 @@ namespace TFGClient.Interfaz
                 using var httpClient = new HttpClient();
                 var response = await httpClient.PostAsync("http://localhost:5000/eliminar-servidor", content);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    // Si se eliminó en Discord, también eliminamos localmente el registro de la base de datos
-                    bool eliminadoLocal = _databaseService.EliminarServidor(profesor.InstiID);
-                    if (eliminadoLocal)
-                    {
-                        await DisplayAlert("Éxito", "Servidor Discord eliminado correctamente y registro local borrado.", "OK");
-                    }
-                    else
-                    {
-                        await DisplayAlert("Advertencia", "Servidor eliminado en Discord, pero no se pudo borrar el registro local.", "OK");
-                    }
-                }
-                else
-                {
-                    var error = await response.Content.ReadAsStringAsync();
-                    await DisplayAlert("Error", $"Error al eliminar el servidor: {error}", "OK");
-                }
             }
             catch (Exception ex)
             {

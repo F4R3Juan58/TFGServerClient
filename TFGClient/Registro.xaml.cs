@@ -17,6 +17,12 @@ namespace TFGClient
         public Registro()
         {
             InitializeComponent();
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+
+            // Ocultar barra de navegación completa
+            NavigationPage.SetHasNavigationBar(this, false);
+
             InicializarEventos();
             cargarBBDD();
             // Ocultar botón de atrás

@@ -22,6 +22,10 @@ public partial class PaginaProfesor : ContentPage
         {
             NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
         }
+        Shell.SetBackButtonBehavior(this, new BackButtonBehavior
+        {
+            IsVisible = false
+        });
     }
 
     private async void OnAppearing(object sender, EventArgs e)

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 using TFGClient.Models;
 using TFGClient.Services;
 
@@ -33,11 +34,6 @@ namespace TFGClient
             string email = EmailEntry.Text?.Trim() ?? "";
             string contraseña = ContrasenaEntry.Text?.Trim() ?? "";
 
-            if (email == "1")
-            {
-                await Shell.Current.GoToAsync("Profesor");
-            }
-
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(contraseña))
             {
                 await DisplayAlert("Error", "Introduce tu correo y contraseña.", "OK");
@@ -53,14 +49,37 @@ namespace TFGClient
 
                 if (alumno != null)
                 {
-                    // Acceso para alumnos (no se guarda el email)
-                    var uri = new Uri("https://discord.gg/f3YA784A");
-                    await Launcher.Default.OpenAsync(uri);
+                    // Solicitar enlace de Discord al servidor Flask
+                    var dataToSend = new { Email = email };
+                    var jsonData = JsonConvert.SerializeObject(dataToSend);
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                    using var httpClient = new HttpClient();
+                    var response = await httpClient.PostAsync("http://localhost:5000/login-alumno", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var resultJson = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(resultJson);
+
+                        if (result != null && result.TryGetValue("invite_url", out string inviteUrl))
+                        {
+                            await Launcher.Default.OpenAsync(inviteUrl);
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", "No se recibió un enlace válido de invitación a Discord.", "OK");
+                        }
+                    }
+                    else
+                    {
+                        var errorMsg = await response.Content.ReadAsStringAsync();
+                        await DisplayAlert("Error", $"No se pudo obtener enlace: {errorMsg}", "OK");
+                    }
                 }
                 else if (profesor != null)
                 {
-                    // ✅ Guardar el email SOLO si es profesor
-                    Preferences.Set("UsuarioEmail", profesor.Email);
+                    // Guardar email y sesión si es profesor
                     SesionUsuario.Instancia.ProfesorLogueado = profesor;
                     await Shell.Current.GoToAsync("Profesor");
                 }
@@ -74,6 +93,7 @@ namespace TFGClient
                 await DisplayAlert("Error", $"Error al intentar iniciar sesión: {ex.Message}", "OK");
             }
         }
+
 
         private async void onRegistroClicked(object sender, EventArgs e)
         {

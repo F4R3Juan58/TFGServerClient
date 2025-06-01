@@ -18,6 +18,12 @@ public partial class ModificarDatos : ContentPage
     public ModificarDatos()
 	{
 		InitializeComponent();
+
+        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+
+        // Ocultar barra de navegación completa
+        NavigationPage.SetHasNavigationBar(this, false);
+
         InicializarEventos();
         cargarBBDD();
     }
@@ -335,6 +341,7 @@ public partial class ModificarDatos : ContentPage
             {
                 await DisplayAlert("Error", "Usuario no encontrado o credenciales incorrectas.", "OK");
             }
+            await Navigation.PushAsync(new Login());
         }
         catch (Exception ex)
         {
