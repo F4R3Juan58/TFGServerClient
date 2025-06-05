@@ -18,12 +18,6 @@ public partial class ModificarDatos : ContentPage
     public ModificarDatos()
 	{
 		InitializeComponent();
-
-        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
-
-        // Ocultar barra de navegación completa
-        NavigationPage.SetHasNavigationBar(this, false);
-
         InicializarEventos();
         cargarBBDD();
     }
@@ -181,15 +175,17 @@ public partial class ModificarDatos : ContentPage
 
             if (alumnoActual != null)
             {
+                // Rellenar los datos del alumno y mostrar el formulario correspondiente
                 RellenarFormularioAlumno(alumnoActual);
                 Formulario.IsVisible = false;
-                Formulario2.IsVisible = true;
+                FormularioAlumno.IsVisible = true; // Mostrar formulario alumno
             }
             else if (profesorActual != null)
             {
+                // Rellenar los datos del profesor y mostrar el formulario correspondiente
                 RellenarFormularioProfesor(profesorActual);
                 Formulario.IsVisible = false;
-                Formulario2.IsVisible = true;
+                FormularioProfesor.IsVisible = true; // Mostrar formulario profesor
             }
             else
             {
@@ -198,7 +194,70 @@ public partial class ModificarDatos : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Ocurrin un error: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"Ocurrio un error: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnGuardarModificacionClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            // Guardar los datos de Alumno
+            if (alumnoActual != null)
+            {
+                var alumnoActualizado = new Alumno
+                {
+                    Nombre = nombreEntry.Text?.Trim(),
+                    Apellido = ApellidosEntry.Text?.Trim(),
+                    Email = ModificarEmailEntry.Text?.Trim(),
+                    ComunidadID = ObtenerComunidadId((CAPicker.SelectedItem as string)!),
+                    InstiID = ObtenerInstitutoId((InstitutoPicker.SelectedItem as string)!),
+                    CursoID = ObtenerCursoId((CursoPicker.SelectedItem as string)!),
+                    RolID = alumnoActual.RolID,
+                    DiscordID = alumnoActual.DiscordID,
+                    IsDelegado = alumnoActual.IsDelegado,
+                    Puntos = alumnoActual.Puntos,
+                    Password = alumnoActual.Password
+                };
+
+                if (db.ActualizarAlumno(alumnoActual.ID, alumnoActualizado))
+                    await DisplayAlert("Éxito", "Datos del alumno modificados correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudieron modificar los datos del alumno.", "OK");
+            }
+            // Guardar los datos de Profesor
+            else if (profesorActual != null)
+            {
+                var profesorActualizado = new Profesor
+                {
+                    Nombre = nombreEntryProfesor.Text?.Trim(),
+                    Apellido = ApellidosEntryProfesor.Text?.Trim(),
+                    Email = ModificarEmailEntryProfesor.Text?.Trim(),
+                    ComunidadID = ObtenerComunidadId((CAPickerProfesor.SelectedItem as string)!),
+                    InstiID = ObtenerInstitutoId((InstitutoPickerProfesor.SelectedItem as string)!),
+                    RolID = profesorActual.RolID,
+                    DiscordID = profesorActual.DiscordID,
+                    IsJefe = profesorActual.IsJefe,
+                    IsTutor = profesorActual.IsTutor,
+                    Password = profesorActual.Password
+                };
+
+                if (db.ActualizarProfesor(profesorActual.ID, profesorActualizado))
+                    await DisplayAlert("Éxito", "Datos del profesor modificados correctamente.", "OK");
+                else
+                    await DisplayAlert("Error", "No se pudieron modificar los datos del profesor.", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Error", "Usuario no encontrado o credenciales incorrectas.", "OK");
+            }
+
+            // Redirigir a la pantalla de login
+            await Navigation.PushAsync(new Login());
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Ocurrio un error: {ex.Message}", "OK");
         }
     }
 
@@ -241,111 +300,26 @@ public partial class ModificarDatos : ContentPage
 
     private void RellenarFormularioProfesor(Profesor profesor)
     {
-        nombreEntry.Text = profesor.Nombre;
-        ApellidosEntry.Text = profesor.Apellido;
-        ModificarEmailEntry.Text = profesor.Email;
+        nombreEntryProfesor.Text = profesor.Nombre;
+        ApellidosEntryProfesor.Text = profesor.Apellido;
+        ModificarEmailEntryProfesor.Text = profesor.Email;
 
+        // Cargar Comunidad
         var comunidad = db.ObtenerTodasLasComunidades().FirstOrDefault(c => c.ID == profesor.ComunidadID);
-        if (comunidad != null) CAPicker.SelectedItem = comunidad.Nombre;
-
+        if (comunidad != null)
+        {
+            CAPickerProfesor.ItemsSource = rellenar.CargarNombreComunidades();
+            CAPickerProfesor.SelectedItem = comunidad.Nombre;
+        }
+        // Cargar Localidad e Instituto
         var instituto = db.ObtenerTodosLosInstitutos().FirstOrDefault(i => i.ID == profesor.InstiID);
         if (instituto != null)
         {
-            LocalidadPicker.ItemsSource = rellenar.CargarLocalidades(profesor.ComunidadID);
-            LocalidadPicker.SelectedItem = instituto.Localidad;
+            LocalidadPickerProfesor.ItemsSource = rellenar.CargarLocalidades(profesor.ComunidadID);
+            LocalidadPickerProfesor.SelectedItem = instituto.Localidad;
 
-            InstitutoPicker.ItemsSource = rellenar.CargarNombreInstitutos(profesor.ComunidadID, instituto.Localidad);
-            InstitutoPicker.SelectedItem = instituto.Nombre;
-        }
-
-        var curso = db.ObtenerTodosLosCursos().FirstOrDefault(c => c.ID == profesor.CursoID);
-        if (curso != null)
-        {
-            NivelPicker.SelectedItem = curso.Nivel;
-            FamiliaPicker.ItemsSource = rellenar.CargarFamiliasPorNivel(curso.Nivel);
-            FamiliaPicker.SelectedItem = curso.FamiliaProfesional;
-
-            GradoPicker.ItemsSource = rellenar.CargarGrados();
-            GradoPicker.SelectedItem = curso.Grado;
-
-            CursoPicker.ItemsSource = rellenar.CargarCursos(curso.Grado, curso.FamiliaProfesional, curso.Nivel);
-            CursoPicker.SelectedItem = curso.Nombre;
-        }
-    }
-
-    private async void OnGuardarModificacionClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            string emailOriginal = EmailEntry.Text?.Trim() ?? "";
-            string password = ContrasenaEntry.Text?.Trim() ?? "";
-
-            if (string.IsNullOrWhiteSpace(emailOriginal) || string.IsNullOrWhiteSpace(password))
-            {
-                await DisplayAlert("Error", "Debes introducir tu email y password actual.", "OK");
-                return;
-            }
-
-            string contrasenaHash = HashearContrasena(password);
-
-            var alumno = db.ObtenerAlumnoPorEmailYPassword(emailOriginal, contrasenaHash);
-            var profesor = db.ObtenerProfesorPorEmailYPassword(emailOriginal, contrasenaHash);
-
-            if (alumno != null)
-            {
-                var alumnoActualizado = new Alumno
-                {
-                    Nombre = nombreEntry.Text?.Trim(),
-                    Apellido = ApellidosEntry.Text?.Trim(),
-                    Email = ModificarEmailEntry.Text?.Trim(),
-                    ComunidadID = ObtenerComunidadId((CAPicker.SelectedItem as string)!),
-                    InstiID = ObtenerInstitutoId((InstitutoPicker.SelectedItem as string)!),
-                    CursoID = ObtenerCursoId((CursoPicker.SelectedItem as string)!),
-
-                    RolID = alumno.RolID,
-                    DiscordID = alumno.DiscordID,
-                    IsDelegado = alumno.IsDelegado,
-                    Puntos = alumno.Puntos,
-                    Password = alumno.Password
-                };
-
-                if (db.ActualizarAlumno(alumno.ID, alumnoActualizado))
-                    await DisplayAlert("nxito", "Datos modificados correctamente.", "OK");
-                else
-                    await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
-            }
-            else if (profesor != null)
-            {
-                var profesorActualizado = new Profesor
-                {
-                    Nombre = nombreEntry.Text?.Trim(),
-                    Apellido = ApellidosEntry.Text?.Trim(),
-                    Email = ModificarEmailEntry.Text?.Trim(),
-                    ComunidadID = ObtenerComunidadId((CAPicker.SelectedItem as string)!),
-                    InstiID = ObtenerInstitutoId((InstitutoPicker.SelectedItem as string)!),
-                    CursoID = ObtenerCursoId((CursoPicker.SelectedItem as string)!),
-
-                    RolID = profesor.RolID,
-                    DiscordID = profesor.DiscordID,
-                    IsJefe = profesor.IsJefe,
-                    IsTutor = profesor.IsTutor,
-                    Password = profesor.Password
-                };
-
-                if (db.ActualizarProfesor(profesor.ID, profesorActualizado))
-                    await DisplayAlert("nxito", "Datos modificados correctamente.", "OK");
-                else
-                    await DisplayAlert("Error", "No se pudieron modificar los datos.", "OK");
-            }
-            else
-            {
-                await DisplayAlert("Error", "Usuario no encontrado o credenciales incorrectas.", "OK");
-            }
-            await Navigation.PushAsync(new Login());
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Error", $"Ocurrin un error: {ex.Message}", "OK");
+            InstitutoPickerProfesor.ItemsSource = rellenar.CargarNombreInstitutos(profesor.ComunidadID, instituto.Localidad);
+            InstitutoPickerProfesor.SelectedItem = instituto.Nombre;
         }
     }
 

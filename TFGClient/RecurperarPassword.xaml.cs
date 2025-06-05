@@ -11,8 +11,8 @@ public partial class RecurperarPassword : ContentPage
     private readonly DatabaseService db = new();
     private string codigoGenerado = string.Empty;
     public RecurperarPassword()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
 
@@ -73,7 +73,7 @@ public partial class RecurperarPassword : ContentPage
             {
                 await DisplayAlert("Error", $"No se pudo enviar el correo: {ex.Message}", "OK");
             }
-        }       
+        }
     }
 
     private async void OnGuardarCambioClicked(object sender, EventArgs e)

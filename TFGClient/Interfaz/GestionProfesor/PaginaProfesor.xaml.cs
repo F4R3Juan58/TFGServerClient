@@ -22,101 +22,193 @@ public partial class PaginaProfesor : ContentPage
         {
             NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
         }
-        Shell.SetBackButtonBehavior(this, new BackButtonBehavior
-        {
-            IsVisible = false
-        });
     }
 
-    private async void OnAppearing(object sender, EventArgs e)
+    protected async override void OnAppearing()
     {
-        var asignaturas = await ObtenerAsignaturasDesdeServidor();
-        AsignaturasCollection.ItemsSource = asignaturas;
+        base.OnAppearing();  // Aseguramos que la implementación base se ejecute
 
-        string nombreAsignatura = "matemáticas"; // reemplaza dinámicamente si es necesario
-        categoriaId = await ObtenerCategoriaIdDesdeServidor(nombreAsignatura);
+        // Obtenemos el profesor logueado
+        var profesor = SesionUsuario.Instancia.ProfesorLogueado;
 
-        if (!string.IsNullOrEmpty(categoriaId))
+        if (profesor != null)
         {
-            Console.WriteLine($"ID de la categoría: {categoriaId}");
-            // aquí podrías habilitar botones o guardar ese ID para próximas acciones
+            try
+            {
+                // Obtenemos las asignaturas desde el servidor
+                var asignaturas = await ObtenerAsignaturasDesdeServidor();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, mostrar una alerta
+                await DisplayAlert("Error", $"Hubo un problema al obtener las asignaturas: {ex.Message}", "OK");
+            }
         }
         else
         {
-            await DisplayAlert("Error", "No se encontró la categoría", "OK");
+            // Si no hay profesor logueado, mostrar un mensaje adecuado
+            await DisplayAlert("Error", "No se encontró información del profesor. Por favor, asegúrese de estar logueado.", "OK");
         }
     }
+
 
     private async Task<List<string>> ObtenerAsignaturasDesdeServidor()
     {
-        using (var client = new HttpClient())
+        // Deshabilitar la interactividad del CollectionView mientras cargamos las asignaturas
+        AsignaturasCollection.IsEnabled = false;
+
+        var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+
+        var dataToSend = new
         {
-            try
-            {
-                var url = "http://TU_IP_LOCAL:5000/api/roles_usuario"; // Cambia a tu IP real
-                var response = await client.GetAsync(url);
+            InstiID = profesor.InstiID,
+            DiscordID = profesor.DiscordID
+        };
 
-                if (!response.IsSuccessStatusCode)
-                    return new List<string>();
+        var json = JsonConvert.SerializeObject(dataToSend);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<string>>(json) ?? new List<string>();
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al obtener asignaturas: {ex.Message}", "OK");
-                return new List<string>();
-            }
+        using var client = new HttpClient();
+        var response = await client.PostAsync("http://localhost:5000/obtener-asignaturas-profesor", content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Error", "No se pudieron obtener las asignaturas del servidor.", "OK");
+            AsignaturasCollection.IsEnabled = true; // Volver a habilitar el CollectionView
+            return new List<string>(); // Retornar una lista vacía
         }
-    }
 
-    private async void OnAsignaturaSelected(object sender, SelectionChangedEventArgs e)
-    {
-        if (e.CurrentSelection.FirstOrDefault() is string asignatura)
+        var body = await response.Content.ReadAsStringAsync();
+
+        try
         {
-            AsignaturaLabel.Text = asignatura;
-            Asignatura = asignatura;
-            string categoriaId = await ObtenerCategoriaIdDesdeServidor(asignatura);
-            var alumnos = await ObtenerAlumnosDesdeServidor(asignatura);
-            AlumnosCollection.ItemsSource = alumnos;
+            // Deserializamos el JSON
+            var result = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(body);
 
-            if (!string.IsNullOrEmpty(categoriaId))
+            // Verificar si el JSON contiene la clave "actuales"
+            if (result != null && result.ContainsKey("actuales"))
             {
-                Console.WriteLine($"Asignatura seleccionada: {asignatura} - Categoría ID: {categoriaId}");
-
+                // Mostramos las asignaturas en el CollectionView
+                AsignaturasCollection.ItemsSource = result["actuales"];
             }
             else
             {
-                await DisplayAlert("Error", $"No se encontró la categoría para {asignatura}", "OK");
+                // Si "actuales" no está presente o vacío, mostrar un mensaje
+                await DisplayAlert("Sin asignaturas", "No se encontraron asignaturas para este profesor.", "OK");
             }
-
-            // Des-seleccionar visualmente
-            ((CollectionView)sender).SelectedItem = null;
         }
-    }
+        catch (JsonException ex)
+        {
+            // Si ocurre un error en la deserialización, mostrar el error
+            await DisplayAlert("Error", $"Error al procesar las asignaturas: {ex.Message}", "OK");
+        }
 
-    private async Task<List<string>> ObtenerAlumnosDesdeServidor(string asignatura)
+        // Habilitamos el CollectionView después de cargar los datos
+        AsignaturasCollection.IsEnabled = true;
+
+        // Retornar la lista de asignaturas, en caso de que necesites la lista para otros usos
+        return new List<string>(); // Si deseas retornar una lista vacía, puedes ajustar esto según lo necesites.
+    }
+    private async void OnAsignaturaSelected(object sender, SelectionChangedEventArgs e)
     {
-        using (var client = new HttpClient())
+        // Verificamos si hay una asignatura seleccionada
+        if (e.CurrentSelection.FirstOrDefault() is string asignatura)
         {
             try
             {
-                var url = $"http://TU_IP_LOCAL:5000/api/alumnos_por_asignatura?asignatura={Uri.EscapeDataString(asignatura)}";
-                var response = await client.GetAsync(url);
+                // Asignamos la asignatura al label para mostrarla
+                AsignaturaLabel.Text = asignatura;
+                Asignatura = asignatura;
 
-                if (!response.IsSuccessStatusCode)
-                    return new List<string>();
+                // Obtenemos los alumnos asociados a la asignatura
+                var alumnos = await ObtenerAlumnosDesdeServidor(asignatura);
 
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<string>>(json) ?? new List<string>();
+                // Asignamos la lista de alumnos al CollectionView
+                if (alumnos.Count > 0)
+                {
+                    AlumnosCollection.ItemsSource = alumnos;
+                }
+                else
+                {
+                    // Si no se encontraron alumnos, mostrar un mensaje
+                    await DisplayAlert("Sin alumnos", "No se encontraron alumnos para esta asignatura.", "OK");
+                }
+
+                // Des-seleccionamos visualmente el item seleccionado
+                ((CollectionView)sender).SelectedItem = null;
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Error al obtener alumnos: {ex.Message}", "OK");
-                return new List<string>();
+                // En caso de error, mostramos un mensaje de alerta
+                await DisplayAlert("Error", $"Ocurrió un error: {ex.Message}", "OK");
             }
         }
     }
+
+
+
+    private async Task<List<string>> ObtenerAlumnosDesdeServidor(string asignatura)
+    {
+        try
+        {
+            // Obtención de los datos del profesor logueado
+            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+
+            // Crear el objeto para enviar en la solicitud
+            var dataToSend = new
+            {
+                InstiID = profesor.InstiID,
+                DiscordID = profesor.DiscordID,
+                AsignaturaName = asignatura
+            };
+
+            // Serialización del objeto a JSON
+            var json = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = new HttpClient();
+
+            // Realizamos la solicitud POST al servidor para obtener los alumnos por asignatura
+            var response = await client.PostAsync("http://localhost:5000/obtener-alumnos-por-asignatura", content);
+
+            // Si la respuesta no es exitosa, mostramos un mensaje y retornamos una lista vacía
+            if (!response.IsSuccessStatusCode)
+            {
+                await DisplayAlert("Error", "No se pudieron obtener los alumnos del servidor.", "OK");
+                return new List<string>(); // Retornar lista vacía
+            }
+
+            // Leemos el contenido de la respuesta
+            var responseJson = await response.Content.ReadAsStringAsync();
+
+            // Verificamos si el JSON está vacío o es inválido
+            if (string.IsNullOrEmpty(responseJson))
+            {
+                await DisplayAlert("Error", "El servidor devolvió una respuesta vacía.", "OK");
+                return new List<string>(); // Retornar lista vacía
+            }
+
+            // Deserializamos el JSON y retornamos la lista de alumnos
+            var alumnos = JsonConvert.DeserializeObject<List<string>>(responseJson);
+
+            // Si no hay alumnos, mostramos un mensaje y retornamos una lista vacía
+            if (alumnos == null || alumnos.Count == 0)
+            {
+                await DisplayAlert("Sin alumnos", "No se encontraron alumnos para esta asignatura.", "OK");
+                return new List<string>(); // Retornar lista vacía
+            }
+
+            // Retornamos la lista de alumnos obtenida
+            return alumnos;
+        }
+        catch (Exception ex)
+        {
+            // En caso de error, mostramos el mensaje de error
+            await DisplayAlert("Error", $"Error al obtener alumnos: {ex.Message}", "OK");
+            return new List<string>(); // Retornar lista vacía en caso de error
+        }
+    }
+
 
 
     private async Task<List<string>> ObtenerAlumnosConectadosClase(string categoriaId)
@@ -144,59 +236,25 @@ public partial class PaginaProfesor : ContentPage
 
 
 
-    private async Task<string> ObtenerCategoriaIdDesdeServidor(string nombreAsignatura)
-    {
-        using (var client = new HttpClient())
-        {
-            try
-            {
-                var url = $"http://TU_IP_LOCAL:5000/api/categoria_id?nombre={Uri.EscapeDataString(nombreAsignatura)}";
-                var response = await client.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
-                    return string.Empty;
-
-                var json = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                return data != null && data.ContainsKey("id") ? data["id"] : string.Empty;
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al obtener categoría: {ex.Message}", "OK");
-                return string.Empty;
-            }
-        }
-    }
-
-
     private async void iniciarClase(object sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(categoriaId))
-        {
-            await DisplayAlert("Error", "No se ha seleccionado una asignatura válida", "OK");
-            return;
-        }
 
-        bool exito = await CrearCanalVoz(categoriaId, "Clase");
-
-        if (exito)
-            await DisplayAlert("Éxito", "Canal de voz 'Clase' creado correctamente", "OK");
-        else
-            await DisplayAlert("Error", "No se pudo crear el canal de voz", "OK");
+        bool exito = await CrearCanalVoz(Asignatura);
     }
 
 
-    private async Task<bool> CrearCanalVoz(string categoriaId, string nombreCanal)
+    private async Task<bool> CrearCanalVoz(string nombreCanal)
     {
         using (var client = new HttpClient())
         {
             try
             {
-                var url = "http://TU_IP_LOCAL:5000/api/crear_canal_voz";
+                var url = "http://localhost:5000/api/crear_canal_voz";
 
                 var data = new
                 {
-                    categoria_id = categoriaId,
+                    InstiID = SesionUsuario.Instancia.ProfesorLogueado.InstiID,
+                    DiscordID = SesionUsuario.Instancia.ProfesorLogueado.DiscordID,
                     nombre_canal = nombreCanal
                 };
 
@@ -215,12 +273,11 @@ public partial class PaginaProfesor : ContentPage
 
     private async void AbrirPopupSubirDocumento(object sender, EventArgs e)
     {
-        await Application.Current.MainPage.Navigation.PushModalAsync(new SubirArchivoPopup());
+        await Application.Current.MainPage.Navigation.PushModalAsync(new SubirArchivoPopup(Asignatura));
     }
 
     private async void ReestablecerAsignatura(object sender, EventArgs e)
     {
-
         using (var client = new HttpClient())
         {
             try
@@ -229,7 +286,7 @@ public partial class PaginaProfesor : ContentPage
 
                 var data = new
                 {
-                    Categoria_id = categoriaId
+                    nombre_asignatura = Asignatura 
                 };
 
                 var content = new StringContent(
@@ -255,6 +312,7 @@ public partial class PaginaProfesor : ContentPage
             }
         }
     }
+
 
     private async void ExpulsarAlumno(object sender, EventArgs e)
     {

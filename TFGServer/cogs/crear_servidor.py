@@ -8,6 +8,30 @@ class CrearServidor(commands.Cog):
         self.db = Database()
         self.servers_admin_assigned = set()  # Guarda IDs de guilds donde ya asignamos admin
 
+    async def generar_invitacion_alumno(self, guild: disnake.Guild, email: str) -> str | None:
+        print(f"Usando guild: {guild.name} (ID: {guild.id})")
+
+        try:
+            # Buscar canal
+            canal = disnake.utils.get(guild.text_channels, name="📌・invitaciones")
+            if canal is None:
+                print(f"⚠️ No se encontró canal 📌・Invitaciones en {guild.name}")
+                return None
+
+            # Crear invitación
+            invitacion = await canal.create_invite(max_age=0, max_uses=1, unique=True)
+
+            # Guardar en la base de datos
+            await self.db.save_invitation(email=email, invite_code=invitacion.code)
+            print(f"✅ Invitación creada para {email} en {guild.name}")
+            return invitacion.url
+
+        except Exception as e:
+            print(f"❌ Error al generar invitación: {e}")
+            return None
+
+
+    
     async def _crear_servidor(self, nombre_instituto: str, insti_id: int, user_email: str) -> str | None:
         # Comprueba si ya existe servidor para ese instituto
         if await self.db.check_server_exists(insti_id):
@@ -30,7 +54,7 @@ class CrearServidor(commands.Cog):
                 await channel.delete()
 
             # Crear canales nuevos
-            canal_general = await nuevo_guild.create_text_channel("📌・general")
+            canal_general = await nuevo_guild.create_text_channel("📌・invitaciones")
             print(f"📂 Canales creados en '{nombre_instituto}'.")
 
             # Crear rol admin con permisos de administrador
@@ -56,6 +80,8 @@ class CrearServidor(commands.Cog):
         except disnake.HTTPException as e:
             print(f"❌ Error al crear servidor '{nombre_instituto}': {e}")
             return None
+    
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member: disnake.Member):

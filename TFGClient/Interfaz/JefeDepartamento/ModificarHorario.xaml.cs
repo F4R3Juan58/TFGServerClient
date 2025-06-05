@@ -11,12 +11,33 @@ namespace TFGClient
 
             profesorPicker.ItemsSource = listaProfesores;
             profesorPicker.ItemDisplayBinding = new Binding("NombreCompleto");
+
+            diaPicker.SelectedIndexChanged += DiaPicker_SelectedIndexChanged;
+        }
+
+        private void DiaPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (diaPicker.SelectedItem is string seleccion)
+            {
+                if (seleccion == "Vespertino")
+                    horarioPicker.SelectedItem = "15:30 - 21:30";
+                else if (seleccion == "Diurno")
+                    horarioPicker.SelectedItem = "8:15 - 15:15";
+            }
         }
 
         private async void Guardar_Clicked(object sender, EventArgs e)
         {
-            // Lógica para guardar los datos
-            await DisplayAlert("Horario modificado", "El horario ha sido modificado con éxito.", "OK");
+            if (profesorPicker.SelectedItem is not Profesor profesor ||
+                diaPicker.SelectedItem is not string franja ||
+                horarioPicker.SelectedItem is not string horario)
+            {
+                await DisplayAlert("Error", "Completa todos los campos antes de guardar.", "OK");
+                return;
+            }
+
+            // Aquí podrías guardar en base de datos si es necesario
+            await DisplayAlert("Horario modificado", $"El horario de {profesor.NombreCompleto} ha sido actualizado a:\n\nFranja: {franja}\nHorario: {horario}", "OK");
             await Navigation.PopModalAsync();
         }
 

@@ -242,19 +242,18 @@ namespace TFGClient.Services
             }
         }
 
-        public bool EliminarServidor(int institutoId)
+        public bool EliminarServidor(int instiId)
         {
             try
             {
                 using var connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                // Comando DELETE para eliminar el servidor asociado al instituto
                 string query = "DELETE FROM ServidoresDiscord WHERE InstiID = @InstiID";
 
-                int filasAfectadas = connection.Execute(query, new { InstiID = institutoId });
+                int filasAfectadas = connection.Execute(query, new { InstiID = instiId });
 
-                return filasAfectadas > 0; // Devuelve true si se eliminó al menos un registro
+                return filasAfectadas > 0;
             }
             catch (Exception ex)
             {
@@ -264,5 +263,66 @@ namespace TFGClient.Services
         }
 
 
+        public bool MarcarComoTutor(int profesorId)
+        {
+            using var conn = new MySqlConnection(connectionString);
+            conn.Open();
+
+            string query = "UPDATE Profesores SET IsTutor = 1 WHERE ID = @ID";
+            int result = conn.Execute(query, new { ID = profesorId });
+            return result > 0;
+        }
+
+        public bool AsignarCursoAlProfesor(int profesorId, string categoria)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                // 1. Obtener el rol relacionado con esa categoría
+                var rol = conn.QueryFirstOrDefault<dynamic>(
+                    "SELECT ID FROM Roles WHERE NombreRol = @NombreRol",
+                    new { NombreRol = categoria });
+
+                if (rol == null)
+                    return false;
+
+                int rolId = rol.ID;
+
+                // 2. Obtener curso relacionado con ese RolID
+                var curso = conn.QueryFirstOrDefault<dynamic>(
+                    "SELECT ID FROM Cursos WHERE RolID = @RolID",
+                    new { RolID = rolId });
+
+                if (curso == null)
+                    return false;
+
+                int cursoId = curso.ID;
+
+                // 3. Actualizar el curso del profesor
+                int filasAfectadas = conn.Execute(
+                    "UPDATE Profesores SET CursoID = @CursoID WHERE ID = @ProfesorID",
+                    new { CursoID = cursoId, ProfesorID = profesorId });
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al asignar curso al profesor: {ex.Message}");
+                return false;
+            }
+        }
+        public ObservableCollection<Alumno> ObtenerAlumnosPorInstitutoYCurso(int instiId, int cursoId)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            var alumnos = connection.Query<Alumno>(
+                "SELECT * FROM Alumnos WHERE InstiID = @InstiID AND CursoID = @CursoID",
+                new { InstiID = instiId, CursoID = cursoId });
+
+            return new ObservableCollection<Alumno>(alumnos);
+        }
     }
 }

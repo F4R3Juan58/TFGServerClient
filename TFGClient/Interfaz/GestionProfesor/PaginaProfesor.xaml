@@ -93,7 +93,7 @@ Spacing="8">
                 <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single" SelectionChanged="OnAsignaturaSelected">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding}" Padding="10" />
+                            <Label Text="{Binding}" Padding="10" TextColor="Black" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

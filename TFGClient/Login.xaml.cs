@@ -49,37 +49,32 @@ namespace TFGClient
 
                 if (alumno != null)
                 {
-                    // Solicitar enlace de Discord al servidor Flask
-                    var dataToSend = new { Email = email };
-                    var jsonData = JsonConvert.SerializeObject(dataToSend);
-                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    // Hacer la consulta al backend Flask para obtener la invitación al Discord
+                    var cliente = new HttpClient();
+                    var contenido = new StringContent(JsonConvert.SerializeObject(new { email = alumno.Email }), Encoding.UTF8, "application/json");
 
-                    using var httpClient = new HttpClient();
-                    var response = await httpClient.PostAsync("http://localhost:5000/login-alumno", content);
-
-                    if (response.IsSuccessStatusCode)
+                    var respuesta = await cliente.PostAsync("http://localhost:5000/obtener-invitacion", contenido);
+                    if (respuesta.IsSuccessStatusCode)
                     {
-                        var resultJson = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(resultJson);
+                        var json = await respuesta.Content.ReadAsStringAsync();
+                        var invitacion = (string)JsonConvert.DeserializeObject<dynamic>(json).invitacion;
 
-                        if (result != null && result.TryGetValue("invite_url", out string inviteUrl))
+                        if (!string.IsNullOrEmpty(invitacion))
                         {
-                            await Launcher.Default.OpenAsync(inviteUrl);
-                        }
-                        else
-                        {
-                            await DisplayAlert("Error", "No se recibió un enlace válido de invitación a Discord.", "OK");
+                            // Acceso para alumnos, abrir la invitación de Discord
+                            var uri = new Uri(invitacion);
+                            await Launcher.Default.OpenAsync(uri);
                         }
                     }
                     else
                     {
-                        var errorMsg = await response.Content.ReadAsStringAsync();
-                        await DisplayAlert("Error", $"No se pudo obtener enlace: {errorMsg}", "OK");
+                        await DisplayAlert("Error", "No se pudo obtener la invitación al Discord.", "OK");
                     }
                 }
                 else if (profesor != null)
                 {
-                    // Guardar email y sesión si es profesor
+                    // ✅ Guardar el email SOLO si es profesor
+                    Preferences.Set("UsuarioEmail", profesor.Email);
                     SesionUsuario.Instancia.ProfesorLogueado = profesor;
                     await Shell.Current.GoToAsync("Profesor");
                 }

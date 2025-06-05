@@ -51,7 +51,10 @@ class DiscordIDLinker(commands.Cog):
             guild_cache = self.invite_uses_cache.setdefault(guild.id, {})
 
             used_invite = None
+            print("Invitaciones actuales:")
             for invite in current_invites:
+                print(f"{invite.code}: {invite.uses} (antes: {guild_cache.get(invite.code, 0)})")
+
                 old_uses = guild_cache.get(invite.code, 0)
                 if invite.uses > old_uses:
                     used_invite = invite

@@ -29,7 +29,7 @@
         </Frame>
 
         <!-- Formulario 2 con ScrollView -->
-        <Frame x:Name="Formulario2"
+        <Frame x:Name="FormularioAlumno"
        IsVisible="false"
        Grid.Row="1"
        Grid.Column="1"
@@ -76,6 +76,40 @@
                             <Picker x:Name="CursoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
                         </VerticalStackLayout>
                     </HorizontalStackLayout>
+
+                    <!-- Botón final -->
+                    <Button Text="Modificar Datos" Clicked="OnGuardarModificacionClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+        <Frame x:Name="FormularioProfesor"
+IsVisible="false"
+Grid.Row="1"
+Grid.Column="1"
+BackgroundColor="#050505"
+Padding="20"
+HorizontalOptions="FillAndExpand"
+VerticalOptions="FillAndExpand">
+
+            <ScrollView VerticalOptions="FillAndExpand">
+                <VerticalStackLayout>
+
+                    <!-- Título -->
+                    <Label Text="Modificar Datos" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20"/>
+
+                    <!-- Campos -->
+                    <Entry Placeholder="Nombre" x:Name="nombreEntryProfesor" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                    <Entry Placeholder="Apellidos" x:Name="ApellidosEntryProfesor" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+                    <Entry Placeholder="Email" x:Name="ModificarEmailEntryProfesor" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
+
+                    <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="CAPickerProfesor" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                    <Label Text="Localidad" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="LocalidadPickerProfesor" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+
+                    <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
+                    <Picker x:Name="InstitutoPickerProfesor" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
 
                     <!-- Botón final -->
                     <Button Text="Modificar Datos" Clicked="OnGuardarModificacionClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>

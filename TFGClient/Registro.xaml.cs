@@ -17,12 +17,6 @@ namespace TFGClient
         public Registro()
         {
             InitializeComponent();
-
-            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
-
-            // Ocultar barra de navegación completa
-            NavigationPage.SetHasNavigationBar(this, false);
-
             InicializarEventos();
             cargarBBDD();
             // Ocultar botón de atrás
@@ -128,8 +122,16 @@ namespace TFGClient
 
         private void OnContinuar2Clicked(object sender, EventArgs e)
         {
-            Formulario3.IsVisible = true;
-            Formulario2.IsVisible = false;
+            if (PAPicker.SelectedItem.ToString() == "Profesor")
+            {
+                registro();
+            }
+            else
+            {
+                Formulario3.IsVisible = true;
+                Formulario2.IsVisible = false;
+            }
+
         }
 
         private string HashearContraseña(string password)
@@ -161,7 +163,12 @@ namespace TFGClient
 
         private readonly DatabaseService db = new();
 
-        private async void OnRegisterClicked(object sender, EventArgs e)
+        private void OnRegisterClicked(object sender, EventArgs e)
+        {
+            registro();
+        }
+
+        private async void registro()
         {
             try
             {
@@ -170,14 +177,13 @@ namespace TFGClient
                 string email = EmailEntry.Text?.Trim();
                 string password = ContrasenaEntry.Text?.Trim();
 
-                /*
                 string confirmacion = ContrasenaConfirmacionEntry.Text?.Trim();
 
                 if (password != confirmacion)
                 {
                     await DisplayAlert("Error", "Las contraseñas no coinciden.", "OK");
                     return;
-                }*/
+                }
 
                 string comunidadNombre = CAPicker.SelectedItem?.ToString();
                 string localidad = LocalidadPicker.SelectedItem?.ToString();
@@ -188,14 +194,30 @@ namespace TFGClient
                 string familia = FamiliaPicker.SelectedItem?.ToString();
                 string cursoNombre = CursoPicker.SelectedItem?.ToString();
 
-                if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidos) || string.IsNullOrWhiteSpace(email) ||
-                    string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
-                    string.IsNullOrWhiteSpace(tipoUsuario) || string.IsNullOrWhiteSpace(nivel) || string.IsNullOrWhiteSpace(grado) ||
-                    string.IsNullOrWhiteSpace(familia) || string.IsNullOrWhiteSpace(cursoNombre))
+
+                if (PAPicker.SelectedItem.ToString() == "Profesor")
                 {
-                    await DisplayAlert("Error", "Por favor, rellena todos los campos.", "OK");
-                    return;
+                    if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidos) || string.IsNullOrWhiteSpace(email) ||
+                   string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
+                   string.IsNullOrWhiteSpace(tipoUsuario))
+                    {
+                        await DisplayAlert("Error", "Por favor, rellena todos los campos.", "OK");
+                        return;
+                    }
                 }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellidos) || string.IsNullOrWhiteSpace(email) ||
+                   string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(comunidadNombre) || string.IsNullOrWhiteSpace(institutoNombre) ||
+                   string.IsNullOrWhiteSpace(tipoUsuario) || string.IsNullOrWhiteSpace(nivel) || string.IsNullOrWhiteSpace(grado) ||
+                   string.IsNullOrWhiteSpace(familia) || string.IsNullOrWhiteSpace(cursoNombre))
+                    {
+                        await DisplayAlert("Error", "Por favor, rellena todos los campos.", "OK");
+                        return;
+                    }
+                }
+
+               
 
                 if (db.ExisteEmail(email))
                 {
@@ -248,8 +270,8 @@ namespace TFGClient
                         RolID = rolId,
                         IsJefe = false,
                         IsTutor = false,
-                        CursoID = cursoId,
-                        DiscordID = discordId
+                        CursoID = 183,
+                        DiscordID = null
                     };
 
                     if (db.InsertarProfesor(profesor))

@@ -36,21 +36,21 @@ namespace TFGClient.Interfaz
                 institutoName = _databaseService.ObtenerNombreInstituto(profesor.InstiID);
             }
             Opciones1 = new ObservableCollection<Opcion>
-    {
-        new Opcion { Nombre = "1º", EsSeleccionado = false },
-    };
+{
+new Opcion { Nombre = "1º", EsSeleccionado = false },
+};
 
             // Definir opciones para 2º
             Opciones2 = new ObservableCollection<Opcion>
-    {
-        new Opcion { Nombre = "2º", EsSeleccionado = false },
-    };
+{
+new Opcion { Nombre = "2º", EsSeleccionado = false },
+};
             BindingContext = this;
             InicializarEventos();
             cargarBBDD();
 
         }
-        
+
 
         private async void InicializarEventos()
         {
@@ -58,6 +58,7 @@ namespace TFGClient.Interfaz
             {
                 CargarFamilias();
             };
+            await CargarCursosParaEliminarDesdeServidorAsync();
 
             FamiliaPicker.SelectedIndexChanged += (s, e) => CargarCursos();
         }
@@ -120,6 +121,7 @@ namespace TFGClient.Interfaz
         private void HideAllAreas()
         {
             AreaCrearServidor.IsVisible = false;
+            AreaEliminarServidor.IsVisible = false;
             AreaAñadirCurso.IsVisible = false;
             AreaEliminarCurso.IsVisible = false;
             AreaGestionAlumnos.IsVisible = false;
@@ -130,9 +132,6 @@ namespace TFGClient.Interfaz
         {
             ResetSidebarButtonsBackground();
             HideAllAreas();
-
-            Console.WriteLine("⏩ Cambiando a Crear Servidor");
-
             ServidorNombreEntry.Text = institutoName;
             SideBarCrearServidor.BackgroundColor = Colors.LightGray;
             AreaCrearServidor.IsVisible = true;
@@ -142,9 +141,6 @@ namespace TFGClient.Interfaz
         {
             ResetSidebarButtonsBackground();
             HideAllAreas();
-
-            Console.WriteLine("⏩ Cambiando a Eliminar Servidor");
-
             ServidorNombreEntryEliminar.Text = institutoName;
             SideBarEliminarServidor.BackgroundColor = Colors.LightGray;
             AreaEliminarServidor.IsVisible = true;
@@ -183,6 +179,8 @@ namespace TFGClient.Interfaz
                     await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
                     return;
                 }
+
+                
 
                 var dataToSend = new
                 {
@@ -244,6 +242,10 @@ namespace TFGClient.Interfaz
             }
         }
 
+
+
+
+
         private void OnSidebarGestionAlumnosTapped(object sender, EventArgs e)
         {
             ResetSidebarButtonsBackground();
@@ -262,6 +264,21 @@ namespace TFGClient.Interfaz
             AreaGestionProfesores.IsVisible = true;
         }
 
+
+        // Métodos vacíos para los botones
+        private void OnCrearServidorButtonClicked(object sender, EventArgs e)
+        {
+            AreaPrincipal.IsVisible = false;
+            AreaCrearServidor.IsVisible = true;
+            SideBarCrearServidor.BackgroundColor = Colors.LightGray;
+        }
+        private void OnGestionarPermisosButtonClicked(object sender, EventArgs e)
+        {
+            AreaPrincipal.IsVisible = false;
+            AreaCrearServidor.IsVisible = false;
+            SideBarCrearServidor.BackgroundColor = Colors.Transparent;
+
+        }
         private void OnVerIncidenciasResueltasTapped(object sender, EventArgs e) { }
         private void OnAccederLogsButtonClicked(object sender, EventArgs e) { }
 
@@ -271,9 +288,9 @@ namespace TFGClient.Interfaz
         {
             // Verificamos si todos los Pickers tienen un valor seleccionado
             if (NivelPicker.SelectedItem == null ||
-                FamiliaPicker.SelectedItem == null ||
-                CursoPicker.SelectedItem == null ||
-                (!Opciones1.Any(o => o.EsSeleccionado) && !Opciones2.Any(o => o.EsSeleccionado))) // Verificamos si al menos un CheckBox está seleccionado
+            FamiliaPicker.SelectedItem == null ||
+            CursoPicker.SelectedItem == null ||
+            (!Opciones1.Any(o => o.EsSeleccionado) && !Opciones2.Any(o => o.EsSeleccionado))) // Verificamos si al menos un CheckBox está seleccionado
             {
                 DisplayAlert("Error", "Por favor, seleccione todos los campos y al menos un curso.", "OK");
                 return; // No agregar el curso si falta algún valor o ningún CheckBox está seleccionado
@@ -335,8 +352,8 @@ namespace TFGClient.Interfaz
 
             // Confirmar con el usuario antes de eliminar
             bool confirmar = await DisplayAlert("Confirmar eliminación",
-                $"¿Quieres eliminar la categoría '{cursoAEliminar.CursosSeleccionados} {cursoAEliminar.Grado}' del servidor Discord?",
-                "Sí", "No");
+            $"¿Quieres eliminar la categoría '{cursoAEliminar.CursosSeleccionados} {cursoAEliminar.Grado}' del servidor Discord?",
+            "Sí", "No");
 
             if (!confirmar) return;
 
@@ -419,9 +436,9 @@ namespace TFGClient.Interfaz
 
                 using var httpClient = new HttpClient();
                 var content = new StringContent(
-                    JsonConvert.SerializeObject(dataToSend),
-                    Encoding.UTF8,
-                    "application/json"
+                JsonConvert.SerializeObject(dataToSend),
+                Encoding.UTF8,
+                "application/json"
                 );
 
                 var response = await httpClient.PostAsync("http://localhost:5000/crear-servidor", content);
@@ -460,7 +477,7 @@ namespace TFGClient.Interfaz
         // Nuevo método para la sección "Configurar servidor"
         private async void AñadirCursos(object sender, EventArgs e)
         {
-            
+
             try
             {
                 // Concatenar todos los cursos y grados seleccionados
@@ -512,8 +529,8 @@ namespace TFGClient.Interfaz
         private string ObtenerDatosConcatenados()
         {
             var listaConcat = Cursos
-                .Select(c => $"{c.CursosSeleccionados} {c.Grado}")
-                .ToList();
+            .Select(c => $"{c.CursosSeleccionados} {c.Grado}")
+            .ToList();
 
             return string.Join(", ", listaConcat);
         }
@@ -530,8 +547,8 @@ namespace TFGClient.Interfaz
             {
                 // Consultamos a la base de datos por alumnos cuyo nombre coincida con la búsqueda
                 var alumnosEncontrados = _databaseService.ObtenerTodosLosAlumnos()
-                    .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
-                    .ToList();
+                .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
+                .ToList();
 
                 // Limpiamos la colección actual
                 Alumnos.Clear();
@@ -565,8 +582,8 @@ namespace TFGClient.Interfaz
             {
                 // Consultamos a la base de datos por alumnos cuyo nombre coincida con la búsqueda
                 var profesoresEncontrados = _databaseService.ObtenerTodosLosProfesores()
-                    .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
-                    .ToList();
+                .Where(a => a.Nombre.Contains(nombreBusqueda, StringComparison.OrdinalIgnoreCase) && a.InstiID == profe.InstiID)
+                .ToList();
 
                 // Limpiamos la colección actual
                 Profesores.Clear();
@@ -702,17 +719,6 @@ namespace TFGClient.Interfaz
             try
             {
                 var profesor = SesionUsuario.Instancia.ProfesorLogueado;
-                // Si se eliminó en Discord, también eliminamos localmente el registro de la base de datos
-                bool eliminadoLocal = _databaseService.EliminarServidor(profesor.InstiID);
-                if (eliminadoLocal)
-                {
-                    await DisplayAlert("Éxito", "Servidor Discord eliminado correctamente y registro local borrado.", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Advertencia", "Servidor eliminado en Discord, pero no se pudo borrar el registro local.", "OK");
-                }
-                
                 if (profesor == null)
                 {
                     await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
@@ -736,6 +742,24 @@ namespace TFGClient.Interfaz
                 using var httpClient = new HttpClient();
                 var response = await httpClient.PostAsync("http://localhost:5000/eliminar-servidor", content);
 
+                if (response.IsSuccessStatusCode)
+                {
+                    // Si se eliminó en Discord, también eliminamos localmente el registro de la base de datos
+                    bool eliminadoLocal = _databaseService.EliminarServidor(profesor.InstiID);
+                    if (eliminadoLocal)
+                    {
+                        await DisplayAlert("Éxito", "Servidor Discord eliminado correctamente y registro local borrado.", "OK");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Advertencia", "Servidor eliminado en Discord, pero no se pudo borrar el registro local.", "OK");
+                    }
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Error", $"Error al eliminar el servidor: {error}", "OK");
+                }
             }
             catch (Exception ex)
             {

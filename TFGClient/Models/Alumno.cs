@@ -22,6 +22,8 @@ namespace TFGClient.Models
         public int CursoID { get; set; }
         public string DiscordID { get; set; }
 
+        public string NombreCompleto => $"{Nombre} {Apellido}";
+
         public ObservableCollection<string> Roles { get; set; } = new ObservableCollection<string>();
     }
 }

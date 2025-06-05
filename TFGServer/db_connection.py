@@ -113,6 +113,20 @@ class Database:
                     if resultado:
                         return resultado['InstiID']
         return None
+    
+    async def obtener_insti_id_por_email_alumno(self, email: str) -> int | None:
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(
+                    "SELECT InstiID FROM Alumnos WHERE Email = %s",
+                    (email,)
+                )
+                resultado = await cur.fetchone()
+                if resultado:
+                    return resultado['InstiID']
+        return None
+
 
     async def obtener_servidor_por_insti_id(self, insti_id: int) -> dict | None:
         await self.init_pool()
@@ -138,3 +152,41 @@ class Database:
                     (grado, curso_nombre)
                 )
                 return await cur.fetchone()
+            
+    async def obtener_discord_id_por_email(self, email: str) -> int:
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("SELECT DiscordID FROM Profesores WHERE Email = %s", (email,))
+                result = await cur.fetchone()
+                if result and result[0]:
+                    return int(result[0])
+                raise Exception("No se encontró DiscordID para el email dado")
+            
+    async def obtener_nombre_categoria_por_profesor(self, email: str) -> str:
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                # Paso 1: Obtener CursoID del profesor
+                await cur.execute("SELECT CursoID FROM Profesores WHERE Email = %s", (email,))
+                prof = await cur.fetchone()
+                if not prof:
+                    raise Exception("No se encontró profesor con ese email")
+
+                curso_id = prof['CursoID']
+
+                # Paso 2: Obtener RolID desde la tabla Cursos
+                await cur.execute("SELECT RolID FROM Cursos WHERE ID = %s", (curso_id,))
+                curso = await cur.fetchone()
+                if not curso:
+                    raise Exception("No se encontró curso con ese ID")
+
+                rol_id = curso['RolID']
+
+                # Paso 3: Obtener el nombre del rol (que será el nombre de la categoría)
+                await cur.execute("SELECT NombreRol FROM Roles WHERE ID = %s", (rol_id,))
+                rol = await cur.fetchone()
+                if not rol:
+                    raise Exception("No se encontró rol para ese curso")
+
+                return rol["NombreRol"]

@@ -34,7 +34,7 @@
 
             <VerticalStackLayout>
                 <Label Text="Curso y Grado" TextColor="Black"/>
-                <Picker BackgroundColor="red"/>
+                <Picker x:Name="cursoGradoPicker"  BackgroundColor="red" TextColor="Black"/>
             </VerticalStackLayout>
 
 
