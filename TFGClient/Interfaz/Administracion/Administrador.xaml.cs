@@ -29,7 +29,7 @@ namespace TFGClient.Interfaz
             _databaseService = new DatabaseService();
             Alumnos = new ObservableCollection<Alumno>();
             Profesores = new ObservableCollection<Profesor>();
-            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            var profesor = SesionUsuario.Instancia.AdministradorLogueado;
             if (profesor != null)
             {
                 NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
@@ -48,6 +48,15 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
             BindingContext = this;
             InicializarEventos();
             cargarBBDD();
+            Shell.SetBackButtonBehavior(this, new BackButtonBehavior
+            {
+                IsVisible = false
+            });
+
+            Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
+
+            // Ocultar barra de navegación completa
+            NavigationPage.SetHasNavigationBar(this, false);
 
         }
 
@@ -172,11 +181,11 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
         {
             try
             {
-                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+                var administrador = SesionUsuario.Instancia.AdministradorLogueado;
 
-                if (profesor == null)
+                if (administrador == null)
                 {
-                    await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
+                    await DisplayAlert("Error", "No se encontró el administrador logueado.", "OK");
                     return;
                 }
 
@@ -184,7 +193,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
 
                 var dataToSend = new
                 {
-                    InstiID = profesor.InstiID,
+                    InstiID = administrador.InstiID,
                 };
 
                 var jsonData = JsonConvert.SerializeObject(dataToSend);
@@ -345,7 +354,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
         {
             var button = sender as Button;
             if (button == null) return;
-            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            var profesor = SesionUsuario.Instancia.AdministradorLogueado;
 
             var cursoAEliminar = button.BindingContext as Curso;
             if (cursoAEliminar == null) return;
@@ -486,7 +495,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 // Mostrar los cursos concatenados antes de enviarlos
                 await DisplayAlert("Cursos a enviar", cursosGradosConcatenados, "OK");
 
-                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+                var profesor = SesionUsuario.Instancia.AdministradorLogueado;
 
                 // Crear el objeto que vamos a enviar al servidor Flask
                 var dataToSend = new
@@ -541,7 +550,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
         {
             // Obtener el nombre de la búsqueda
             string nombreBusqueda = BuscarAlumnoEntry.Text;
-            var profe = SesionUsuario.Instancia.ProfesorLogueado;
+            var profe = SesionUsuario.Instancia.AdministradorLogueado;
             // Si el nombre no está vacío, realizar la búsqueda
             if (!string.IsNullOrEmpty(nombreBusqueda))
             {
@@ -562,7 +571,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
             else
             {
                 // Si no se encuentra ningún nombre en la búsqueda, mostrar todos los alumnos
-                var todosLosAlumnos = _databaseService.ObtenerTodosLosAlumnos();
+                var todosLosAlumnos = _databaseService.ObtenerTodosLosAlumnos().Where(a => a.InstiID == profe.InstiID).ToList();
                 Alumnos.Clear();
                 foreach (var alumno in todosLosAlumnos)
                 {
@@ -575,7 +584,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
         {
             // Obtener el nombre de la búsqueda
             string nombreBusqueda = BuscarProfesorEntry.Text;
-            var profe = SesionUsuario.Instancia.ProfesorLogueado;
+            var profe = SesionUsuario.Instancia.AdministradorLogueado;
 
             // Si el nombre no está vacío, realizar la búsqueda
             if (!string.IsNullOrEmpty(nombreBusqueda))
@@ -597,7 +606,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
             else
             {
                 // Si no se encuentra ningún nombre en la búsqueda, mostrar todos los alumnos
-                var todosLosProfesores = _databaseService.ObtenerTodosLosProfesores();
+                var todosLosProfesores = _databaseService.ObtenerTodosLosProfesores().Where(a => a.InstiID == profe.InstiID).ToList();
                 Profesores.Clear();
                 foreach (var profesor in todosLosProfesores)
                 {
@@ -616,7 +625,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
 
             bool confirmar = await DisplayAlert("Confirmar", $"¿Quieres eliminar al alumno {alumno.Nombre} {alumno.Apellido} y expulsarlo del Discord?", "Sí", "No");
             if (!confirmar) return;
-            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            var profesor = SesionUsuario.Instancia.AdministradorLogueado;
             try
             {
                 // Preparar JSON con el DiscordID para expulsar del servidor Discord vía Flask
@@ -718,7 +727,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
         {
             try
             {
-                var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+                var profesor = SesionUsuario.Instancia.AdministradorLogueado;
                 if (profesor == null)
                 {
                     await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
@@ -767,6 +776,57 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
             }
         }
 
+        private async void cerrarSesion(object sender, EventArgs e)
+        {
+            bool confirmar = await Application.Current.MainPage.DisplayAlert(
+                "Cerrar sesión", "¿Estás seguro de que quieres cerrar sesión?", "Sí", "Cancelar");
+
+            if (!confirmar)
+                return;
+
+            Preferences.Clear();
+            SesionUsuario.Instancia.CerrarSesion();
+
+            // Vuelve al Shell con la página de login como inicio
+            Application.Current.MainPage = new AppShell();
+
+            // Navega a la página de login (puede ser un route como "LoginPage")
+            await Shell.Current.GoToAsync("//Login");
+        }
+
+        private async void OnEditarProfesorClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null)
+                return;
+
+            var profesor = button.BindingContext as Profesor; // Aquí asumo que la clase se llama Profesor
+            if (profesor == null)
+                return;
+
+            // Cambiar el estado de IsJefe en la base de datos
+            bool exito = _databaseService.CambiarEstadoIsJefe(profesor.ID);
+
+            if (exito)
+            {
+                // Actualizar el objeto local para reflejar el cambio (invertimos el valor)
+                profesor.IsJefe = !profesor.IsJefe;
+
+                // Mostrar mensaje acorde al nuevo estado
+                string mensaje = profesor.IsJefe
+                    ? $"{profesor.Nombre} ahora es jefe de estudios."
+                    : $"{profesor.Nombre} deja de ser jefe de estudios.";
+
+                await DisplayAlert("Cambio de estado", mensaje, "OK");
+
+                // Opcional: refrescar la lista si usas ObservableCollection (notificar cambios)
+                // Esto depende de cómo tengas implementado el binding
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo cambiar el estado de jefe de estudios.", "OK");
+            }
+        }
 
     }
     // Clase que representa un curso

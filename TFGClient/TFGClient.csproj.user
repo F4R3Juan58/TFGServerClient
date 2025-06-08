@@ -54,6 +54,9 @@
     <MauiXaml Update="ModificarDatos.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="AñadirAdministrador.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="RecurperarPassword.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

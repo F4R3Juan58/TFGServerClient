@@ -80,6 +80,16 @@ Text=""
 TextColor="White"
 FontAttributes="Bold"
 VerticalOptions="Center" />
+                <ImageButton
+    BackgroundColor="Transparent"
+    WidthRequest="16"
+    HeightRequest="16"
+    Padding="0"
+    Margin="40,0,-10,0"
+    Source="cerrar_sesion.png"
+    Clicked="cerrarSesion" />
+
+
 
             </StackLayout>
         </Grid>
@@ -104,6 +114,7 @@ Clicked="OnSidebarCrearServidorTapped"/>
                 Text="Eliminar Servidor"
                 x:Name="SideBarEliminarServidor"
                 Style="{StaticResource SidebarButtonStyle}"
+                    
                 Clicked="OnSidebarEliminarServidorTapped"/>
 
                 <Button
@@ -147,6 +158,15 @@ Style="{StaticResource CardButtonStyle}"
 WidthRequest="200" 
 HorizontalOptions="Center" 
 Clicked="OnSidebarCrearServidorTapped" />
+                    </Frame>
+
+                    <Frame CornerRadius="4" BorderColor="#DDD" BackgroundColor="White" Padding="12" HasShadow="False">
+                        <Button 
+Text="Eliminar Servidor" 
+Style="{StaticResource CardButtonStyle}" 
+WidthRequest="200" 
+HorizontalOptions="Center" 
+Clicked="OnSidebarEliminarServidorTapped" />
                     </Frame>
 
                     <!-- Botón Añadir Curso -->
@@ -276,7 +296,7 @@ IsVisible="False">
                             <Picker x:Name="CursoPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="3" WidthRequest="400" Margin="0,0,0,20"/>
 
                             <!-- Botón "+" (Este ocupa 3 filas y es más grande) -->
-                            <Button Text="+" FontSize="60" BackgroundColor="Transparent" Clicked="AddCurso" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" HorizontalOptions="FillAndExpand"/>
+                            <Button Text="+" FontSize="60" BackgroundColor="Transparent" Clicked="AddCurso" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" HorizontalOptions="FillAndExpand" TextColor="Black"/>
                         </Grid>
 
 
@@ -387,7 +407,11 @@ IsVisible="False">
                                         <Grid ColumnDefinitions="Auto,Auto, *,Auto" VerticalOptions="Center">
                                             <Label Text="{Binding Nombre}" FontSize="16" TextColor="Black" Grid.Column="0" VerticalOptions="Center" Margin="0,0,5,0" />
                                             <Label Text="{Binding Apellido}" FontSize="16" TextColor="Black" Grid.Column="1" VerticalOptions="Center" Margin="0,0,10,0" />
-                                            <Button Text="🗑️" BackgroundColor="Red" Grid.Column="3" VerticalOptions="Center" HorizontalOptions="End" Clicked="OnEliminarProfesorClicked"/>
+                                            <HorizontalStackLayout HorizontalOptions="End" Grid.Column="3">
+                                                <Button Text="🗑️" BackgroundColor="Red"  VerticalOptions="Center" Clicked="OnEliminarProfesorClicked" Margin="5,0,5,0"/>
+                                                <Button Text="✏️" BackgroundColor="Gray" TextColor="White" Clicked="OnEditarProfesorClicked" Margin="5,0,5,0" />
+                                            </HorizontalStackLayout>
+ 
                                         </Grid>
                                     </Frame>
 
@@ -427,11 +451,11 @@ IsVisible="False">
                                             </HorizontalStackLayout>
 
                                             <Button Text="🗑️"
-Grid.Column="1" 
-BackgroundColor="Red" 
-TextColor="White" 
-VerticalOptions="Center"
-Clicked="OnEliminarCursoClicked"  />
+                                                Grid.Column="1" 
+                                                BackgroundColor="Red" 
+                                                TextColor="White" 
+                                                VerticalOptions="Center"
+                                                Clicked="OnEliminarCursoClicked"  />
                                         </Grid>
                                     </Frame>
                                 </DataTemplate>

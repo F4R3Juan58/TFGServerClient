@@ -15,13 +15,17 @@ public partial class PaginaProfesor : ContentPage
     private string Asignatura;
 
     public PaginaProfesor()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         var profesor = SesionUsuario.Instancia.ProfesorLogueado;
         if (profesor != null)
         {
             NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
         }
+        Shell.SetBackButtonBehavior(this, new BackButtonBehavior
+        {
+            IsVisible = false
+        });
     }
 
     protected async override void OnAppearing()
@@ -151,10 +155,8 @@ public partial class PaginaProfesor : ContentPage
     {
         try
         {
-            // Obtención de los datos del profesor logueado
             var profesor = SesionUsuario.Instancia.ProfesorLogueado;
 
-            // Crear el objeto para enviar en la solicitud
             var dataToSend = new
             {
                 InstiID = profesor.InstiID,
@@ -162,77 +164,84 @@ public partial class PaginaProfesor : ContentPage
                 AsignaturaName = asignatura
             };
 
-            // Serialización del objeto a JSON
             var json = JsonConvert.SerializeObject(dataToSend);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             using var client = new HttpClient();
 
-            // Realizamos la solicitud POST al servidor para obtener los alumnos por asignatura
             var response = await client.PostAsync("http://localhost:5000/obtener-alumnos-por-asignatura", content);
 
-            // Si la respuesta no es exitosa, mostramos un mensaje y retornamos una lista vacía
             if (!response.IsSuccessStatusCode)
             {
                 await DisplayAlert("Error", "No se pudieron obtener los alumnos del servidor.", "OK");
-                return new List<string>(); // Retornar lista vacía
+                return new List<string>();
             }
 
-            // Leemos el contenido de la respuesta
             var responseJson = await response.Content.ReadAsStringAsync();
 
-            // Verificamos si el JSON está vacío o es inválido
             if (string.IsNullOrEmpty(responseJson))
             {
                 await DisplayAlert("Error", "El servidor devolvió una respuesta vacía.", "OK");
-                return new List<string>(); // Retornar lista vacía
+                return new List<string>();
             }
 
-            // Deserializamos el JSON y retornamos la lista de alumnos
-            var alumnos = JsonConvert.DeserializeObject<List<string>>(responseJson);
+            // Deserializar usando la clase AlumnosResponse
+            var alumnosResponse = JsonConvert.DeserializeObject<AlumnosResponse>(responseJson);
 
-            // Si no hay alumnos, mostramos un mensaje y retornamos una lista vacía
-            if (alumnos == null || alumnos.Count == 0)
+            if (alumnosResponse == null || alumnosResponse.Alumnos == null || alumnosResponse.Alumnos.Count == 0)
             {
                 await DisplayAlert("Sin alumnos", "No se encontraron alumnos para esta asignatura.", "OK");
-                return new List<string>(); // Retornar lista vacía
+                return new List<string>();
             }
 
-            // Retornamos la lista de alumnos obtenida
-            return alumnos;
+            return alumnosResponse.Alumnos;
         }
         catch (Exception ex)
         {
-            // En caso de error, mostramos el mensaje de error
             await DisplayAlert("Error", $"Error al obtener alumnos: {ex.Message}", "OK");
-            return new List<string>(); // Retornar lista vacía en caso de error
+            return new List<string>();
         }
     }
 
 
 
-    private async Task<List<string>> ObtenerAlumnosConectadosClase(string categoriaId)
+    private async Task<List<(string Nombre, string DiscordID)>> ObtenerAlumnosConectadosClase()
     {
         using (var client = new HttpClient())
         {
             try
             {
-                var url = $"http://127.0.0.1:5000/api/alumnos_conectados?categoria_id={Uri.EscapeDataString(categoriaId)}";
-                var response = await client.GetAsync(url);
+                var url = "http://localhost:5000/api/alumnos_conectados";
+
+                var data = new
+                {
+                    profesor_discord_id = SesionUsuario.Instancia.ProfesorLogueado.DiscordID,
+                };
+
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, content);
 
                 if (!response.IsSuccessStatusCode)
-                    return new List<string>();
+                    return new List<(string, string)>();
 
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<string>>(json) ?? new List<string>();
+
+                // Deserializa como lista de diccionarios (o usa un tipo explícito si prefieres)
+                var alumnos = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(json);
+
+                return alumnos.Select(a =>
+                    (a.GetValueOrDefault("nombre") ?? "", a.GetValueOrDefault("discord_id") ?? "")
+                ).ToList();
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Error al obtener alumnos conectados: {ex.Message}", "OK");
-                return new List<string>();
+                return new List<(string, string)>();
             }
         }
     }
+
+
 
 
 
@@ -286,7 +295,7 @@ public partial class PaginaProfesor : ContentPage
 
                 var data = new
                 {
-                    nombre_asignatura = Asignatura 
+                    nombre_asignatura = Asignatura
                 };
 
                 var content = new StringContent(
@@ -316,18 +325,20 @@ public partial class PaginaProfesor : ContentPage
 
     private async void ExpulsarAlumno(object sender, EventArgs e)
     {
-        string categoria_id = categoriaId;
-        var nombresAlumnos = await ObtenerAlumnosConectadosClase(categoria_id);
-
-        // Convertir List<string> a List<Alumno>
-        var alumnosClase = nombresAlumnos.Select(nombre => new AlumnoClase
         {
-            Id = nombre,
-            Nombre = nombre
-        }).ToList();
+            var nombresAlumnos = await ObtenerAlumnosConectadosClase();
 
-        var modal = new ExpulsarAlumnoClase(categoria_id, alumnosClase);
-        await Navigation.PushModalAsync(modal);
+            // Convertir List<(string Nombre, string DiscordID)> a List<AlumnoClase>
+            var alumnosClase = nombresAlumnos.Select(alumno => new AlumnoClase
+            {
+                Id = alumno.DiscordID,
+                Nombre = alumno.Nombre
+            }).ToList();
+
+            var modal = new ExpulsarAlumnoClase(alumnosClase);
+            await Navigation.PushModalAsync(modal);
+        }
+
     }
 
     private async void ExpulsarAlumnoAsignatura(object sender, EventArgs e)
@@ -348,7 +359,32 @@ public partial class PaginaProfesor : ContentPage
 
     private async void AbrirCuestionario(object sender, EventArgs e)
     {
-        var modal = new Cuestionario();
+        var modal = new Cuestionario(Asignatura);
         await Navigation.PushModalAsync(modal);
     }
+
+    private async void cerrarSesion(object sender, EventArgs e)
+    {
+        bool confirmar = await Application.Current.MainPage.DisplayAlert(
+            "Cerrar sesión", "¿Estás seguro de que quieres cerrar sesión?", "Sí", "Cancelar");
+
+        if (!confirmar)
+            return;
+
+        Preferences.Clear();
+        SesionUsuario.Instancia.CerrarSesion();
+
+        // Vuelve al Shell con la página de login como inicio
+        Application.Current.MainPage = new AppShell();
+
+        // Navega a la página de login (puede ser un route como "LoginPage")
+        await Shell.Current.GoToAsync("//Login");
+    }
+
+    public class AlumnosResponse
+    {
+        [JsonProperty("alumnos")]
+        public List<string> Alumnos { get; set; }
+    }
+
 }

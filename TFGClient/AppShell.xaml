@@ -8,24 +8,25 @@
     Title="TFGClient">
 
     <!-- Solo rutas, no visibles -->
-    <ShellContent Route="Login" ContentTemplate="{DataTemplate local:Login}" IsVisible="False" />
+    <ShellContent Route="Login" ContentTemplate="{DataTemplate local:Login}" IsVisible="True" x:Name="Login"/>
     <ShellContent Route="Registro" ContentTemplate="{DataTemplate local:Registro}" IsVisible="False"/>
+    <ShellContent Route="AñadirAdministrador" ContentTemplate="{DataTemplate local:AñadirAdministrador}" IsVisible="False"/>
 
     <!-- Roles -->
     <FlyoutItem Title="Profesor" Icon="icon_profesor.png">
-        <ShellContent Title="Profesor" ContentTemplate="{DataTemplate local:Interfaz.PaginaProfesor}" />
+        <ShellContent Title="Profesor" ContentTemplate="{DataTemplate local:Interfaz.PaginaProfesor}" x:Name="Profesor" IsVisible="False" />
     </FlyoutItem>
 
     <FlyoutItem Title="Tutor" Icon="icon_tutor.png">
-        <ShellContent Title="Tutor" ContentTemplate="{DataTemplate local:Interfaz.Tutor}" />
+        <ShellContent Title="Tutor" ContentTemplate="{DataTemplate local:Interfaz.Tutor}" x:Name="Tutor" IsVisible="False"/>
     </FlyoutItem>
 
 
     <FlyoutItem Title="Jefe de Departamento" Icon="icon_jefedpto.png">
-        <ShellContent Title="Jefe de Departamento" ContentTemplate="{DataTemplate local:Interfaz.JefeDepartamento}" />
+        <ShellContent Title="Jefe de Departamento" ContentTemplate="{DataTemplate local:Interfaz.JefeDepartamento}" x:Name="JefeDepartamento" IsVisible="False"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Administrador" Icon="icon_admin.png">
-        <ShellContent Title="Administrador" ContentTemplate="{DataTemplate local:Interfaz.Administrador}" />
+        <ShellContent Title="Administrador" ContentTemplate="{DataTemplate local:Interfaz.Administrador}" x:Name="Administrador" IsVisible="False"/>
     </FlyoutItem>
 </Shell>

@@ -64,6 +64,8 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 		<PackageReference Include="MySql.Data" Version="9.2.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="PdfPig" Version="0.1.10" />
+		<PackageReference Include="Xceed.Words.NET" Version="5.0.25228.6154" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,6 +95,9 @@
 	  </Compile>
 	  <Compile Update="Interfaz\GestionProfesor\PaginaProfesor.xaml.cs">
 	    <DependentUpon>PaginaProfesor.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="AñadirAdministrador.xaml.cs">
+	    <DependentUpon>AñadirAdministrador.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Registro.xaml.cs">
 	    <DependentUpon>Registro.xaml</DependentUpon>
@@ -146,6 +151,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="ModificarDatos.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="AñadirAdministrador.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="RecurperarPassword.xaml">

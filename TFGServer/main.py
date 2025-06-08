@@ -4,6 +4,7 @@ import traceback  # arriba del archivo
 import asyncio
 import disnake
 from disnake.ext import commands
+import random
 import os
 import config
 from werkzeug.utils import secure_filename
@@ -44,35 +45,6 @@ def run_bot():
 
 threading.Thread(target=run_bot, daemon=True).start()
 print("🧵 Hilo del bot iniciado.")
-
-
-@bot.command()
-async def eliminar_servidor(ctx, guild_id: int):
-    """Comando para eliminar un servidor utilizando el ID de la guild (solo si el bot es el dueño)."""
-    
-    guild = bot.get_guild(guild_id)
-    
-    if guild is None:
-        await ctx.send(f"No se encontró el servidor con ID {guild_id}")
-        return
-    
-    # Verificar si el bot es el dueño del servidor
-    if guild.owner_id != bot.user.id:
-        await ctx.send(f"El bot no es el dueño de este servidor. No se puede eliminar.")
-        return
-
-    try:
-        # Eliminar el servidor
-        await guild.delete()  # Eliminar el servidor sin 'reason'
-        await ctx.send(f"Servidor {guild.name} eliminado exitosamente.")
-    except Exception as e:
-        await ctx.send(f"Ocurrió un error al intentar eliminar el servidor: {e}")
-
-
-
-
-
-
 
 @app.route("/obtener-invitacion", methods=["POST"])
 def obtener_invitacion():
@@ -641,60 +613,74 @@ def abrir_votacion_delegado():
     
 @app.route("/obtener-alumnos-por-asignatura", methods=["POST"])
 def obtener_alumnos_por_asignatura():
+    from flask import request, jsonify
+    import asyncio
+
     # Obtener los datos de la solicitud
     data = request.get_json(force=True)
-    print(f"Datos recibidos: {data}")  # Depuración: Verifica los datos recibidos
+    print(f"Datos recibidos: {data}")
 
     insti_id = data.get("InstiID")
     nombre_asignatura = data.get("AsignaturaName")
+    discord_id_profesor = int(data.get("DiscordID", 0))  # opcional
 
     if not insti_id or not nombre_asignatura:
-        print("Faltan datos: InstiID y Asignatura son requeridos")  # Depuración: Si faltan datos
+        print("Faltan datos: InstiID y Asignatura son requeridos")
         return jsonify({"error": "Faltan datos: InstiID y Asignatura son requeridos"}), 400
 
     try:
         # Buscar el servidor asociado al InstiID
-        print(f"Buscando servidor con InstiID: {insti_id}")  # Depuración: Verifica que el InstiID sea correcto
+        print(f"Buscando servidor con InstiID: {insti_id}")
         servidor = asyncio.run_coroutine_threadsafe(
             db.obtener_servidor_por_insti_id(insti_id),
             bot.loop
         ).result()
 
         if not servidor:
-            print(f"Servidor con InstiID {insti_id} no encontrado.")  # Depuración: Si no se encuentra el servidor
+            print(f"Servidor con InstiID {insti_id} no encontrado.")
             return jsonify({"error": "Servidor no encontrado"}), 404
 
-        discord_id = int(servidor["DiscordID"])
-        print(f"DiscordID encontrado: {discord_id}")  # Depuración: Verifica que DiscordID sea correcto
-        guild = bot.get_guild(discord_id)
+        discord_id_guild = int(servidor["DiscordID"])
+        print(f"DiscordID encontrado: {discord_id_guild}")
+        guild = bot.get_guild(discord_id_guild)
 
         if not guild:
-            print(f"Guild de Discord con ID {discord_id} no encontrado.")  # Depuración: Si no se encuentra el guild
+            print(f"Guild de Discord con ID {discord_id_guild} no encontrado.")
             return jsonify({"error": "Guild de Discord no encontrado"}), 404
 
-        # Llamamos al comando del cog para obtener los alumnos
-        cog = bot.get_cog("CargarAlumnosAsignatura")
-        if not cog:
-            print("Cog 'CargarAlumnosAsignatura' no encontrado.")  # Depuración: Si el cog no es encontrado
-            return jsonify({"error": "Cog no encontrado."}), 500
+        profesor = guild.get_member(discord_id_profesor) if discord_id_profesor else None
+        if not profesor:
+            print("Profesor no encontrado en el servidor.")
+            return jsonify({"error": "Profesor no encontrado en el servidor"}), 404
 
-        # Llamamos al método del cog sin necesidad de ctx
-        print(f"Llamando al método 'cargarAlumnosAsignatura' para la asignatura: {nombre_asignatura}")  # Depuración
-        alumnos_data = asyncio.run_coroutine_threadsafe(
-            cog.cargarAlumnosAsignatura(discord_id, nombre_asignatura),
-            bot.loop
-        ).result()
+        # Buscar un rol del profesor que contenga la asignatura en su nombre
+        rol_asignatura = None
+        for rol in profesor.roles:
+            if nombre_asignatura.lower() in rol.name.lower():
+                rol_asignatura = rol
+                break
 
-        # Si hay alumnos, los devolvemos en la respuesta
-        if "alumnos" in alumnos_data:
-            print(f"Alumnos encontrados: {alumnos_data['alumnos']}")  # Depuración: Imprimir los alumnos encontrados
-            return jsonify({"alumnos": alumnos_data["alumnos"]}), 200
+        if not rol_asignatura:
+            print(f"No se encontró un rol del profesor que contenga la asignatura '{nombre_asignatura}'")
+            return jsonify({"error": f"No se encontró un rol del profesor que contenga la asignatura '{nombre_asignatura}'"}), 404
+
+        # Buscar todos los miembros con ese rol, excepto el profesor
+        miembros_con_rol = [
+            member for member in guild.members
+            if rol_asignatura in member.roles and member.id != discord_id_profesor
+        ]
+
+        alumnos = [member.name for member in miembros_con_rol]
+
+        if alumnos:
+            print(f"Alumnos encontrados: {alumnos}")
+            return jsonify({"alumnos": alumnos}), 200
         else:
-            print(f"Error al obtener los alumnos: {alumnos_data.get('error', 'Sin error específico')}")  # Depuración: Si no hay alumnos
-            return jsonify({"error": alumnos_data["error"]}), 500
+            print(f"No se encontraron alumnos con el rol '{rol_asignatura.name}'")
+            return jsonify({"error": f"No se encontraron alumnos con el rol '{rol_asignatura.name}'"}), 404
 
     except Exception as e:
-        print(f"Error al obtener los alumnos: {e}")  # Depuración: Error general
+        print(f"Error al obtener los alumnos: {e}")
         return jsonify({"error": f"Error al obtener los alumnos: {str(e)}"}), 500
 
 
@@ -818,8 +804,205 @@ def reestablecer_asignatura():
     except Exception as e:
         print(f"[ERROR] {e}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route("/api/alumnos_conectados", methods=["POST"])
+async def alumnos_conectados():
+    data = request.get_json()
+    profesor_id = int(data.get("profesor_discord_id"))
 
+    for guild in bot.guilds:
+        profesor = guild.get_member(profesor_id)
+        if profesor and profesor.voice and profesor.voice.channel:
+            canal = profesor.voice.channel
+            alumnos = [
+                {
+                    "nombre": miembro.display_name,
+                    "discord_id": str(miembro.id)
+                }
+                for miembro in canal.members if miembro.id != profesor_id
+            ]
+            return jsonify(alumnos), 200
+
+    return jsonify([]), 200
+
+
+@app.route("/api/expulsar_alumno_clase", methods=["POST"])
+def expulsar_alumno_clase():
+    data = request.get_json()
+    alumno_id = int(data.get("alumno_id"))
+    profesor_id = int(data.get("profesor_id"))
+
+    async def expulsar():
+        for guild in bot.guilds:
+            profesor = guild.get_member(profesor_id)
+            alumno = guild.get_member(alumno_id)
+
+            if not profesor or not alumno:
+                continue
+            if not profesor.voice or not alumno.voice:
+                continue
+            canal = profesor.voice.channel
+            if canal.id != alumno.voice.channel.id:
+                continue
+
+            try:
+                # Expulsar
+                await alumno.move_to(None, reason=f"Expulsado por el profesor {profesor.display_name}")
+                print("✅ Alumno expulsado")
+
+                # Denegar permiso de conexión en el canal para ese usuario
+                overwrite = canal.overwrites_for(alumno)
+                overwrite.connect = False
+                await canal.set_permissions(alumno, overwrite=overwrite)
+                print(f"🚫 Permiso de conexión revocado para {alumno.display_name}")
+            except Exception as e:
+                print(f"❗ Error al expulsar o cambiar permisos: {str(e)}")
+
+    asyncio.run_coroutine_threadsafe(expulsar(), bot.loop)
+    return jsonify({"mensaje": "Petición de expulsión enviada"}), 200
+
+@app.route("/api/enviar_cuestionarios", methods=["POST"])
+def enviar_cuestionarios():
+    data = request.get_json()
+
+    # Extraemos los datos enviados
+    instiID = data.get("InstiID")
+    profesorID = data.get("DiscordID")
+    asignatura = data.get("Asignatura")
+    cuestionarios = data.get("Cuestionarios", [])
+
+    # Debug: Imprimir los datos recibidos
+    print(f"Datos recibidos: InstiID={instiID}, ProfesorID={profesorID}, Asignatura={asignatura}, Cuestionarios={cuestionarios}")
+
+    # Obtener servidor de Discord asociado al instituto
+    servidor = asyncio.run_coroutine_threadsafe(
+        db.obtener_servidor_por_insti_id(instiID),
+        bot.loop
+    ).result()
+
+    if not servidor:
+        print("Error: No existe servidor asociado al instituto.")  # Debug
+        return jsonify({"error": "No existe servidor asociado al instituto."}), 404
+
+    discord_id = int(servidor['DiscordID'])
+    guild = bot.get_guild(discord_id)
+
+    # Comprobamos si los datos esenciales están presentes
+    if not instiID or not profesorID or not asignatura or not cuestionarios:
+        print("Error: Faltan datos necesarios.")  # Debug
+        return jsonify({"error": "Faltan datos necesarios"}), 400
+
+    # Buscar el canal de Discord asociado con la asignatura
+    try:
+        print(f"Buscando canal para la asignatura: {asignatura}")  # Debug
+        channel = obtener_canal_por_asignatura(guild, asignatura)
+    except Exception as e:
+        print(f"Error al obtener canal: {str(e)}")  # Debug
+        return jsonify({"error": str(e)}), 404
+
+    # Enviar cada cuestionario a Discord
+    for cuestionario in cuestionarios:
+        pregunta = cuestionario.get("Pregunta")
+        respuestas = [
+            cuestionario.get("Respuesta1"),
+            cuestionario.get("Respuesta2"),
+            cuestionario.get("Respuesta3"),
+            cuestionario.get("Respuesta4")
+        ]
+        respuesta_correcta = cuestionario.get("Correcta")
+
+        # Debug: Imprimir los detalles del cuestionario
+        print(f"Enviando pregunta: {pregunta}, Respuestas: {respuestas}, Respuesta Correcta: {respuesta_correcta}")
+
+        # Enviar a Discord
+        bot.loop.create_task(enviar_pregunta_discord(pregunta, respuestas, respuesta_correcta, asignatura, channel))
+
+    return jsonify({"message": "Cuestionarios enviados exitosamente"}), 200
+
+
+async def enviar_pregunta_discord(pregunta, respuestas, respuesta_correcta, asignatura, channel):
+    # Desordenar las respuestas
+    random.shuffle(respuestas)
+
+    # Crear botones para cada respuesta
+    botones = [
+        disnake.ui.Button(
+            label=res,
+            custom_id=f"respuesta_{i}_{'correcta' if res == respuesta_correcta else 'incorrecta'}",
+            style=disnake.ButtonStyle.primary if res == respuesta_correcta else disnake.ButtonStyle.secondary,
+            disabled=False  # Los botones son habilitados
+        )
+        for i, res in enumerate(respuestas)
+    ]
+
+    # Crear un embed para la pregunta
+    embed = disnake.Embed(title=pregunta, color=disnake.Color.blue())
+    for idx, respuesta in enumerate(respuestas):
+        embed.add_field(name=f"Opción {idx + 1}", value=respuesta, inline=False)
+
+    # Enviar la pregunta como un mensaje al canal de Discord
+    try:
+        print(f"Enviando pregunta al canal: {channel.name}")  # Debug
+        await channel.send(embed=embed, components=[botones])  # Enviar el embed con botones
+        print("Pregunta enviada a Discord exitosamente.")  # Debug
+    except Exception as e:
+        print(f"Error al enviar el mensaje a Discord: {e}")  # Debug
+
+
+def obtener_canal_por_asignatura(guild, asignatura):
+    # Buscar roles con el nombre de la asignatura
+    roles = [role.name for role in guild.roles if '-' in role.name and asignatura.lower() in role.name.lower()]
+    print(f"Roles encontrados: {roles}")  # Debug
+    if roles:
+        print(f"Roles que contienen '-' y coinciden con '{asignatura}': {', '.join(roles)}")
+    else:
+        raise Exception(f"No se encontraron roles con '-' y que contengan '{asignatura}'.")
+
+    # Buscar categorías con el nombre de la asignatura
+    categorias = [categoria for categoria in guild.categories if '-' in categoria.name and asignatura.lower() in categoria.name.lower()]
+    print(f"Categorías encontradas: {categorias}")  # Debug
+    if categorias:
+        print(f"Categorías que contienen '-' y coinciden con '{asignatura}': {', '.join(categoria.name for categoria in categorias)}")
+    else:
+        raise Exception(f"No se encontraron categorías con '-' y que contengan '{asignatura}'.")
+
+    # Buscar el canal "📝・exámenes" dentro de la categoría asociada a la asignatura
+    for categoria in categorias:
+        for canal in categoria.text_channels:
+            if canal.name == "📝・exámenes":
+                print(f"Canal encontrado: {canal.name}")  # Debug
+                return canal
+
+    raise Exception(f"No se encontró el canal '📝・exámenes' en la categoría de '{asignatura}'.")
+
+
+# Evento para manejar la respuesta de los botones
+@bot.event
+async def on_button_click(interaction: disnake.MessageInteraction):
+    # Aquí verificamos cuál fue el botón presionado
+    boton_presionado = interaction.component.custom_id
+
+    # Verificamos si la respuesta es la correcta
+    if "correcta" in boton_presionado:
+        await interaction.response.send_message("¡Respuesta correcta!", ephemeral=True)
+    else:
+        await interaction.response.send_message("Respuesta incorrecta. Intenta de nuevo.", ephemeral=True)
+
+    # Desactivar todos los botones después de una respuesta
+    new_buttons = [
+        disnake.ui.Button(
+            label=btn.label,
+            custom_id=btn.custom_id,
+            style=btn.style,
+            disabled=True  # Desactivar el botón después de la respuesta
+        )
+        for btn in interaction.message.components[0]
+    ]
+
+    # Actualizar el mensaje con los botones desactivados
+    await interaction.message.edit(components=[new_buttons])
 
 if __name__ == "__main__":
     print("🚀 Iniciando servidor Flask...")
     app.run(host="0.0.0.0", port=5000)
+    

@@ -5,7 +5,7 @@ class ServidorEliminador(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="eliminar_servidor")
+    @commands.command(name="eliminar_servidor_cmd")
     async def eliminar_servidor_cmd(self, ctx, *, nombre_instituto: str):
         """Comando para eliminar un servidor por nombre de instituto."""
         # Llama a la función privada para eliminar

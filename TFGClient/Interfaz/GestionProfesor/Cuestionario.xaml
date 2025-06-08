@@ -44,17 +44,17 @@
                 <!-- Contenido principal -->
                 <ScrollView Grid.Row="1">
                     <StackLayout Padding="20" Spacing="15">
-                       
+
                         <!-- Campo de la pregunta -->
                         <Label Text="Pregunta:" TextColor="Black"/>
-                        <Entry x:Name="PreguntaEntry" Placeholder="Escribe la pregunta aquí..." />
+                        <Entry x:Name="PreguntaEntry" Placeholder="Escribe la pregunta aquí..." TextColor="Black"/>
 
                         <!-- Respuestas -->
                         <Label Text="Respuestas:" TextColor="Black"/>
-                        <Entry x:Name="Respuesta1Entry" Placeholder="Respuesta 1" />
-                        <Entry x:Name="Respuesta2Entry" Placeholder="Respuesta 2" />
-                        <Entry x:Name="Respuesta3Entry" Placeholder="Respuesta 3" />
-                        <Entry x:Name="Respuesta4Entry" Placeholder="Respuesta 4" />
+                        <Entry x:Name="Respuesta1Entry" Placeholder="Respuesta 1" TextColor="Black"/>
+                        <Entry x:Name="Respuesta2Entry" Placeholder="Respuesta 2" TextColor="Black"/>
+                        <Entry x:Name="Respuesta3Entry" Placeholder="Respuesta 3" TextColor="Black"/>
+                        <Entry x:Name="Respuesta4Entry" Placeholder="Respuesta 4" TextColor="Black"/>
 
                         <!-- Botón para agregar la pregunta -->
                         <Button Text="Añadir pregunta"

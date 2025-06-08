@@ -14,10 +14,9 @@ namespace TFGClient.Interfaz
         private readonly string categoriaId;
         private AlumnoClase alumnoSeleccionado;
 
-        public ExpulsarAlumnoClase(string categoriaId, List<AlumnoClase> alumnos)
+        public ExpulsarAlumnoClase(List<AlumnoClase> alumnos)
         {
             InitializeComponent();
-            this.categoriaId = categoriaId;
             AlumnosCollectionView.ItemsSource = alumnos;
         }
 
@@ -40,12 +39,13 @@ namespace TFGClient.Interfaz
             if (alumnoSeleccionado == null) return;
 
             using var client = new HttpClient();
-            var url = "http://127.0.0.1:5000/api/expulsar_alumno";
+            var url = "http://127.0.0.1:5000/api/expulsar_alumno_clase";
             var data = new
             {
-                categoria_id = categoriaId,
-                alumno_id = alumnoSeleccionado.Id
+                alumno_id = alumnoSeleccionado.Id,
+                profesor_id = SesionUsuario.Instancia.ProfesorLogueado.DiscordID
             };
+
 
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(url, content);

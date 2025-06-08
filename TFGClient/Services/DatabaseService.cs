@@ -69,6 +69,16 @@ namespace TFGClient.Services
                 new { Email = email, password = contraseñaHash });
         }
 
+        public Administradores? ObtenerAdministradorPorEmailYPassword(string email, string contraseñaHash)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            return connection.QueryFirstOrDefault<Administradores>(
+                "SELECT * FROM Administradores WHERE Email = @Email AND password = @password",
+                new { Email = email, password = contraseñaHash });
+        }
+
         public Alumno? ObtenerAlumnoPorEmail(string email)
         {
             using var connection = new MySqlConnection(connectionString);
@@ -102,7 +112,7 @@ namespace TFGClient.Services
             connection.Open();
 
             string query = @"INSERT INTO Alumnos 
-                    (Nombre, Apellido, password, Email, ComunidadID, InstiID, CursoID, RolID, IsDelegado, Puntos, DiscordID) 
+                    (Nombre, Apellido, Password, Email, ComunidadID, InstiID, CursoID, RolID, IsDelegado, Puntos, DiscordID) 
                     VALUES 
                     (@Nombre, @Apellido, @password, @Email, @ComunidadID, @InstiID, @CursoID, @RolID, @IsDelegado, @Puntos, @DiscordID)";
 
@@ -116,11 +126,25 @@ namespace TFGClient.Services
             connection.Open();
 
             string query = @"INSERT INTO Profesores 
-                    (Nombre, Apellido, password, Email, ComunidadID, InstiID, RolID, IsJefe, IsTutor, CursoID, DiscordID) 
+                    (Nombre, Apellido, Password, Email, ComunidadID, InstiID, RolID, IsJefe, IsTutor, CursoID, DiscordID) 
                     VALUES 
                     (@Nombre, @Apellido, @password, @Email, @ComunidadID, @InstiID, @RolID, @IsJefe, @IsTutor, @CursoID, @DiscordID)";
 
             int rows = connection.Execute(query, profesor);
+            return rows > 0;
+        }
+
+        public bool InsertarAdministrador(Administradores administrador)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            string query = @"INSERT INTO Administradores 
+                    (Nombre, Apellido, Password, Email, InstiID, RolID, DiscordID) 
+                    VALUES 
+                    (@Nombre, @Apellido, @password, @Email, @InstiID, @RolID, @DiscordID)";
+
+            int rows = connection.Execute(query, administrador);
             return rows > 0;
         }
 
@@ -324,5 +348,71 @@ namespace TFGClient.Services
 
             return new ObservableCollection<Alumno>(alumnos);
         }
+
+        public bool EsAdministrador(string email)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                // Verifica si el correo existe en la tabla Administradores
+                var admin = conn.QueryFirstOrDefault<dynamic>(
+                    "SELECT ID FROM Administradores WHERE Email = @Email",
+                    new { Email = email });
+
+                return admin != null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al comprobar administrador: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool EsProfesor(string email)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                // Verifica si el correo existe en la tabla Administradores
+                var profesor = conn.QueryFirstOrDefault<dynamic>(
+                    "SELECT ID FROM Profesores WHERE Email = @Email",
+                    new { Email = email });
+
+                return profesor != null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al comprobar profesor: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool CambiarEstadoIsJefe(int profesorId)
+        {
+            try
+            {
+                using var conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                // Actualizar IsJefe al valor contrario (true -> false, false -> true)
+                int filasAfectadas = conn.Execute(
+                    @"UPDATE Profesores 
+              SET IsJefe = NOT IsJefe
+              WHERE ID = @ProfesorID",
+                    new { ProfesorID = profesorId });
+
+                return filasAfectadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al cambiar estado de IsJefe: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }

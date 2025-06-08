@@ -8,13 +8,15 @@ using TFGClient.Services;
 
 namespace TFGClient
 {
-    public partial class Cuestionario: ContentPage
+    public partial class Cuestionario : ContentPage
     {
         public ObservableCollection<CuestionarioForm> Cuestionarios { get; set; }
+        string asignatura;
 
-        public Cuestionario()
+        public Cuestionario(string Asignatura)
         {
             InitializeComponent();
+            asignatura = Asignatura;
             Cuestionarios = new ObservableCollection<CuestionarioForm>();
             CuestionariosCollectionView.ItemsSource = Cuestionarios;
         }
@@ -23,6 +25,7 @@ namespace TFGClient
         public class CuestionarioForm
         {
             public string Pregunta { get; set; }
+            public string Correcta { get; set; }
             public string Respuesta1 { get; set; }
             public string Respuesta2 { get; set; }
             public string Respuesta3 { get; set; }
@@ -50,6 +53,7 @@ namespace TFGClient
             Cuestionarios.Add(new CuestionarioForm
             {
                 Pregunta = pregunta,
+                Correcta = respuesta1,
                 Respuesta1 = respuesta1,
                 Respuesta2 = respuesta2,
                 Respuesta3 = respuesta3,
@@ -74,8 +78,16 @@ namespace TFGClient
             }
 
             // Crear un objeto para enviar al servidor
+            var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+            var instiID = profesor.InstiID;
+            var discordID = profesor.DiscordID;
+             // Asegúrate de que la propiedad Asignatura esté disponible en el objeto ProfesorLogueado
+
             var data = new
             {
+                InstiID = instiID,
+                DiscordID = discordID,
+                Asignatura = asignatura,
                 Cuestionarios = Cuestionarios
             };
 

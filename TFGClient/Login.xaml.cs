@@ -46,8 +46,20 @@ namespace TFGClient
             {
                 var alumno = db.ObtenerAlumnoPorEmailYPassword(email, contraseñaHash);
                 var profesor = db.ObtenerProfesorPorEmailYPassword(email, contraseñaHash);
+                var administrador = db.ObtenerAdministradorPorEmailYPassword(email, contraseñaHash);
 
-                if (alumno != null)
+                if (email=="Administrador" && contraseña=="administrador")
+                {
+                    await Shell.Current.GoToAsync("AñadirAdministrador");
+                }
+                else if (administrador != null)
+                {
+                    // Guardar el email del administrador
+                    Preferences.Set("UsuarioEmail", administrador.Email);
+                    SesionUsuario.Instancia.AdministradorLogueado = administrador;
+                    await Shell.Current.GoToAsync("Administrador");
+                }
+                else if  (alumno != null)
                 {
                     // Hacer la consulta al backend Flask para obtener la invitación al Discord
                     var cliente = new HttpClient();
@@ -76,6 +88,10 @@ namespace TFGClient
                     // ✅ Guardar el email SOLO si es profesor
                     Preferences.Set("UsuarioEmail", profesor.Email);
                     SesionUsuario.Instancia.ProfesorLogueado = profesor;
+                    if (Shell.Current is AppShell appShell)
+                    {
+                        appShell.cargar();
+                    }
                     await Shell.Current.GoToAsync("Profesor");
                 }
                 else
@@ -116,21 +132,23 @@ namespace TFGClient
 
     public class SesionUsuario
     {
-        public static SesionUsuario _instancia;
-
-        public static SesionUsuario Instancia
-        {
-            get
-            {
-                if (_instancia == null)
-                    _instancia = new SesionUsuario();
-
-                return _instancia;
-            }
-        }
+        private static readonly Lazy<SesionUsuario> _instancia = new(() => new SesionUsuario());
+        public static SesionUsuario Instancia => _instancia.Value;
 
         public Profesor ProfesorLogueado { get; set; }
+        public Administradores AdministradorLogueado { get; set; }
 
-        public SesionUsuario() { }
+        public bool HaySesionActiva => ProfesorLogueado != null || AdministradorLogueado != null;
+
+        public void CerrarSesion()
+        {
+            ProfesorLogueado = null;
+            AdministradorLogueado = null;
+        }
+
+        private SesionUsuario() { }
     }
+
+
+
 }
