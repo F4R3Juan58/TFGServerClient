@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TFGClient.Interfaz.JefeDepartamento"
-             BackgroundColor="#F5F5F5"
                 Shell.NavBarIsVisible="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f8f8fb" Offset="0.0" />
+            <GradientStop Color="#dee3e7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ContentPage.Resources>
         <!-- Estilo para los botones del menú lateral -->
         <Style x:Key="SidebarButtonStyle" TargetType="Label">
@@ -80,7 +86,14 @@ Spacing="8">
         TextColor="White"
         FontAttributes="Bold"
         VerticalOptions="Center" />
-
+                <ImageButton
+    BackgroundColor="Transparent"
+    WidthRequest="16"
+    HeightRequest="16"
+    Padding="0"
+    Margin="40,0,-10,0"
+    Source="cerrar_sesion.png"
+    Clicked="cerrarSesion" />
             </StackLayout>
         </Grid>
 
@@ -208,19 +221,56 @@ Spacing="8">
             <ScrollView IsVisible="False" Grid.Column="1" x:Name="AdministrarProfesores">
                 <VerticalStackLayout  Padding="16" Spacing="16">
                     <Label Text="Listado de profesores" FontSize="20" TextColor="Black"/>
-                    <CollectionView ItemsSource="{Binding Profesores}" SelectionMode="Single" x:Name="ListaProfesoresCollectionView" HeightRequest="300">
+                    <CollectionView 
+    ItemsSource="{Binding Profesores}" 
+    SelectionMode="Single" 
+    x:Name="ListaProfesoresCollectionView" 
+    HeightRequest="300">
+
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Frame Margin="5" Padding="10" BackgroundColor="#eaf2ff" CornerRadius="5">
-                                    <Label Text="{Binding NombreCompleto}" FontSize="16" TextColor="#296ACC"/>
+                                <Frame Margin="5" Padding="10" CornerRadius="5" x:Name="ItemFrame" BackgroundColor="#eaf2ff">
+                                    <Frame.VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#eaf2ff" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#296ACC" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </Frame.VisualStateManager.VisualStateGroups>
+
+                                    <Label Text="{Binding NombreCompleto}" 
+                       FontSize="16" 
+                       TextColor="Black">
+                                        <Label.VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="TextColor" Value="#296ACC" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="TextColor" Value="White" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </Label.VisualStateManager.VisualStateGroups>
+                                    </Label>
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <HorizontalStackLayout>
-                        <Button Text="Editar"  Style="{StaticResource CardButtonStyle}" Clicked="Editar"/>
-                        <Button Text="Salir"  Style="{StaticResource CardButtonStyle}" Clicked="VolverGestionAcademica"/>
-                    </HorizontalStackLayout>
+
+
+                    <Button Text="Editar"  Style="{StaticResource CardButtonStyle}" Clicked="Editar" Margin="0,0,0,-10"/>
+                    <Button Text="Salir" BackgroundColor="Red" Style="{StaticResource CardButtonStyle}" Clicked="VolverGestionAcademica"/>
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>

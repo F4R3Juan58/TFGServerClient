@@ -1,8 +1,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TFGClient.Login"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="#0f1012">
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f8f8fb" Offset="0.0" />
+            <GradientStop Color="#dee3e7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
     <Grid VerticalOptions="FillAndExpand"
           HorizontalOptions="FillAndExpand"
@@ -12,21 +17,35 @@
         <Frame x:Name="Formulario"
                Grid.Row="1"
                Grid.Column="1"
-               BackgroundColor="#050505"
+               BackgroundColor="#ffffff"
                Padding="20"
                HorizontalOptions="FillAndExpand"
+               CornerRadius="25"
+               BorderColor="Transparent"
+               HasShadow="True"
+               Margin="20"
                VerticalOptions="Center">
 
             <VerticalStackLayout>
-                <Label Text="LOGIN" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20" TextColor="White"/>
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="0,0,0,20">
+                    <Image Source="logo.png" WidthRequest="75" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Text="EDUCORD" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="10,20,10,20" TextColor="#0c77d0"/>
+                </HorizontalStackLayout>
 
-                <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
-                <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="White"/>
 
-                <Button Text="Login" Clicked="onLoginClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#146dba" />
-                <Button Text="Registro" Clicked="onRegistroClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
-                <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
-                <Button Text="Recuperar Contraseña" Clicked="onRecuperarClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#2a3036"/>
+                <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                    <Entry Placeholder="Email" x:Name="EmailEntry" TextColor="Black" PlaceholderColor="#6b737b" BackgroundColor="Transparent" />
+                </Frame>
+
+                <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                    <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" TextColor="Black" PlaceholderColor="#6b737b" IsPassword="True" BackgroundColor="Transparent" />
+                </Frame>
+
+
+                <Button Text="Login" Clicked="onLoginClicked" Margin="0,0,0,20" TextColor="White" BackgroundColor="#0c77d0" />
+                <Button Text="Registro" Clicked="onRegistroClicked" Margin="0,0,0,20" TextColor="Black" BackgroundColor="#ced4da"/>
+                <Button Text="Modificar Datos" Clicked="onModificarClicked" Margin="0,0,0,20" TextColor="Black" BackgroundColor="#ced4da"/>
+                <Button Text="Recuperar Contraseña" Clicked="onRecuperarClicked" Margin="0,0,0,20" TextColor="Black" BackgroundColor="#ced4da"/>
 
             </VerticalStackLayout>
         </Frame>

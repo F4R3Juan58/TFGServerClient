@@ -48,7 +48,7 @@
 
             <Button Text="Cerrar"
                 Clicked="CerrarModal_Clicked"
-                BackgroundColor="LightGray"
+                BackgroundColor="#0c77d0"
                     Style="{StaticResource CardButtonStyle}"/>
         </VerticalStackLayout>
     </Frame>

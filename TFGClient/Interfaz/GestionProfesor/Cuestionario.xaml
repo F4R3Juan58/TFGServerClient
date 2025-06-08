@@ -17,87 +17,96 @@
     <Grid>
         <!-- Modal centrado -->
         <Frame
-            WidthRequest="500"
-            HeightRequest="800"
-            BackgroundColor="White"
-            CornerRadius="20"
-            Padding="20"
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            HasShadow="True">
+        WidthRequest="500"
+        HeightRequest="800"
+        BackgroundColor="#ffffff"
+        BorderColor="Transparent"
+        CornerRadius="20"
+        Padding="20"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        HasShadow="True">
 
             <Grid RowDefinitions="Auto,*,Auto">
-                <!-- Botón cerrar en esquina superior derecha -->
-                <Grid>
-                    <Label Text="CUESTIONARIO" FontSize="20" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" TextColor="Black" VerticalOptions="Center"/>
+                <!-- TÍTULO + BOTÓN CERRAR -->
+                <Grid Grid.Row="0">
+                    <Label Text="CUESTIONARIO"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="CenterAndExpand"
+                       TextColor="#0c77d0"
+                       VerticalOptions="Center"/>
                     <Button 
-                        Text="X"
-                        Clicked="OnCerrarModalClicked"
-                        BackgroundColor="Transparent"
-                        TextColor="Red"
-                        FontSize="20"
-                        FontAttributes="Bold"
-                        HorizontalOptions="End"
-                        VerticalOptions="Start"/>
+                    Text="X"
+                    Clicked="OnCerrarModalClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="Red"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"/>
                 </Grid>
 
-                <!-- Contenido principal -->
+                <!-- CONTENIDO PRINCIPAL -->
                 <ScrollView Grid.Row="1">
                     <StackLayout Padding="20" Spacing="15">
 
                         <!-- Campo de la pregunta -->
-                        <Label Text="Pregunta:" TextColor="Black"/>
-                        <Entry x:Name="PreguntaEntry" Placeholder="Escribe la pregunta aquí..." TextColor="Black"/>
+                        <Label Text="Pregunta:" TextColor="#0c77d0"/>
+                        <Entry x:Name="PreguntaEntry" Placeholder="Escribe la pregunta aquí..." TextColor="Black" BackgroundColor="#ced4da" PlaceholderColor="Black"/>
 
                         <!-- Respuestas -->
-                        <Label Text="Respuestas:" TextColor="Black"/>
-                        <Entry x:Name="Respuesta1Entry" Placeholder="Respuesta 1" TextColor="Black"/>
-                        <Entry x:Name="Respuesta2Entry" Placeholder="Respuesta 2" TextColor="Black"/>
-                        <Entry x:Name="Respuesta3Entry" Placeholder="Respuesta 3" TextColor="Black"/>
-                        <Entry x:Name="Respuesta4Entry" Placeholder="Respuesta 4" TextColor="Black"/>
+                        <Label Text="Respuestas:" TextColor="#0c77d0"/>
+                        <Entry x:Name="Respuesta1Entry" Placeholder="Respuesta 1" TextColor="Black" BackgroundColor="#ced4da" PlaceholderColor="Black"/>
+                        <Entry x:Name="Respuesta2Entry" Placeholder="Respuesta 2" TextColor="Black" BackgroundColor="#ced4da" PlaceholderColor="Black"/>
+                        <Entry x:Name="Respuesta3Entry" Placeholder="Respuesta 3" TextColor="Black" BackgroundColor="#ced4da" PlaceholderColor="Black"/>
+                        <Entry x:Name="Respuesta4Entry" Placeholder="Respuesta 4" TextColor="Black" BackgroundColor="#ced4da" PlaceholderColor="Black"/>
 
                         <!-- Botón para agregar la pregunta -->
                         <Button Text="Añadir pregunta"
-                                Clicked="OnAgregarPreguntaClicked"
-                                Style="{StaticResource CardButtonStyle}" />
+                            Clicked="OnAgregarPreguntaClicked"
+                            Style="{StaticResource CardButtonStyle}" />
 
-                        <!-- CollectionView con altura fija y scroll interno -->
+                        <!-- CollectionView de preguntas -->
                         <CollectionView x:Name="CuestionariosCollectionView"
-                                        HeightRequest="300">
+                                    HeightRequest="300">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <VerticalStackLayout Padding="0,10">
-                                        <Label Text="{Binding Pregunta}" FontAttributes="Bold" TextColor="Black" />
-                                        <HorizontalStackLayout>
-                                            <Label Text="A)" TextColor="Black" Margin="0,0,10,0"/>
-                                            <Label Text="{Binding Respuesta1}" TextColor="Black"/>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout>
-                                            <Label Text="B)" TextColor="Black" Margin="0,0,10,0"/>
-                                            <Label Text="{Binding Respuesta2}" TextColor="Black"/>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout>
-                                            <Label Text="C)" TextColor="Black" Margin="0,0,10,0"/>
-                                            <Label Text="{Binding Respuesta3}" TextColor="Black"/>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout>
-                                            <Label Text="D)" TextColor="Black" Margin="0,0,10,0"/>
-                                            <Label Text="{Binding Respuesta4}" TextColor="Black"/>
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
+                                    <Frame BorderColor="#ddd" Padding="10" Margin="5" BackgroundColor="#f8f9fa">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Pregunta}" FontAttributes="Bold" TextColor="Black"/>
+                                            <HorizontalStackLayout>
+                                                <Label Text="A)" TextColor="Black" Margin="0,0,10,0"/>
+                                                <Label Text="{Binding Respuesta1}" TextColor="Black"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout>
+                                                <Label Text="B)" TextColor="Black" Margin="0,0,10,0"/>
+                                                <Label Text="{Binding Respuesta2}" TextColor="Black"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout>
+                                                <Label Text="C)" TextColor="Black" Margin="0,0,10,0"/>
+                                                <Label Text="{Binding Respuesta3}" TextColor="Black"/>
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout>
+                                                <Label Text="D)" TextColor="Black" Margin="0,0,10,0"/>
+                                                <Label Text="{Binding Respuesta4}" TextColor="Black"/>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
                 </ScrollView>
 
-                <!-- Botón de envío abajo del todo -->
+                <!-- BOTÓN DE ENVÍO -->
                 <Button Grid.Row="2"
-                        Text="Enviar Cuestionarios"
-                        Clicked="OnEnviarCuestionariosClicked"
-                        Style="{StaticResource CardButtonStyle}"
-                        Margin="20,10,20,0" />
+                    Text="Enviar Cuestionarios"
+                    Clicked="OnEnviarCuestionariosClicked"
+                    Style="{StaticResource CardButtonStyle}"
+                    Margin="20,10,20,0" />
             </Grid>
         </Frame>
     </Grid>
+
 </ContentPage>

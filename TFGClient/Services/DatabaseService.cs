@@ -451,6 +451,5 @@ namespace TFGClient.Services
 
             return rowsAffected > 0;
         }
->>>>>>> eb5d62bd9093ca0be139a2344a93cd950e073b43
     }
 }

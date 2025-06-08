@@ -19,7 +19,8 @@
     <Frame
         WidthRequest="500"
         HeightRequest="400"
-        BackgroundColor="White"
+        BackgroundColor="#ffffff"
+        BorderColor="Transparent"
         CornerRadius="20"
         Padding="20"
         VerticalOptions="Center"
@@ -28,20 +29,14 @@
 
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="Nuevo Tutor" TextColor="Black" FontSize="18" />
-            <Label Text="Profesor" TextColor="Black"/>
-            <Picker x:Name="profesorPicker"  BackgroundColor="red" TextColor="Black"/>
+            <Label Text="Nuevo Tutor" TextColor="#0c77d0" FontSize="18" Margin="0,0,0,-10"/>
+            <Label Text="Profesor" TextColor="#0c77d0" Margin="0,0,0,-10"/>
+            <Picker x:Name="profesorPicker"  BackgroundColor="#ced4da" TextColor="Black"/>
+            <Label Text="Curso y Grado" TextColor="#0c77d0" Margin="0,0,0,-10"/>
+            <Picker x:Name="cursoGradoPicker"  BackgroundColor="#ced4da" TextColor="Black"/>
 
-            <VerticalStackLayout>
-                <Label Text="Curso y Grado" TextColor="Black"/>
-                <Picker x:Name="cursoGradoPicker"  BackgroundColor="red" TextColor="Black"/>
-            </VerticalStackLayout>
-
-
-            <HorizontalStackLayout>
-                <Button Text="Confirmar" TextColor="White" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
-                <Button Text="Cerrar" TextColor="White" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
-            </HorizontalStackLayout>
+            <Button Text="Confirmar" TextColor="White" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}" Margin="0,0,0,-10"/>
+            <Button Text="Cerrar"  BackgroundColor="Red" TextColor="White" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
 
         </VerticalStackLayout>
 

@@ -18,10 +18,11 @@
 
     <Frame
         WidthRequest="500"
-        HeightRequest="400"
-        BackgroundColor="White"
+        HeightRequest="450"
+        BackgroundColor="#ffffff"
         CornerRadius="20"
         Padding="20"
+        BorderColor="Transparent"
         VerticalOptions="Center"
         HorizontalOptions="Center"
         HasShadow="True">
@@ -30,17 +31,18 @@
 
             <Label Text="Modificar Asignación de Asignatura" TextColor="Black" FontSize="20" FontAttributes="Bold"/>
 
-            <Label Text="Nombre de Profesor" TextColor="Black" FontSize="16" x:Name="NombreProfesor"/>
-            <Label Text="Asignaturas Actuales:" TextColor="Black"/>
-            <Picker x:Name="Asignaturas" TextColor="Black" BackgroundColor="Red"/>
-
-            <Label Text="Todas las Asignaturas:" TextColor="Black"/>
-            <Picker x:Name="AsignaturasTotales" TextColor="Black" BackgroundColor="Red"/>
-
             <HorizontalStackLayout>
-                <Button Text="Guardar" TextColor="Black" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
-                <Button Text="Cancelar" TextColor="Black" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
+                <Label Text="Nombre: "/>
+                <Label Text="Nombre de Profesor" TextColor="Black" FontSize="16" x:Name="NombreProfesor"/>
             </HorizontalStackLayout>
+            <Label Text="Asignaturas Actuales:" TextColor="Black" Margin="0,0,0,-10"/>
+            <Picker x:Name="Asignaturas" TextColor="Black" BackgroundColor="#ced4da"/>
+
+            <Label Text="Todas las Asignaturas:" TextColor="Black" Margin="0,0,0,-10"/>
+            <Picker x:Name="AsignaturasTotales" TextColor="Black" BackgroundColor="#ced4da"/>
+
+            <Button Text="Guardar" TextColor="White" BackgroundColor="#0c77d0" Clicked="Confirmar_Clicked"  Style="{StaticResource CardButtonStyle}" Margin="0,0,0,-10"/>
+            <Button Text="Cancelar" TextColor="Black" BackgroundColor="Red" Clicked="Cerrar_Clicked"  Style="{StaticResource CardButtonStyle}"/>
 
         </VerticalStackLayout>
 

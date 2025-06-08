@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TFGClient.Interfaz.PaginaProfesor"
-             BackgroundColor="#F5F5F5"
              Shell.NavBarIsVisible="False">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f8f8fb" Offset="0.0" />
+            <GradientStop Color="#dee3e7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
     <ContentPage.Resources>
         <!-- Estilo para los botones del menú lateral -->
@@ -85,7 +90,7 @@ Spacing="8">
     WidthRequest="16"
     HeightRequest="16"
     Padding="0"
-    Margin="40,0,-10,0"
+    Margin="10,0,-10,0"
     Source="cerrar_sesion.png"
     Clicked="cerrarSesion" />
             </StackLayout>

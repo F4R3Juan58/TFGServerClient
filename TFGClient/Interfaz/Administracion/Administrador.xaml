@@ -5,7 +5,12 @@ xmlns:shapes="clr-namespace:Microsoft.Maui.Controls.Shapes;assembly=Microsoft.Ma
 x:Class="TFGClient.Interfaz.Administrador"
 BackgroundColor="#F5F5F5"
 Shell.NavBarIsVisible="False">
-
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f8f8fb" Offset="0.0" />
+            <GradientStop Color="#dee3e7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
     <ContentPage.Resources>
         <!-- Estilo para los botones del menú lateral -->
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
@@ -41,7 +46,7 @@ Shell.NavBarIsVisible="False">
         <Grid
 Grid.Row="0"
 ColumnDefinitions="Auto, *, Auto"
-BackgroundColor="#296ACC"
+BackgroundColor="#0c77d0"
 HeightRequest="60">
 
             <HorizontalStackLayout
@@ -78,14 +83,18 @@ Margin="0,0,16,0">
 x:Name="NombreProfesor"
 Text=""
 TextColor="White"
+                    FontSize="20"
 FontAttributes="Bold"
 VerticalOptions="Center" />
                 <ImageButton
-    BackgroundColor="Transparent"
+    BackgroundColor="White"
+                    CornerRadius="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
     WidthRequest="16"
     HeightRequest="16"
     Padding="0"
-    Margin="40,0,-10,0"
+    Margin="20,0,-10,0"
     Source="cerrar_sesion.png"
     Clicked="cerrarSesion" />
 
@@ -219,7 +228,7 @@ Padding="20"
 x:Name="AreaCrearServidor"
 IsVisible="False">
 
-                <Frame BackgroundColor="White">
+                <Frame BackgroundColor="#ffffff">
                     <VerticalStackLayout Spacing="20" Padding="10">
                         <Label Text="CREAR SERVIDOR EN DISCORD" FontSize="30" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold"/>
 
@@ -240,7 +249,7 @@ IsVisible="False">
     x:Name="AreaEliminarServidor"
     IsVisible="False">
 
-                <Frame BackgroundColor="White">
+                <Frame BackgroundColor="#ffffff">
                     <VerticalStackLayout Spacing="20" Padding="10">
                         <Label Text="ELIMINAR SERVIDOR EN DISCORD" FontSize="30" TextColor="Black" HorizontalOptions="Center" FontAttributes="Bold"/>
 
@@ -259,45 +268,69 @@ Padding="20"
 x:Name="AreaAñadirCurso"
 IsVisible="False">
 
-                <Frame BackgroundColor="White">
+                <Frame BackgroundColor="#ffffff">
                     <VerticalStackLayout>
 
                         <Label Text="Añadir curso" TextColor="Black" FontSize="20"/>
+                        <Grid Padding="20"
+      ColumnDefinitions="*,*,*,*,Auto"
+      RowDefinitions="Auto,Auto">
 
-                        <Grid Padding="20" ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                            <!-- FILA 0: Labels -->
+                            <Label Text="Nivel" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" TextColor="Black" Margin="0,10,0,5"/>
+                            <Label Text="Familia" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" TextColor="Black" Margin="0,10,0,5"/>
+                            <Label Text="Curso" Grid.Row="0" Grid.Column="2" HorizontalOptions="Center" TextColor="Black" Margin="0,10,0,5"/>
+                            <Label Text="Grado" Grid.Row="0" Grid.Column="3" HorizontalOptions="Center" TextColor="Black" Margin="0,10,0,5"/>
+
+                            <!-- FILA 1: Controles alineados -->
                             <!-- Nivel -->
-                            <Label Text="Nivel" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="0" Margin="0,10,0,10"/>
-                            <Picker x:Name="NivelPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" Margin="0,0,0,20"/>
+                            <Picker x:Name="NivelPicker"
+            Grid.Row="1" Grid.Column="0"
+            BackgroundColor="#ced4da"
+            TextColor="Black"
+            HorizontalOptions="FillAndExpand"
+            Margin="0,0,0,10"/>
 
                             <!-- Familia -->
-                            <Label Text="Familia" HorizontalOptions="Center" TextColor="Black" Grid.Row="0" Grid.Column="1" Margin="0,10,0,10"/>
-                            <Picker x:Name="FamiliaPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="1" Margin="0,0,0,20"/>
+                            <Picker x:Name="FamiliaPicker"
+            Grid.Row="1" Grid.Column="1"
+            BackgroundColor="#ced4da"
+            TextColor="Black"
+            HorizontalOptions="FillAndExpand"
+            Margin="0,0,0,10"/>
 
-                            <!-- Curso -->
-                            <Label Text="Curso" HorizontalOptions="FillAndExpand" TextColor="Black" Grid.Row="0" Grid.Column="2" Margin="0,10,0,10"/>
-
-                            <!-- Curso 1º -->
-                            <VerticalStackLayout Grid.Row="1" Grid.Column="2">
-                                <HorizontalStackLayout HorizontalOptions="Start" VerticalOptions="Center" Spacing="10">
+                            <!-- Curso (1º y 2º) -->
+                            <HorizontalStackLayout Grid.Row="1" Grid.Column="2"
+                           HorizontalOptions="Center"
+                           Spacing="20">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
                                     <CheckBox x:Name="Curso1" IsChecked="{Binding Opciones1[0].EsSeleccionado}" />
                                     <Label Text="1º" TextColor="Black" VerticalOptions="Center"/>
                                 </HorizontalStackLayout>
-
-                                <!-- Curso 2º -->
-                                <HorizontalStackLayout HorizontalOptions="Start" VerticalOptions="Center" Spacing="10">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
                                     <CheckBox x:Name="Curso2" IsChecked="{Binding Opciones2[0].EsSeleccionado}" />
                                     <Label Text="2º" TextColor="Black" VerticalOptions="Center"/>
                                 </HorizontalStackLayout>
-
-                            </VerticalStackLayout>
+                            </HorizontalStackLayout>
 
                             <!-- Grado -->
-                            <Label Text="Grado" HorizontalOptions="FillAndExpand" TextColor="Black" Grid.Row="0" Grid.Column="3" Margin="0,10,0,10"/>
-                            <Picker x:Name="CursoPicker" BackgroundColor="LightGray" TextColor="Black" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="3" WidthRequest="400" Margin="0,0,0,20"/>
+                            <Picker x:Name="CursoPicker"
+            Grid.Row="1" Grid.Column="3"
+            BackgroundColor="#ced4da"
+            TextColor="Black"
+            HorizontalOptions="FillAndExpand"
+            Margin="0,0,0,10"/>
 
-                            <!-- Botón "+" (Este ocupa 3 filas y es más grande) -->
-                            <Button Text="+" FontSize="60" BackgroundColor="Transparent" Clicked="AddCurso" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2" HorizontalOptions="FillAndExpand" TextColor="Black"/>
+                            <!-- Botón "+" -->
+                            <Button Text="+" FontSize="40"
+            Grid.Row="1" Grid.Column="4"
+            BackgroundColor="Transparent"
+            TextColor="Black"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            Clicked="AddCurso"/>
                         </Grid>
+
 
 
 
@@ -306,37 +339,39 @@ IsVisible="False">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Frame BorderColor="#DDD" BackgroundColor="White" Padding="10" Margin="5">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-
-                                            <!-- Botón para eliminar (en la parte superior derecha) -->
-                                            <Button Text="X" 
-HorizontalOptions="End"
-VerticalOptions="Start"
-BackgroundColor="Transparent"
-TextColor="Red"
-BorderColor="Transparent"
-Clicked="OnEliminarCursoClicked" 
-WidthRequest="30" HeightRequest="30"/>
+                                        <Grid ColumnDefinitions="*,*,Auto"
+                      VerticalOptions="Center"
+                      HorizontalOptions="FillAndExpand">
 
                                             <!-- Información del curso -->
-                                            <VerticalStackLayout Grid.Row="1">
-                                                <Label Text="{Binding Nivel}" FontSize="16" TextColor="Black"/>
-                                                <Label Text="{Binding Familia}" FontSize="16" TextColor="Black"/>
-                                                <Label Text="{Binding CursosSeleccionados}" FontSize="16" TextColor="Black"/>
-                                                <Label Text="{Binding Grado}" FontSize="16" TextColor="Black"/>
-                                            </VerticalStackLayout>
+                                            <HorizontalStackLayout Grid.Column="0" >
+                                                <Label Text="{Binding CursosSeleccionados}" FontSize="16" TextColor="Black" VerticalOptions="Center" Margin="0,0,2,0"/>
+                                                <Label Text="{Binding Grado}" FontSize="16" TextColor="Black" VerticalOptions="Center" Margin="2,0,0,0"/>
+                                            </HorizontalStackLayout>
+                                            
+
+                                            <!-- Botón de eliminar a la derecha -->
+                                            <Button Grid.Column="2"
+                            Text="X"
+                            BackgroundColor="Transparent"
+                            TextColor="Red"
+                            BorderColor="Transparent"
+                            Clicked="OnEliminarCursoClicked"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center" />
                                         </Grid>
                                     </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
 
+
+
                         <Button 
 Style="{StaticResource CardButtonStyle}"
+                            Margin="0,10,0,0"
 Text="Añadir Cursos"
 Clicked="AñadirCursos"/>
                     </VerticalStackLayout>

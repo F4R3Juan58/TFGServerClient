@@ -79,6 +79,14 @@ Spacing="8">
         TextColor="White"
         FontAttributes="Bold"
         VerticalOptions="Center" />
+                <ImageButton
+    BackgroundColor="Transparent"
+    WidthRequest="16"
+    HeightRequest="16"
+    Padding="0"
+    Margin="40,0,-10,0"
+    Source="cerrar_sesion.png"
+    Clicked="cerrarSesion" />
 
             </StackLayout>
         </Grid>

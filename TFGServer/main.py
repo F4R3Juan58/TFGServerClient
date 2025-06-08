@@ -46,50 +46,6 @@ def run_bot():
 threading.Thread(target=run_bot, daemon=True).start()
 print("🧵 Hilo del bot iniciado.")
 
-@app.route("/obtener-invitacion", methods=["POST"])
-def obtener_invitacion():
-    data = request.get_json()
-    email = data.get("email")
-
-    if not email:
-        return jsonify({"error": "Falta el email"}), 400
-
-    async def tarea_generar_invitacion():
-        insti_id = await db.obtener_insti_id_por_email_alumno(email)
-        servidor = await db.obtener_servidor_por_insti_id(insti_id)
-
-        if not servidor:
-            return {"error": "No hay servidor asociado al instituto"}, 404
-
-        guild_id = int(servidor["DiscordID"])
-
-        # Obtener el guild directamente desde bot.guilds
-        guild = disnake.utils.get(bot.guilds, id=guild_id)
-        if not guild:
-            return {"error": f"Guild con ID {guild_id} no encontrado en bot.guilds"}, 404
-
-        cog = bot.get_cog("CrearServidor")
-        if not cog:
-            return {"error": "Cog CrearServidor no encontrado"}, 500
-
-        # Pasamos la instancia de guild directamente al método del cog
-        nueva_invitacion = await cog.generar_invitacion_alumno(guild, email)
-
-        if nueva_invitacion:
-            return {"invitacion": nueva_invitacion}, 200
-        else:
-            return {"error": "No se pudo generar la invitación"}, 500
-
-    # Ejecutar correctamente en el loop del bot
-    futuro = asyncio.run_coroutine_threadsafe(tarea_generar_invitacion(), bot.loop)
-    try:
-        resultado, status = futuro.result()
-        return jsonify(resultado), status
-    except Exception as e:
-        print(f"Error en obtener-invitacion: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
 @app.route("/crear-servidor", methods=["POST"])
 def crear_servidor_api():
     data = request.json
@@ -228,32 +184,6 @@ def obtener_invitacion():
     except Exception as e:
         print(f"Error en obtener-invitacion: {e}")
         return jsonify({"error": str(e)}), 500
-
-
-@app.route("/crear-servidor", methods=["POST"])
-def crear_servidor_api():
-    data = request.json
-    nombre = data.get("nombre")
-    insti_id = data.get("insti_id")
-    user_email = data.get("email")
-
-    if not nombre or not insti_id or not user_email:
-        return jsonify({"error": "Faltan datos"}), 400
-
-    try:
-        future = asyncio.run_coroutine_threadsafe(
-            bot.get_cog("CrearServidor")._crear_servidor(nombre, insti_id, user_email),
-            bot.loop
-        )
-        invite_url = future.result(timeout=20)
-        if invite_url:
-            return jsonify({"status": "OK", "invite": invite_url}), 200
-        else:
-            return jsonify({"status": "Error", "message": "Servidor ya existente o error interno"}), 400
-
-    except Exception as e:
-        print(f"Error en crear-servidor: {e}")
-        return jsonify({"error": f"Error al crear el servidor: {str(e)}"}), 500
 
 @app.route("/vincular-discordid", methods=["POST"])
 def vincular_discordid_api():

@@ -230,15 +230,16 @@ public partial class ModificarDatos : ContentPage
             {
                 var profesorActualizado = new Profesor
                 {
-                    Nombre = nombreEntryProfesor.Text?.Trim(),
-                    Apellido = ApellidosEntryProfesor.Text?.Trim(),
-                    Email = ModificarEmailEntryProfesor.Text?.Trim(),
+                    Nombre = nombreProfesorEntry.Text?.Trim(),
+                    Apellido = apellidosProfesorEntry.Text?.Trim(),
+                    Email = emailProfesorEntry.Text?.Trim(),
                     ComunidadID = ObtenerComunidadId((CAPickerProfesor.SelectedItem as string)!),
                     InstiID = ObtenerInstitutoId((InstitutoPickerProfesor.SelectedItem as string)!),
                     RolID = profesorActual.RolID,
                     DiscordID = profesorActual.DiscordID,
                     IsJefe = profesorActual.IsJefe,
                     IsTutor = profesorActual.IsTutor,
+                    CursoID = 183,
                     Password = profesorActual.Password
                 };
 
@@ -300,9 +301,9 @@ public partial class ModificarDatos : ContentPage
 
     private void RellenarFormularioProfesor(Profesor profesor)
     {
-        nombreEntryProfesor.Text = profesor.Nombre;
-        ApellidosEntryProfesor.Text = profesor.Apellido;
-        ModificarEmailEntryProfesor.Text = profesor.Email;
+        nombreProfesorEntry.Text = profesor.Nombre;
+        apellidosProfesorEntry.Text = profesor.Apellido;
+        emailProfesorEntry.Text = profesor.Email;
 
         // Cargar Comunidad
         var comunidad = db.ObtenerTodasLasComunidades().FirstOrDefault(c => c.ID == profesor.ComunidadID);

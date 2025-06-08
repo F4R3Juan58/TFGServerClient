@@ -158,4 +158,22 @@ public partial class JefeDepartamento : ContentPage
         GestionAcademica.IsVisible = false;
         AdministrarProfesores.IsVisible = true;
     }
+
+    private async void cerrarSesion(object sender, EventArgs e)
+    {
+        bool confirmar = await Application.Current.MainPage.DisplayAlert(
+            "Cerrar sesión", "¿Estás seguro de que quieres cerrar sesión?", "Sí", "Cancelar");
+
+        if (!confirmar)
+            return;
+
+        Preferences.Clear();
+        SesionUsuario.Instancia.CerrarSesion();
+
+        // Vuelve al Shell con la página de login como inicio
+        Application.Current.MainPage = new AppShell();
+
+        // Navega a la página de login (puede ser un route como "LoginPage")
+        await Shell.Current.GoToAsync("//Login");
+    }
 }

@@ -2,8 +2,63 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TFGClient.Registro"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="#0f1012">
+             Shell.NavBarIsVisible="False">
+    
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f8f8fb" Offset="0.0" />
+            <GradientStop Color="#dee3e7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <!-- Estilo Labels comunes -->
+            <Style TargetType="Label" x:Key="LabelRegistroStyle">
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,10,0,10" />
+                <Setter Property="TextColor" Value="#0c77d0" />
+            </Style>
+
+            <!-- Estilo Frames de Input -->
+            <Style TargetType="Frame" x:Key="InputFrameStyle">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="BorderColor" Value="#ced4da" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Margin" Value="0,0,0,20" />
+            </Style>
+
+            <!-- Estilo Entries y Pickers -->
+            <Style TargetType="Entry" x:Key="InputEntryStyle">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+
+            <Style TargetType="Picker" x:Key="InputPickerStyle">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+
+            <!-- Botón base -->
+            <Style TargetType="Button" x:Key="ButtonBaseStyle">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,10,0,10" />
+                <Setter Property="BackgroundColor" Value="#146dba" />
+            </Style>
+
+            <!-- Botón azul más claro -->
+            <Style TargetType="Button" x:Key="ButtonLightBlueStyle" BasedOn="{StaticResource ButtonBaseStyle}">
+                <Setter Property="BackgroundColor" Value="#0c77d0" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
 
     <ScrollView>
         <VerticalStackLayout>
@@ -15,33 +70,50 @@
 
                 <!-- Formulario 1 -->
                 <Frame x:Name="Formulario"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       IsVisible="True"
-                       BackgroundColor="#050505"
-                       HorizontalOptions="FillAndExpand"
-                       VerticalOptions="Center">
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   BackgroundColor="#ffffff"
+                   Padding="20"
+                   HorizontalOptions="FillAndExpand"
+                   CornerRadius="25"
+                   BorderColor="Transparent"
+                   HasShadow="True"
+                   Margin="20"
+                   VerticalOptions="Center">
                     <VerticalStackLayout>
-                        <Label Text="REGISTRO" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20" TextColor="White"/>
 
-                        <Label Text="Nombre" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Nombre" x:Name="NombreEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="REGISTRO" FontSize="30" FontAttributes="Bold" HorizontalOptions="Center" Margin="10,20,10,20" TextColor="#0c77d0"/>
 
-                        <Label Text="Apellidos" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Nombre" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Nombre" x:Name="NombreEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Email" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Email" x:Name="EmailEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Apellidos" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Apellidos" x:Name="ApellidosEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Contraseña" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Email" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Email" x:Name="EmailEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Confirma la contraseña" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Contraseña" x:Name="ContrasenaConfirmacionEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Contraseña" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Contraseña" x:Name="ContrasenaEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
+
+                        <Label Text="Confirma la contraseña" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Contraseña" x:Name="ContrasenaConfirmacionEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
                         <Button Text="Verificación" Clicked="OnVerificacionClicked" HorizontalOptions="Center" Margin="0,10,0,10"
-                                TextColor="White" BackgroundColor="#146dba" />
+            TextColor="White" BackgroundColor="#146dba" />
+
                     </VerticalStackLayout>
+
                 </Frame>
 
                 <!-- Verificación -->
@@ -49,15 +121,19 @@
                        Grid.Row="1"
                        Grid.Column="1"
                        IsVisible="False"
-                       BackgroundColor="#050505"
+                       BackgroundColor="#ffffff"
+                       BorderColor="Transparent"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center">
                     <VerticalStackLayout>
-                        <Label Text="Código de verificación" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Entry Placeholder="Introduce el código de verificación" x:Name="CodigoEntry" Margin="0,0,0,20" PlaceholderColor="#6b737b" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Código de verificación" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0" FontSize="20" FontAttributes="Bold"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Entry Placeholder="Introduce el código de verificación" x:Name="CodigoEntry" PlaceholderColor="black" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
                         <Button Text="Continuar" Clicked="OnContinuarClicked" HorizontalOptions="Center" Margin="0,10,0,10"
-                                TextColor="White" BackgroundColor="#2a3036"/>
+                                TextColor="White" BackgroundColor="#0c77d0"/>
                     </VerticalStackLayout>
+
                 </Frame>
 
                 <!-- Formulario 2 -->
@@ -65,60 +141,84 @@
                        Grid.Row="1"
                        Grid.Column="1"
                        IsVisible="False"
-                       BackgroundColor="#050505"
+                       BackgroundColor="#ffffff"
                        HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center">
                     <VerticalStackLayout>
-                        <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Picker x:Name="CAPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Comunidad Autónoma" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="CAPicker" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Localidad" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Picker x:Name="LocalidadPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Localidad" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="LocalidadPicker" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Picker x:Name="InstitutoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black"/>
+                        <Label Text="Instituto" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="InstitutoPicker" BackgroundColor="Transparent" TextColor="Black"/>
+                        </Frame>
 
-                        <Label Text="Alumno o Profesor" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                        <Picker x:Name="PAPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black">
-                            <Picker.Items>
-                                <x:String>Alumno</x:String>
-                                <x:String>Profesor</x:String>
-                            </Picker.Items>
-                        </Picker>
+                        <Label Text="Alumno o Profesor" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="PAPicker" BackgroundColor="Transparent" TextColor="Black">
+                                <Picker.Items>
+                                    <x:String>Alumno</x:String>
+                                    <x:String>Profesor</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Frame>
 
                         <Button Text="Continuar" Clicked="OnContinuar2Clicked" HorizontalOptions="Center" Margin="0,10,0,10"
-                                TextColor="White" BackgroundColor="#146dba" />
+            TextColor="White" BackgroundColor="#0c77d0" />
                     </VerticalStackLayout>
+
                 </Frame>
                 <!-- Formulario 3 -->
                 <Frame x:Name="Formulario3"
                    Grid.Row="1"
                    Grid.Column="1"
                    IsVisible="False"
-                   BackgroundColor="#050505"
+                   BackgroundColor="#ffffffff"
+                       BorderColor="Transparent"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="Center">
-                                <VerticalStackLayout>
-                                    <Label Text="Nivel" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                                    <Picker x:Name="NivelPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                    <VerticalStackLayout VerticalOptions="Center">
 
-                                    <Label Text="Familia" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White"/>
-                                    <Picker x:Name="FamiliaPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Nivel" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="NivelPicker" BackgroundColor="Transparent" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        </Frame>
 
-                                    <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="20">
-                            <VerticalStackLayout HorizontalOptions="FillAndExpand"  WidthRequest="200">
-                                            <Label Text="Grado" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="White"/>
-                                            <Picker x:Name="GradoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand" />
-                                        </VerticalStackLayout>
+                        <Label Text="Familia" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                        <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                            <Picker x:Name="FamiliaPicker" BackgroundColor="Transparent" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                        </Frame>
 
-                                        <VerticalStackLayout HorizontalOptions="FillAndExpand"  WidthRequest="200">
-                                            <Label Text="Curso" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="White"/>
-                                            <Picker x:Name="CursoPicker" Margin="0,0,0,20" BackgroundColor="White" TextColor="Black" HorizontalOptions="FillAndExpand" WidthRequest="400"/>
-                                        </VerticalStackLayout>
-                                    </HorizontalStackLayout>
+                        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="20">
 
-                                    <Button Text="Registrarse" Clicked="OnRegisterClicked" HorizontalOptions="Center" Margin="0,10,0,10" TextColor="White" BackgroundColor="#146dba" />
+                            <VerticalStackLayout HorizontalOptions="FillAndExpand" WidthRequest="200">
+                                <Label Text="Grado" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                                <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                                    <Picker x:Name="GradoPicker" BackgroundColor="Transparent" TextColor="Black" HorizontalOptions="FillAndExpand"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout HorizontalOptions="FillAndExpand" WidthRequest="200">
+                                <Label Text="Curso" HorizontalOptions="FillAndExpand" Margin="0,10,0,10" TextColor="#0c77d0"/>
+                                <Frame Padding="0" CornerRadius="5" BorderColor="#ced4da" HasShadow="False" BackgroundColor="White" Margin="0,0,0,20">
+                                    <Picker x:Name="CursoPicker" BackgroundColor="Transparent" TextColor="Black" HorizontalOptions="FillAndExpand" WidthRequest="400"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                        </HorizontalStackLayout>
+
+                        <Button Text="Registrarse" Clicked="OnRegisterClicked" HorizontalOptions="Center" Margin="0,10,0,10"
+            TextColor="White" BackgroundColor="#146dba" />
+
                     </VerticalStackLayout>
+
                 </Frame>
 
 
