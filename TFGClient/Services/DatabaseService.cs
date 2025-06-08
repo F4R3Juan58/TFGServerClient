@@ -324,5 +324,42 @@ namespace TFGClient.Services
 
             return new ObservableCollection<Alumno>(alumnos);
         }
+
+        public async Task<Alumno> ObtenerDelegadoPorCurso(int cursoId)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            // Buscar el alumno con IsDelegado = 1 para el cursoId proporcionado
+            var delegado = await connection.QueryFirstOrDefaultAsync<Alumno>(
+                "SELECT * FROM Alumnos WHERE CursoID = @CursoID AND IsDelegado = 1",
+                new { CursoID = cursoId });
+
+            return delegado;
+        }
+
+        public async Task<bool> AsignarDelegado(int cursoId, int alumnoId)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            // Primero, asegurarnos de que no haya otro delegado asignado para este curso
+            var delegadoExistente = await connection.QueryFirstOrDefaultAsync<Alumno>(
+                "SELECT * FROM Alumnos WHERE CursoID = @CursoID AND IsDelegado = 1",
+                new { CursoID = cursoId });
+
+            if (delegadoExistente != null)
+            {
+                // Si ya existe un delegado, lo eliminamos
+                string updateQuery = "UPDATE Alumnos SET IsDelegado = 0 WHERE ID = @ID";
+                await connection.ExecuteAsync(updateQuery, new { ID = delegadoExistente.ID });
+            }
+
+            // Asignamos el nuevo delegado
+            string assignQuery = "UPDATE Alumnos SET IsDelegado = 1 WHERE ID = @ID";
+            int rowsAffected = await connection.ExecuteAsync(assignQuery, new { ID = alumnoId });
+
+            return rowsAffected > 0;
+        }
     }
 }

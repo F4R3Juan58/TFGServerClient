@@ -190,3 +190,14 @@ class Database:
                     raise Exception("No se encontró rol para ese curso")
 
                 return rol["NombreRol"]
+    async def obtener_alumno_delegado(self, insti_id: int) -> dict | None:
+        await self.init_pool()
+        async with self.pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute("""
+                    SELECT * FROM Alumnos 
+                    WHERE InstiID = %s AND IsDelegado = 1
+                    LIMIT 1
+            """, (insti_id,))
+            return await cur.fetchone()
+
