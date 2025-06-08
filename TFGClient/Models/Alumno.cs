@@ -17,7 +17,7 @@ namespace TFGClient.Models
         public int ComunidadID { get; set; }
         public int InstiID { get; set; }
         public int RolID { get; set; }
-        public bool IsDelegado { get; set; }
+        public int IsDelegado { get; set; }
         public int Puntos { get; set; }
         public int CursoID { get; set; }
         public string DiscordID { get; set; }

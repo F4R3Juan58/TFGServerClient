@@ -246,7 +246,7 @@ namespace TFGClient
                         ComunidadID = comunidadId,
                         InstiID = institutoId,
                         RolID = rolId,
-                        IsDelegado = false,
+                        IsDelegado = 0,
                         Puntos = 0,
                         CursoID = cursoId,
                         DiscordID = discordId

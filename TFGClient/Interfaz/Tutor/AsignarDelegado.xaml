@@ -14,7 +14,6 @@
         </Style>
     </ContentPage.Resources>
 
-    
     <Frame
         WidthRequest="800"
         HeightRequest="800"
@@ -25,12 +24,31 @@
         HorizontalOptions="Center"
         HasShadow="True">
 
-        <VerticalStackLayout>
-            <Label Text="Alumnos" TextColor="Black" FontSize="18" HorizontalOptions="Center" />
+        <VerticalStackLayout Spacing="20">
+
+            <!-- Etiqueta para Delegado Actual -->
+            <Label Text="Delegado actual" 
+       TextColor="Black" 
+       FontSize="18" 
+       HorizontalOptions="Center"/>
+
+            <!-- Mostrar el delegado actual, ahora con x:Name para poder referenciarlo -->
+            <Label x:Name="DelegadoLabel" 
+       Text="{Binding DelegadoActual}" 
+       TextColor="Gray" 
+       FontSize="16" 
+       HorizontalOptions="Center" />
+
+            <!-- Lista de Alumnos -->
+            <Label Text="Alumnos" 
+       TextColor="Black" 
+       FontSize="18" 
+       HorizontalOptions="Center" />
+
 
             <CollectionView x:Name="AlumnosCollectionView"
-                        SelectionMode="Single"
-                        SelectionChanged="OnAlumnoSeleccionado">
+                            SelectionMode="Single"
+                            SelectionChanged="OnAlumnoSeleccionado">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="10">
@@ -40,15 +58,19 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button x:Name="AsignarDelegadoButton"
-                Text="Asignar Delegado"
-                IsEnabled="False"
-                Clicked="AsignarDelegado_Clicked" 
-                    Style="{StaticResource CardButtonStyle}"/>
+            <!-- Botones uno al lado del otro -->
+            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                <Button x:Name="AsignarDelegadoButton"
+                        Clicked="AsignarDelegado_Clicked"
+                        Text="Asignar Delegado"
+                        IsEnabled="False"
+                        Style="{StaticResource CardButtonStyle}"/>
 
-            <Button Text="Cerrar"
-                Clicked="CerrarModal_Clicked"
-                    Style="{StaticResource CardButtonStyle}"/>
+                <Button Text="Cerrar"
+                        Clicked="CerrarModal_Clicked"
+                        Style="{StaticResource CardButtonStyle}"/>
+            </HorizontalStackLayout>
+
         </VerticalStackLayout>
     </Frame>
 </ContentPage>

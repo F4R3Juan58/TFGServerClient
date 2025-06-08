@@ -5,17 +5,6 @@ class ServidorEliminador(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="eliminar_servidor_cmd")
-    async def eliminar_servidor_cmd(self, ctx, *, nombre_instituto: str):
-        """Comando para eliminar un servidor por nombre de instituto."""
-        # Llama a la función privada para eliminar
-        success = await self.eliminar_servidor(nombre_instituto, ctx.author.id)
-
-        if success:
-            await ctx.send(f"✅ Servidor '{nombre_instituto}' eliminado correctamente.")
-        else:
-            await ctx.send(f"❌ No se pudo eliminar el servidor '{nombre_instituto}'. Revisa permisos o existencia.")
-
     async def eliminar_servidor(self, nombre_instituto: str, usuario_id: int):
         # Buscar el servidor con ese nombre
         guild = disnake.utils.get(self.bot.guilds, name=nombre_instituto)

@@ -16,6 +16,8 @@ public partial class Tutor : ContentPage
 
     // Guarda el último alumno seleccionado para detectar re-selección
     private Alumno _alumnoSeleccionadoAnterior = null;
+    private string _tutoriaSeleccionadaAnterior = null; 
+
 
     // Bandera para evitar loops al cambiar SelectedItem programáticamente
     private bool _ignorarEvento = false;
@@ -23,14 +25,90 @@ public partial class Tutor : ContentPage
     public Tutor()
     {
         InitializeComponent();
+    }
+
+    // Evento que se ejecuta cada vez que la página aparece
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Cargar los datos nuevamente
         var profesor = SesionUsuario.Instancia.ProfesorLogueado;
 
         if (profesor != null)
         {
             NombreProfesor.Text = $"{profesor.Nombre} {profesor.Apellido}";
             CargarAlumnos(profesor.InstiID, profesor.CursoID);
+            ObtenerTutorias();  // Cargar las tutorías también cuando la página aparece
         }
     }
+
+    private async void ObtenerTutorias()
+    {
+        var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
+        var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+
+        // Crear un objeto con los datos necesarios
+        var dataToSend = new
+        {
+            insti_id = instiId,
+            profesor_id = profesorId
+        };
+
+        var jsonData = JsonConvert.SerializeObject(dataToSend);
+        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        using var httpClient = new HttpClient();
+        var response = await httpClient.PostAsync("http://localhost:5000/obtener-tutorias-profesor", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var tutorias = JsonConvert.DeserializeObject<TutoriasResponse>(responseBody);
+
+            // Limpiar la lista de tutorías anterior y actualizarla con los nuevos datos
+            TutoriasCollection.ItemsSource = tutorias.Tutorias;
+        }
+        else
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            await DisplayAlert("Error", $"No se pudieron obtener las tutorías: {error}", "OK");
+        }
+    }
+
+
+
+    private void OnTutoriaSelected(object sender, SelectionChangedEventArgs e)
+    {
+        // Obtener la tutoría seleccionada (nombre del canal)
+        var seleccionActual = e.CurrentSelection.FirstOrDefault() as string;
+
+        if (seleccionActual != null)
+        {
+            // Guardar la tutoría seleccionada
+            _tutoriaSeleccionadaAnterior = seleccionActual;
+
+            // Cambiar la visibilidad de los botones de acuerdo a la tutoría seleccionada
+            GridBotonesGenerales.IsVisible = false;
+            GridBotonesAlumno.IsVisible = true; // Aquí puedes añadir botones relacionados con la tutoría
+        }
+        else
+        {
+            // Si no hay selección, volver a mostrar los botones generales
+            _tutoriaSeleccionadaAnterior = null;
+            GridBotonesGenerales.IsVisible = true;
+            GridBotonesAlumno.IsVisible = false;
+        }
+    }
+
+
+    // Clase para mapear la respuesta de tutorías
+    public class TutoriasResponse
+    {
+        public string Status { get; set; }
+        public List<string> Tutorias { get; set; }
+    }
+
 
     private void CargarAlumnos(int instiId, int cursoId)
     {
@@ -44,16 +122,107 @@ public partial class Tutor : ContentPage
             Alumnos.Add(alumno);
     }
 
-    private void crearCanalTemporal(object sender, EventArgs e)
+    private void OnAlumnoSelected(object sender, SelectionChangedEventArgs e)
     {
-        // Lógica para crear canal temporal
+        var seleccionActual = e.CurrentSelection.FirstOrDefault() as Alumno;
+
+        if (seleccionActual != null)
+        {
+            _alumnoSeleccionadoAnterior = seleccionActual;
+
+            GridBotonesGenerales.IsVisible = false;
+            GridBotonesAlumno.IsVisible = true;
+        }
+        else
+        {
+            _alumnoSeleccionadoAnterior = null;
+
+            GridBotonesGenerales.IsVisible = true;
+            GridBotonesAlumno.IsVisible = false;
+        }
+    }
+
+    // Nuevo método para deseleccionar al pulsar en fondo o zona vacía
+    private void OnFondoTapped(object sender, EventArgs e)
+    {
+        AlumnosCollection.SelectedItem = null;
+        _alumnoSeleccionadoAnterior = null;
+
+        GridBotonesGenerales.IsVisible = true;
+        GridBotonesAlumno.IsVisible = false;
+    }
+
+    private async void CrearCanalTexto(object sender, EventArgs e)
+    {
+        if (_alumnoSeleccionadoAnterior != null)
+        {
+            var alumnoId = _alumnoSeleccionadoAnterior.DiscordID;
+            var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+            var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
+
+            // Crear un objeto con los datos necesarios
+            var dataToSend = new
+            {
+                alumno_id = alumnoId,
+                profesor_id = profesorId,
+                insti_id = instiId
+            };
+
+            var jsonData = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-texto", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                // Mostrar confirmación
+                await DisplayAlert("Canal de Texto", "Canal creado correctamente.", "OK");
+
+                // Limpiar la lista de tutorías actual y actualizarla con los datos del servidor
+                TutoriasCollection.ItemsSource = null;  // Limpiar los datos antiguos de la lista
+
+                // Actualizar la lista de tutorías
+                ObtenerTutorias();  // Volver a cargar las tutorías actualizadas
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Error", $"No se pudo crear el canal: {error}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Por favor, selecciona un alumno.", "OK");
+        }
     }
 
     private async void asignarDelegado(object sender, EventArgs e)
     {
-        var modal = new AsignarDelegado();
+        var profesor = SesionUsuario.Instancia.ProfesorLogueado;
+        if (profesor == null)
+        {
+            await DisplayAlert("Error", "No se encontró el profesor logueado.", "OK");
+            return;
+        }
+
+        // Obtener los alumnos del curso
+        var alumnos = _db.ObtenerAlumnosPorInstitutoYCurso(profesor.InstiID, profesor.CursoID)
+                         .Select(a => new Alumno
+                         {
+                             ID = a.ID,
+                             Nombre = a.Nombre,
+                             DiscordID = a.DiscordID,
+                             IsDelegado = a.IsDelegado
+                         })
+                         .ToList();
+
+        // Lanzar modal con parámetros correctos
+        var modal = new AsignarDelegado(alumnos, profesor.InstiID, profesor.CursoID);
         await Navigation.PushModalAsync(modal);
     }
+
 
     private void revocarDelegado(object sender, EventArgs e)
     {
@@ -91,45 +260,136 @@ public partial class Tutor : ContentPage
         }
     }
 
-
-    private void crearCanalFCT(object sender, EventArgs e)
+    private async void CrearCanalVoz(object sender, EventArgs e)
     {
-        // Lógica para crear canal FCT
-    }
-
-    private void OnTutoriaSelected(object sender, SelectionChangedEventArgs e)
-    {
-        // Lógica para manejar selección de tutoria
-    }
-
-    private void OnAlumnoSelected(object sender, SelectionChangedEventArgs e)
-    {
-        var seleccionActual = e.CurrentSelection.FirstOrDefault() as Alumno;
-
-        if (seleccionActual != null)
+        if (_alumnoSeleccionadoAnterior != null)
         {
-            _alumnoSeleccionadoAnterior = seleccionActual;
+            var alumnoId = _alumnoSeleccionadoAnterior.DiscordID;
+            var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+            var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
 
-            GridBotonesGenerales.IsVisible = false;
-            GridBotonesAlumno.IsVisible = true;
+            // Crear un objeto con los datos necesarios
+            var dataToSend = new
+            {
+                alumno_id = alumnoId,
+                profesor_id = profesorId,
+                insti_id = instiId
+            };
+
+            var jsonData = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-tutoria", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                // Mostrar confirmación
+                await DisplayAlert("Canal de Voz", "Canal creado correctamente.", "OK");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Error", $"No se pudo crear el canal: {error}", "OK");
+            }
         }
         else
         {
-            _alumnoSeleccionadoAnterior = null;
-
-            GridBotonesGenerales.IsVisible = true;
-            GridBotonesAlumno.IsVisible = false;
+            await DisplayAlert("Error", "Por favor, selecciona un alumno.", "OK");
         }
     }
 
-    // Nuevo método para deseleccionar al pulsar en fondo o zona vacía
-    private void OnFondoTapped(object sender, EventArgs e)
+    private async void CrearCanalFCT(object sender, EventArgs e)
     {
-        AlumnosCollection.SelectedItem = null;
-        _alumnoSeleccionadoAnterior = null;
+        if (_alumnoSeleccionadoAnterior != null)
+        {
+            var alumnoId = _alumnoSeleccionadoAnterior.DiscordID;
+            var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+            var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
 
-        GridBotonesGenerales.IsVisible = true;
-        GridBotonesAlumno.IsVisible = false;
+            // Crear un objeto con los datos necesarios
+            var dataToSend = new
+            {
+                alumno_id = alumnoId,
+                profesor_id = profesorId,
+                insti_id = instiId
+            };
+
+            var jsonData = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-fct", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                // Mostrar confirmación
+                await DisplayAlert("Canal FCT", "Canal creado correctamente.", "OK");
+
+                // Limpiar la lista de tutorías actual y actualizarla con los datos del servidor
+                TutoriasCollection.ItemsSource = null;  // Limpiar los datos antiguos de la lista
+
+                // Actualizar la lista de tutorías
+                ObtenerTutorias();  // Volver a cargar las tutorías actualizadas
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Error", $"No se pudo crear el canal: {error}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Por favor, selecciona un alumno.", "OK");
+        }
+    }
+
+    private async void CrearCanalTFG(object sender, EventArgs e)
+    {
+        if (_alumnoSeleccionadoAnterior != null)
+        {
+            var alumnoId = _alumnoSeleccionadoAnterior.DiscordID;
+            var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+            var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
+
+            // Crear un objeto con los datos necesarios
+            var dataToSend = new
+            {
+                alumno_id = alumnoId,
+                profesor_id = profesorId,
+                insti_id = instiId
+            };
+
+            var jsonData = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-tfg", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                // Mostrar confirmación
+                await DisplayAlert("Canal TFG", "Canal creado correctamente.", "OK");
+
+                // Limpiar la lista de tutorías actual y actualizarla con los datos del servidor
+                TutoriasCollection.ItemsSource = null;  // Limpiar los datos antiguos de la lista
+
+                // Actualizar la lista de tutorías
+                ObtenerTutorias();  // Volver a cargar las tutorías actualizadas
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Error", $"No se pudo crear el canal: {error}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Por favor, selecciona un alumno.", "OK");
+        }
     }
 
     private async void IniciarTutoria(object sender, EventArgs e)
@@ -181,4 +441,54 @@ public partial class Tutor : ContentPage
             await DisplayAlert("Error", $"Excepción al iniciar tutoría: {ex.Message}", "OK");
         }
     }
+
+    private async void EliminarTutoria(object sender, EventArgs e)
+    {
+        if (_tutoriaSeleccionadaAnterior != null)
+        {
+            var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+            var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
+            var nombreTutoria = _tutoriaSeleccionadaAnterior;  // Aquí usamos la tutoría seleccionada
+
+            // Crear un objeto con los datos necesarios
+            var dataToSend = new
+            {
+                insti_id = instiId,
+                profesor_id = profesorId,
+                nombre_tutoria = nombreTutoria
+            };
+
+            var jsonData = JsonConvert.SerializeObject(dataToSend);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync("http://localhost:5000/eliminar-tutoria", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                // Mejorar el mensaje de confirmación
+                await DisplayAlert("Eliminación de Tutoría",
+                    $"La tutoría '{nombreTutoria}' ha sido eliminada correctamente. ¡La lista se actualizará ahora!",
+                    "OK");
+
+                // Limpiar la lista de tutorías actual y actualizarla con los datos del servidor
+                TutoriasCollection.ItemsSource = null;  // Limpiar los datos antiguos de la lista
+
+                // Actualizar la lista de tutorías
+                ObtenerTutorias();  // Volver a cargar las tutorías actualizadas
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Error", $"No se pudo eliminar la tutoría '{nombreTutoria}': {error}", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Por favor, selecciona una tutoría para eliminar.", "OK");
+        }
+    }
+
 }

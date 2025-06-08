@@ -89,7 +89,7 @@ Spacing="8">
             <VerticalStackLayout Grid.Row="1" Grid.Column="0" BackgroundColor="#FFFFFF" Spacing="10" Margin="20,20,0,0" Padding="10,0">
 
                 <Label Text="TUTORIAS" Style="{StaticResource SidebarButtonStyle}"/>
-                <CollectionView x:Name="AsignaturasCollection" SelectionMode="Single" SelectionChanged="OnTutoriaSelected">
+                <CollectionView x:Name="TutoriasCollection" SelectionMode="Single" SelectionChanged="OnTutoriaSelected">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Label Text="{Binding}" Padding="10" />
@@ -175,39 +175,6 @@ Spacing="8">
                 FontAttributes="Bold"
                 HeightRequest="60"
                 HorizontalOptions="Fill" />
-
-                        <!-- Fila 3: Botones ocultos inicialmente -->
-                        <Button
-                x:Name="BtnFCT"
-                Grid.Row="2" Grid.Column="0"
-                IsVisible="False"
-                Text="FCT"
-                ImageSource="icon_delegado.png"
-                ContentLayout="Left,10"
-                BorderColor="#D32F2F"
-                BorderWidth="2"
-                CornerRadius="8"
-                BackgroundColor="Transparent"
-                TextColor="#D32F2F"
-                FontAttributes="Bold"
-                HeightRequest="60"
-                HorizontalOptions="Fill" />
-
-                        <Button
-                x:Name="BtnTFG"
-                Grid.Row="2" Grid.Column="1"
-                IsVisible="False"
-                Text="TFG"
-                ImageSource="icon_votacion.png"
-                ContentLayout="Left,10"
-                BorderColor="#D32F2F"
-                BorderWidth="2"
-                CornerRadius="8"
-                BackgroundColor="Transparent"
-                TextColor="#D32F2F"
-                FontAttributes="Bold"
-                HeightRequest="60"
-                HorizontalOptions="Fill" />
                     </Grid>
 
                     <!-- Botones específicos para alumno, ocultos inicialmente -->
@@ -215,7 +182,7 @@ Spacing="8">
             x:Name="GridBotonesAlumno"
             IsVisible="False"
             Padding="16"
-            RowDefinitions="Auto, Auto"
+            RowDefinitions="Auto, Auto, auto"
             ColumnDefinitions="*, *"
             RowSpacing="16"
             ColumnSpacing="16">
@@ -232,7 +199,8 @@ Spacing="8">
                 TextColor="#D32F2F"
                 FontAttributes="Bold"
                 HeightRequest="60"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill" 
+                Clicked="CrearCanalVoz"/>
 
                         <Button
                 Grid.Row="0" Grid.Column="1"
@@ -246,10 +214,41 @@ Spacing="8">
                 TextColor="#D32F2F"
                 FontAttributes="Bold"
                 HeightRequest="60"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill"
+                Clicked="CrearCanalTexto"/>
 
                         <Button
-                Grid.Row="1" Grid.ColumnSpan="2"
+                Grid.Row="1" Grid.Column="0"
+                Text="FCT"
+                ImageSource="icon_delegado.png"
+                ContentLayout="Left,10"
+                BorderColor="#D32F2F"
+                BorderWidth="2"
+                CornerRadius="8"
+                BackgroundColor="Transparent"
+                TextColor="#D32F2F"
+                FontAttributes="Bold"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                Clicked="CrearCanalFCT"/>        
+
+                        <Button
+                Grid.Row="1" Grid.Column="1"
+                Text="TFG"
+                ImageSource="icon_votacion.png"
+                ContentLayout="Left,10"
+                BorderColor="#D32F2F"
+                BorderWidth="2"
+                CornerRadius="8"
+                BackgroundColor="Transparent"
+                TextColor="#D32F2F"
+                FontAttributes="Bold"
+                HeightRequest="60"
+                HorizontalOptions="Fill"
+                Clicked="CrearCanalTFG"/>
+
+                        <Button
+                Grid.Row="2" Grid.ColumnSpan="2"
                 Text="Eliminar canal"
                 ImageSource="icon_trash.png"
                 ContentLayout="Left,10"
@@ -258,7 +257,8 @@ Spacing="8">
                 TextColor="White"
                 FontAttributes="Bold"
                 HeightRequest="60"
-                HorizontalOptions="Fill" />
+                HorizontalOptions="Fill"
+                Clicked="EliminarTutoria"/>
                     </Grid>
                 </VerticalStackLayout>
             </ScrollView>
