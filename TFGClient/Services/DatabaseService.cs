@@ -79,6 +79,16 @@ namespace TFGClient.Services
                 new { Email = email, password = contraseñaHash });
         }
 
+        public Administradores? ObtenerAdministradorPorEmail(string email)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            connection.Open();
+
+            return connection.QueryFirstOrDefault<Administradores>(
+                "SELECT * FROM Administradores WHERE Email = @Email",
+                new { Email = email });
+        }
+
         public Alumno? ObtenerAlumnoPorEmail(string email)
         {
             using var connection = new MySqlConnection(connectionString);

@@ -415,7 +415,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                     return;
                 }
 
-                var profesor = _databaseService.ObtenerProfesorPorEmail(email);
+                var profesor = _databaseService.ObtenerAdministradorPorEmail(email);
                 if (profesor == null)
                 {
                     await DisplayAlert("Acceso denegado", "Solo los profesores pueden crear servidores de Discord.", "OK");

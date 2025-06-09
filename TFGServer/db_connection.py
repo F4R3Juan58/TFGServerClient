@@ -79,26 +79,32 @@ class Database:
             async with conn.cursor() as cur:
                 tablas = ['Alumnos', 'Profesores', 'Administradores']
                 actualizado = False
+
+                # Intentamos actualizar en las tablas principales
                 for tabla in tablas:
                     await cur.execute(
-                        f"UPDATE {tabla} SET discordid = %s WHERE email = %s",
+                        f"UPDATE {tabla} SET DiscordID = %s WHERE email = %s",
                         (discordid, email)
                     )
                     if cur.rowcount > 0:
                         actualizado = True
 
-                if actualizado:
-                    await cur.execute(
-                        "UPDATE conexiones SET discordid = %s WHERE email = %s",
-                        (discordid, email)
-                    )
-                    await cur.execute(
-                        "DELETE FROM conexiones WHERE email = %s OR discordid = %s",
-                        (email, discordid)
-                    )
-                    await conn.commit()
+                # Siempre actualizamos conexiones, esté o no en las otras tablas
+                await cur.execute(
+                    "UPDATE conexiones SET discordid = %s WHERE email = %s",
+                    (discordid, email)
+                )
+
+                # Eliminamos duplicados, si existe el mismo email o discordid repetido
+                await cur.execute(
+                    "DELETE FROM conexiones WHERE email = %s OR discordid = %s AND NOT (email = %s AND discordid = %s)",
+                    (email, discordid, email, discordid)
+                )
+
+                await conn.commit()
 
                 return actualizado
+
 
     async def obtener_insti_id_por_email(self, email: str) -> int | None:
         await self.init_pool()

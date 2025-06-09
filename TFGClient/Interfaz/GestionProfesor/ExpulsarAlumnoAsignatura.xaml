@@ -24,7 +24,7 @@
     HasShadow="True">
 
         <VerticalStackLayout Padding="20" Spacing="10">
-            <Label Text="Alumnos" FontSize="18" HorizontalOptions="Center" />
+            <Label Text="Alumnos" FontSize="18" HorizontalOptions="Center" TextColor="#296ACC" />
 
             <CollectionView x:Name="AlumnosCollectionView"
                         SelectionMode="Single"

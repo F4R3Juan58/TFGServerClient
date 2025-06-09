@@ -52,6 +52,8 @@ class AñadirCursosCogs(commands.Cog):
                 # Crear canales por defecto
                 await guild.create_text_channel("❓・dudas", category=category)
                 await guild.create_text_channel("📌・general", category=category)
+                await guild.create_text_channel("📌・delegado - texto", category=category)
+                await guild.create_voice_channel("📌・delegado - voz", category=category)
                 print(f"Canales por defecto creados en '{nombre_rol}'")
             else:
                 print(f"Categoría '{nombre_rol}' ya existe.")
@@ -63,6 +65,15 @@ class AñadirCursosCogs(commands.Cog):
                 if not self.canal_existe(category, "❓・dudas"):
                     await guild.create_text_channel("❓・dudas", category=category)
                     print(f"Canal '❓・dudas' creado en categoría '{nombre_rol}'")
+
+                if not self.canal_existe(category, "📌・delegado - texto"):
+                    await guild.create_text_channel("📌・delegado - texto", category=category)
+                    print(f"Canal '❓・dudas' creado en categoría '{nombre_rol}'")
+
+                if not self.canal_existe(category, "📌・delegado - voz"):
+                    await guild.create_voice_channel("📌・delegado - voz", category=category)
+                    print(f"Canal '❓・dudas' creado en categoría '{nombre_rol}'")
+
 
             # Asignar permisos al rol en la categoría
             permisos_avanzados = disnake.PermissionOverwrite(

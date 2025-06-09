@@ -130,7 +130,7 @@ async def eliminar_servidor():
 
             # Eliminar el servidor completamente si el bot es dueño
             try:
-                await guild.delete(reason="Servidor eliminado desde panel")  # Eliminar el servidor
+                await guild.delete()  # Eliminar el servidor
                 print(f"Servidor {guild.name} eliminado correctamente.")
             except Exception as e:
                 print(f"Error al eliminar el servidor {guild.name}: {e}")
@@ -433,15 +433,25 @@ def obtener_categorias_para_tutor():
     
 @app.route("/asignar-tutor", methods=["POST"])
 def asignar_tutor():
+    print("Petición recibida en /asignar-tutor")
+
     data = request.get_json(force=True)
+    print("Datos recibidos:", data)
+
     insti_id = data.get("InstiID")
     categoria = data.get("categoria")
     discord_id_profesor = data.get("discordId")
 
     if not all([insti_id, categoria, discord_id_profesor]):
+        print("Faltan datos:", insti_id, categoria, discord_id_profesor)
         return jsonify({"error": "Faltan datos"}), 400
 
     try:
+        print("Llamando a asignar_tutor_logica con:",
+              "InstiID:", insti_id,
+              "Categoria:", categoria,
+              "DiscordID:", discord_id_profesor)
+
         future = asyncio.run_coroutine_threadsafe(
             bot.get_cog("AsignarTutorCogs").asignar_tutor_logica(
                 insti_id=insti_id,
@@ -450,11 +460,15 @@ def asignar_tutor():
             ),
             bot.loop
         )
-        future.result()
+        result = future.result()
+        print("Resultado de asignar_tutor_logica:", result)
+
         return jsonify({"status": "OK", "message": "Tutor asignado correctamente."}), 200
 
     except Exception as e:
+        print("Error al asignar tutor:", str(e))
         return jsonify({"error": str(e)}), 500
+
     
 @app.route("/crear-asignatura", methods=["POST"])
 def crear_asignatura():
@@ -999,6 +1013,160 @@ async def on_button_click(interaction: disnake.MessageInteraction):
 
     # Actualizar el mensaje con los botones desactivados
     await interaction.message.edit(components=[new_buttons])
+    
+@app.route("/crear-canal-tutoria", methods=["POST"])
+def crear_canal_tutoria():
+    data = request.get_json()
+    alumno_id = data.get("alumno_id")
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+
+    if not all([alumno_id, insti_id, profesor_id]):
+        return jsonify({"error": "Faltan datos: alumno_id, insti_id o profesor_id"}), 400
+
+    try:
+        # Llamar al comando del cog para crear el canal de voz
+        futuro = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("CrearCanalVozCogs").crear_canal_voz(insti_id, profesor_id, alumno_id),
+            bot.loop
+        )
+        futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "message": "Canal de voz creado correctamente."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al crear el canal de voz: {str(e)}"}), 500
+    
+@app.route("/crear-canal-texto", methods=["POST"])
+def crear_canal_texto():
+    data = request.get_json()
+    alumno_id = data.get("alumno_id")
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+
+    if not all([alumno_id, insti_id, profesor_id]):
+        return jsonify({"error": "Faltan datos: alumno_id, insti_id o profesor_id"}), 400
+
+    try:
+        # Llamar al comando del cog para crear el canal de texto
+        futuro = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("CrearCanalTextoCogs").crear_canal_texto(insti_id, profesor_id, alumno_id),
+            bot.loop
+        )
+        futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "message": "Canal de texto creado correctamente."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al crear el canal de texto: {str(e)}"}), 500
+    
+@app.route("/crear-canal-fct", methods=["POST"])
+def crear_canal_fct():
+    data = request.get_json()
+    alumno_id = data.get("alumno_id")
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+
+    if not all([alumno_id, insti_id, profesor_id]):
+        return jsonify({"error": "Faltan datos: alumno_id, insti_id o profesor_id"}), 400
+
+    try:
+        # Llamar al comando del cog para crear el canal FCT
+        futuro = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("CrearCanalFCTCogs").crear_canal_fct(insti_id, profesor_id, alumno_id),
+            bot.loop
+        )
+        futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "message": "Canal FCT creado correctamente."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al crear el canal FCT: {str(e)}"}), 500
+    
+@app.route("/crear-canal-tfg", methods=["POST"])
+def crear_canal_tfg():
+    data = request.get_json()
+    alumno_id = data.get("alumno_id")
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+
+    if not all([alumno_id, insti_id, profesor_id]):
+        return jsonify({"error": "Faltan datos: alumno_id, insti_id o profesor_id"}), 400
+
+    try:
+        # Llamar al comando del cog para crear el canal TFG
+        futuro = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("CrearCanalTFGCogs").crear_canal_tfg(insti_id, profesor_id, alumno_id),
+            bot.loop
+        )
+        futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "message": "Canal TFG creado correctamente."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al crear el canal TFG: {str(e)}"}), 500
+    
+@app.route("/obtener-tutorias-profesor", methods=["POST"])
+def obtener_tutorias_profesor():
+    data = request.get_json()
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+
+    if not all([insti_id, profesor_id]):
+        return jsonify({"error": "Faltan datos: insti_id o profesor_id"}), 400
+
+    try:
+        # Llamar al comando del cog para obtener las tutorías
+        futuro = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("RellenarTutoriasCogs").obtener_tutorias(insti_id, profesor_id),
+            bot.loop
+        )
+        tutorias = futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "tutorias": tutorias}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al obtener las tutorías: {str(e)}"}), 500
+    
+@app.route("/eliminar-tutoria", methods=["POST"])
+def eliminar_tutoria():
+    data = request.get_json()
+    insti_id = data.get("insti_id")
+    profesor_id = data.get("profesor_id")
+    nombre_tutoria = data.get("nombre_tutoria")
+
+    if not all([insti_id, profesor_id, nombre_tutoria]):
+        return jsonify({"error": "Faltan datos: insti_id, profesor_id o nombre_tutoria"}), 400
+
+    try:
+        # Verificar que el cog 'EliminarTutoriaCogs' está cargado
+        cog = bot.get_cog("EliminarTutoriaCogs")
+        if cog is None:
+            print("El cog 'EliminarTutoriaCogs' no está cargado.")
+            return jsonify({"error": "El cog 'EliminarTutoriaCogs' no está cargado."}), 500
+
+        # Llamar al comando del cog para eliminar la tutoría
+        futuro = asyncio.run_coroutine_threadsafe(
+            cog.eliminar_tutoria(None, insti_id, profesor_id, nombre_tutoria),  # Pasamos None como ctx
+            bot.loop
+        )
+        futuro.result()  # Esperar a que se ejecute el comando
+        return jsonify({"status": "OK", "message": f"Tutoría '{nombre_tutoria}' eliminada correctamente."}), 200
+    except Exception as e:
+        return jsonify({"error": f"Error al eliminar la tutoría: {str(e)}"}), 500
+    
+@app.route("/asignar-delegado", methods=["POST"])
+def asignar_delegado():
+    data = request.get_json(force=True)
+    insti_id = data.get("InstiID")
+    discord_id = data.get("DiscordID")
+
+    if not insti_id or not discord_id:
+        return jsonify({"error": "Faltan datos (InstiID o DiscordID)"}), 400
+
+    try:
+        future = asyncio.run_coroutine_threadsafe(
+            bot.get_cog("AsignarDelegadoCogs").asignar_delegado_logica(
+                int(insti_id), int(discord_id)
+            ),
+            bot.loop
+        )
+        future.result(timeout=15)
+        return jsonify({"status": "OK", "message": "Delegado asignado correctamente"}), 200
+
+    except Exception as e:
+        print(f"❌ Error en asignar-delegado: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     print("🚀 Iniciando servidor Flask...")
