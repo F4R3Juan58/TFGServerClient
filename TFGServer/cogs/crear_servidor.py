@@ -49,25 +49,48 @@ class CrearServidor(commands.Cog):
             nuevo_guild = await self.bot.create_guild(name=nombre_instituto)
             print(f"✅ Servidor '{nombre_instituto}' creado.")
 
+            # --- IMPLEMENTADO: Restringir rol @everyone ---
+            # Obtenemos el rol @everyone y le quitamos el permiso de ver canales.
+            # Esto asegura que por defecto nadie vea nada a menos que un rol se lo permita.
+            everyone_role = nuevo_guild.default_role
+            perms = everyone_role.permissions
+            perms.update(view_channel=False)
+            await everyone_role.edit(permissions=perms)
+            print(f"🔒 Permisos de @everyone restringidos en '{nombre_instituto}'.")
+
             # Borrar canales por defecto
             for channel in nuevo_guild.channels:
                 await channel.delete()
 
-            # Crear canales nuevos
-            canal_general = await nuevo_guild.create_text_channel("📌・invitaciones")
-            print(f"📂 Canales creados en '{nombre_instituto}'.")
-
-            # Crear rol admin con permisos de administrador
+            # --- IMPLEMENTADO: Crear todos los roles necesarios ---
+            # Crear rol admin y jefe con permisos de administrador
             admin_role = await nuevo_guild.create_role(name="admin", permissions=disnake.Permissions(administrator=True))
+            jefe_role = await nuevo_guild.create_role(name="jefe", permissions=disnake.Permissions(administrator=True))
+            # Crear resto de roles sin permisos especiales por defecto
+            tutor_role = await nuevo_guild.create_role(name="tutor")
             profesor_role = await nuevo_guild.create_role(name="profesor")
+            delegado_role = await nuevo_guild.create_role(name="delegado")
             alumno_role = await nuevo_guild.create_role(name="alumno")
-            print(f"🔑 Rol 'admin' creado en '{nombre_instituto}'.")
+            print(f"🔑 Roles 'admin', 'jefe', 'tutor', 'profesor', 'delegado' y 'alumno' creados en '{nombre_instituto}'.")
+
+            # --- IMPLEMENTADO: Crear canal con permisos específicos (sin categoría) ---
+            # Definir permisos de canal para que solo admin y jefe puedan verlo
+            overwrites = {
+                everyone_role: disnake.PermissionOverwrite(view_channel=False),
+                admin_role: disnake.PermissionOverwrite(view_channel=True),
+                jefe_role: disnake.PermissionOverwrite(view_channel=True)
+            }
+
+            # Crear canal de invitaciones aplicando directamente los permisos (overwrites)
+            canal_invitaciones = await nuevo_guild.create_text_channel("📌・invitaciones", overwrites=overwrites)
+            print(f"📂 Canal '📌・invitaciones' creado con permisos específicos en '{nombre_instituto}'.")
+
 
             # Guardamos el guild id en set para saber que aún no hemos asignado admin a nadie
             self.servers_admin_assigned.add(nuevo_guild.id)
 
-            # Crear invitación para canal general
-            invite = await canal_general.create_invite(max_age=0, max_uses=0, unique=True)
+            # Crear invitación para el canal de invitaciones
+            invite = await canal_invitaciones.create_invite(max_age=0, max_uses=0, unique=True)
 
             # Guardar servidor en base de datos
             await self.db.save_server(insti_id, nombre_instituto, nuevo_guild.id)

@@ -221,7 +221,7 @@ def configurar_servidor_api():
     cursos_raw = data.get("cursosGrados")  # Aquí recibes string: "1º DAM, 2º ASIR"
 
     print(f"InstiID: {insti_id}")
-    print("Cursos raw: "+str(cursos_raw))
+    print("Cursos raw: " + str(cursos_raw))
 
     if not insti_id or not cursos_raw:
         return jsonify({"error": "Faltan datos"}), 400
@@ -230,6 +230,7 @@ def configurar_servidor_api():
     cursos_lista = [curso.strip() for curso in cursos_raw.split(",") if curso.strip()]
 
     try:
+        # 1. Obtener la información del servidor desde la base de datos
         servidor = asyncio.run_coroutine_threadsafe(
             db.obtener_servidor_por_insti_id(insti_id),
             bot.loop
@@ -240,23 +241,31 @@ def configurar_servidor_api():
         if not servidor:
             return jsonify({"error": "No existe servidor asociado al instituto."}), 404
 
+        # 2. --- CORRECCIÓN CLAVE ---
+        # Obtenemos el ID de Discord como un entero.
         discord_id = int(servidor['DiscordID'])
-        guild = bot.get_guild(discord_id)
+        
+        # Ya NO necesitamos la línea `guild = bot.get_guild(discord_id)`. La eliminamos.
+        # El Cog se encargará de obtener el 'guild' de forma segura usando fetch_guild.
 
         cog = bot.get_cog("AñadirCursosCogs")
         if not cog:
             return jsonify({"error": "No se encontró el cog AñadirCursosCogs."}), 500
 
+        # 3. --- CORRECCIÓN CLAVE ---
+        # Llamamos a la función del Cog pasándole el ID numérico (discord_id), no el objeto guild.
         asyncio.run_coroutine_threadsafe(
-            cog.configurar_servidor_api(guild, cursos_lista),
+            cog.configurar_servidor_api(discord_id, cursos_lista),
             bot.loop
         ).result()
 
         return jsonify({"status": "OK", "message": "Servidor configurado correctamente."}), 200
 
     except Exception as e:
-        return jsonify({"error": f"Error al configurar el servidor: {str(e)}"}), 500
-
+        # Imprime el traceback completo en la consola del servidor para un mejor debugging
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Error al configurar el servidor: {str(e)}"}), 500    
 
 @app.route("/obtener-categorias", methods=["POST"])  # POST porque recibes insti_id en body JSON
 def obtener_categorias():

@@ -32,16 +32,22 @@ class CrearTutoriaCogs(commands.Cog):
         if not categoria:
             raise Exception(f"Categoría para curso '{curso_nombre}' no encontrada")
 
-        # Crear canal de voz temporal con permisos
-        overwrites = {
-            guild.default_role: disnake.PermissionOverwrite(connect=False),
-            profesor: disnake.PermissionOverwrite(connect=True, manage_channels=True),
-        }
+        # --- INICIO DE LA MODIFICACIÓN ---
+        # Buscar los roles necesarios para los permisos
+        rol_alumno = disnake.utils.get(guild.roles, name="alumno")
+        rol_tutor = disnake.utils.get(guild.roles, name="tutor")
 
-        # Permitir acceso a todos los alumnos (rol "Alumno" de la categoría)
-        rol_alumno = disnake.utils.find(lambda r: r.name.lower() == "alumno", guild.roles)
-        if rol_alumno:
-            overwrites[rol_alumno] = disnake.PermissionOverwrite(connect=True)
+        if not rol_alumno or not rol_tutor:
+            raise Exception("No se pudieron encontrar los roles 'alumno' y/o 'tutor' en el servidor.")
+
+        # Crear canal de voz temporal con permisos específicos
+        overwrites = {
+            guild.default_role: disnake.PermissionOverwrite(connect=False, view_channel=False),
+            profesor: disnake.PermissionOverwrite(connect=True, view_channel=True, manage_channels=True),
+            rol_alumno: disnake.PermissionOverwrite(connect=True, view_channel=True),
+            rol_tutor: disnake.PermissionOverwrite(connect=True, view_channel=True)
+        }
+        # --- FIN DE LA MODIFICACIÓN ---
 
         canal_nombre = f"Tutoria {profesor.display_name} - {curso_nombre}"
         canal = await guild.create_voice_channel(name=canal_nombre, category=categoria, overwrites=overwrites)

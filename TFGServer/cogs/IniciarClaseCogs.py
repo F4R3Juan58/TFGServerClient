@@ -1,5 +1,5 @@
-from disnake.ext import commands
 import disnake
+from disnake.ext import commands
 import asyncio
 from db_connection import Database
 
@@ -45,41 +45,36 @@ class IniciarClaseCogs(commands.Cog):
         if not categorias:
             raise Exception(f"Categoría para la asignatura '{nombre_asignatura}' no encontrada")
 
+        # Buscar la categoría que coincide con el nombre de la asignatura
+        categorias_obj = [categoria for categoria in guild.categories if '-' in categoria.name and nombre_asignatura.lower() in categoria.name.lower()]
 
-        # Si no se encuentra ninguna categoría que coincida, lanzamos una excepción
-        if not categorias:
+        if not categorias_obj:
             raise Exception(f"Categoría para la asignatura '{nombre_asignatura}' no encontrada")
+        elif len(categorias_obj) > 1:
+            raise Exception(f"Se encontraron varias categorías para '{nombre_asignatura}'")
+        else:
+            categoria = categorias_obj[0]
+
+        # --- INICIO DE LA MODIFICACIÓN ---
+        # Buscar los roles necesarios para los permisos
+        rol_asignatura = disnake.utils.get(guild.roles, name=categoria.name)
+        rol_profesor = disnake.utils.get(guild.roles, name="profesor")
+        rol_alumno = disnake.utils.get(guild.roles, name="alumno")
+
+        if not rol_asignatura or not rol_profesor or not rol_alumno:
+             raise Exception("No se pudieron encontrar los roles de asignatura, profesor y/o alumno.")
 
         # Crear el canal de voz en la categoría correspondiente
         overwrites = {
-            guild.default_role: disnake.PermissionOverwrite(connect=False),
-            profesor: disnake.PermissionOverwrite(connect=True, manage_channels=True),
+            guild.default_role: disnake.PermissionOverwrite(view_channel=False, connect=False),
+            profesor: disnake.PermissionOverwrite(manage_channels=True), # El profesor que crea gestiona el canal
+            rol_profesor: disnake.PermissionOverwrite(view_channel=True, connect=True),
+            rol_alumno: disnake.PermissionOverwrite(view_channel=True, connect=True),
+            rol_asignatura: disnake.PermissionOverwrite(view_channel=True, connect=True),
         }
-
-        # Permitir acceso a todos los alumnos (rol "Alumno" de la categoría)
-        rol_alumno = disnake.utils.find(lambda r: r.name.lower() == "alumno", guild.roles)
-        if rol_alumno:
-            overwrites[rol_alumno] = disnake.PermissionOverwrite(connect=True)
+        # --- FIN DE LA MODIFICACIÓN ---
 
         canal_nombre = f"Clase {nombre_asignatura} - {profesor.display_name}"
-
-        # Buscar la categoría que coincide con el nombre de la asignatura
-        categorias = [categoria for categoria in guild.categories if '-' in categoria.name and nombre_asignatura.lower() in categoria.name.lower()]
-
-        # Debug: Mostrar categorías encontradas
-        print(f"[DEBUG] Categorías encontradas: {', '.join(categoria.name for categoria in categorias)}")
-
-        if not categorias:
-            print(f"[DEBUG] No se encontraron categorías con el nombre '{nombre_asignatura}'")
-            raise Exception(f"Categoría para la asignatura '{nombre_asignatura}' no encontrada")
-        elif len(categorias) > 1:
-            print(f"[DEBUG] Se encontraron varias categorías: {', '.join(categoria.name for categoria in categorias)}")
-            raise Exception(f"Se encontraron varias categorías para '{nombre_asignatura}'")
-        else:
-            categoria = categorias[0]  # Seleccionar la única categoría encontrada
-
-        # Debug: Mostrar categoría seleccionada
-        print(f"[DEBUG] Usando la categoría: {categoria.name}")
 
         # Crear el canal de voz en la categoría seleccionada
         try:
@@ -96,7 +91,7 @@ class IniciarClaseCogs(commands.Cog):
             def check_channel_empty(member, before, after):
                 if before.channel and before.channel.id == canal.id:
                     if len(before.channel.members) == 0:
-                        print(f"[DEBUG] El canal {canal.nombre} está vacío")
+                        print(f"[DEBUG] El canal {canal.name} está vacío")
                         return True
                 return False
 
@@ -126,8 +121,6 @@ class IniciarClaseCogs(commands.Cog):
             print(f"[DEBUG] Error al crear el canal de voz: {e}")
 
         return f"Canal de clase '{canal_nombre}' creado correctamente."
-
-
 
 def setup(bot):
     bot.add_cog(IniciarClaseCogs(bot))
