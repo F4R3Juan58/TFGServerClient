@@ -95,7 +95,7 @@ namespace TFGClient
             {
                 try
                 {
-                    var url = "http://127.0.0.1:5000/api/enviar_cuestionarios";  // Reemplaza con tu URL de servidor Flask
+                    var url = "http://13.38.70.221:5000/api/enviar_cuestionarios";  // Reemplaza con tu URL de servidor Flask
                     var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
                     var response = await client.PostAsync(url, content);

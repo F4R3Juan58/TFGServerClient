@@ -39,7 +39,7 @@ namespace TFGClient.Interfaz
             if (alumnoSeleccionado == null) return;
 
             using var client = new HttpClient();
-            var url = "http://127.0.0.1:5000/api/expulsar_alumno";
+            var url = "http://13.38.70.221:5000/api/expulsar_alumno";
             var data = new
             {
                 alumno_id = alumnoSeleccionado.Id

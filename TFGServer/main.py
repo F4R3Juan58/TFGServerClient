@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 import threading
-import traceback  # arriba del archivo
 import asyncio
 import disnake
 from disnake.ext import commands
@@ -10,13 +9,21 @@ import config
 from werkzeug.utils import secure_filename
 from db_connection import Database  # Clase para acceso a DB
 
+# ----------------------------------------
+# Configuración de Flask y carpeta uploads
+# ----------------------------------------
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# ----------------------------------------
+# Configuración del bot de Discord
+# ----------------------------------------
 intents = disnake.Intents.all()
 bot = commands.Bot(command_prefix="!!", intents=intents)
 db = Database()
+
+# Función para cargar cogs
 
 def cargar_cogs():
     print("🔄 Cargando cogs...")
@@ -33,18 +40,8 @@ def cargar_cogs():
 async def on_ready():
     print(f'✅ Bot conectado como {bot.user.name}')
     for guild in bot.guilds:
-            print(f"Bot está en el servidor: {guild.name} (ID: {guild.id})")
+        print(f"Bot está en el servidor: {guild.name} (ID: {guild.id})")
     cargar_cogs()
-
-def run_bot():
-    try:
-        print("🔌 Iniciando bot de Discord...")
-        bot.run(config.Token)
-    except Exception as e:
-        print("❌ Error al iniciar el bot:", e)
-
-threading.Thread(target=run_bot, daemon=True).start()
-print("🧵 Hilo del bot iniciado.")
 
 @app.route("/crear-servidor", methods=["POST"])
 def crear_servidor_api():
@@ -151,15 +148,30 @@ def obtener_invitacion():
         return jsonify({"error": "Falta el email"}), 400
 
     async def tarea_generar_invitacion():
-        insti_id = await db.obtener_insti_id_por_email_alumno(email)
+        # 1) Intentamos obtener un discord_id ya vinculado al email
+        discord_id = await db.obtener_discord_id_por_email(email)
+
+        if discord_id:
+            # 2) Si existe discord_id, vamos a comprobar todos los servidores
+            servidores = await db.obtener_todos_servidores()  # [{ "DiscordID": "123" }, ...]
+            for servidor in servidores:
+                guild_id = int(servidor["DiscordID"])
+                guild = disnake.utils.get(bot.guilds, id=guild_id)
+                if guild:
+                    miembro = guild.get_member(discord_id)
+                    if miembro:
+                        # 3) Ya está en al menos un servidor
+                        return {"error": "Este usuario ya está en el servidor",
+                                "guild_id": guild_id}, 400
+
+        # 4) Si no había discord_id o no está en ningún servidor, continuamos:
+        insti_id = await db.obtener_insti_id_por_email_alumno_o_profesor(email)
         servidor = await db.obtener_servidor_por_insti_id(insti_id)
 
         if not servidor:
             return {"error": "No hay servidor asociado al instituto"}, 404
 
         guild_id = int(servidor["DiscordID"])
-
-        # Obtener el guild directamente desde bot.guilds
         guild = disnake.utils.get(bot.guilds, id=guild_id)
         if not guild:
             return {"error": f"Guild con ID {guild_id} no encontrado en bot.guilds"}, 404
@@ -168,7 +180,7 @@ def obtener_invitacion():
         if not cog:
             return {"error": "Cog CrearServidor no encontrado"}, 500
 
-        # Pasamos la instancia de guild directamente al método del cog
+        # Reutilizamos el método de invitación (podrías tener distinto método para profesor)
         nueva_invitacion = await cog.generar_invitacion_alumno(guild, email)
 
         if nueva_invitacion:
@@ -184,6 +196,7 @@ def obtener_invitacion():
     except Exception as e:
         print(f"Error en obtener-invitacion: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/vincular-discordid", methods=["POST"])
 def vincular_discordid_api():
@@ -1168,7 +1181,13 @@ def asignar_delegado():
         print(f"❌ Error en asignar-delegado: {e}")
         return jsonify({"error": str(e)}), 500
 
+def run_flask():
+    print("🚀 Iniciando servidor Flask en hilo secundario...")
+    app.run(host="0.0.0.0", port=5000, use_reloader=False)
+
 if __name__ == "__main__":
-    print("🚀 Iniciando servidor Flask...")
-    app.run(host="0.0.0.0", port=5000)
+    threading.Thread(target=run_flask, daemon=True).start()
+    print("🔌 Iniciando bot de Discord en el hilo principal...")
+    bot.run(config.Token)
+
     

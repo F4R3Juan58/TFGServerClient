@@ -200,7 +200,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 using var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:5000/obtener-categorias", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/obtener-categorias", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -239,10 +239,6 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                             });
                         }
                     }
-                }
-                else
-                {
-                    await DisplayAlert("Error", "No se pudieron obtener las categorías del servidor.", "OK");
                 }
             }
             catch (Exception ex)
@@ -381,7 +377,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 using var httpClient = new HttpClient();
 
                 // Cambia esta URL por la de tu endpoint Flask para eliminar categorías
-                var response = await httpClient.PostAsync("http://localhost:5000/eliminar-categoria", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/eliminar-categoria", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -450,7 +446,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 "application/json"
                 );
 
-                var response = await httpClient.PostAsync("http://localhost:5000/crear-servidor", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/crear-servidor", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -513,7 +509,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
 
                 // Crear cliente HTTP y hacer POST a Flask (localhost:5000)
                 using var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:5000/añadir-cursos", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/añadir-cursos", content);
 
                 // Manejar respuesta
                 if (response.IsSuccessStatusCode)
@@ -639,7 +635,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 using var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:5000/expulsar-usuario", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/expulsar-usuario", content);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -695,7 +691,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 using var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:5000/expulsar-usuario", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/expulsar-usuario", content);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -749,7 +745,7 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 using var httpClient = new HttpClient();
-                var response = await httpClient.PostAsync("http://localhost:5000/eliminar-servidor", content);
+                var response = await httpClient.PostAsync("http://13.38.70.221:5000/eliminar-servidor", content);
 
                 if (response.IsSuccessStatusCode)
                 {

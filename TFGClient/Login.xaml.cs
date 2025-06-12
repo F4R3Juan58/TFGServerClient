@@ -65,7 +65,7 @@ namespace TFGClient
                     var cliente = new HttpClient();
                     var contenido = new StringContent(JsonConvert.SerializeObject(new { email = alumno.Email }), Encoding.UTF8, "application/json");
 
-                    var respuesta = await cliente.PostAsync("http://localhost:5000/obtener-invitacion", contenido);
+                    var respuesta = await cliente.PostAsync("http://13.38.70.221:5000/obtener-invitacion", contenido);
                     if (respuesta.IsSuccessStatusCode)
                     {
                         var json = await respuesta.Content.ReadAsStringAsync();
@@ -86,6 +86,27 @@ namespace TFGClient
                 else if (profesor != null)
                 {
                     // ✅ Guardar el email SOLO si es profesor
+                    // Hacer la consulta al backend Flask para obtener la invitación al Discord
+                    var cliente = new HttpClient();
+                    var contenido = new StringContent(JsonConvert.SerializeObject(new { email = profesor.Email }), Encoding.UTF8, "application/json");
+
+                    var respuesta = await cliente.PostAsync("http://13.38.70.221:5000/obtener-invitacion", contenido);
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        var json = await respuesta.Content.ReadAsStringAsync();
+                        var invitacion = (string)JsonConvert.DeserializeObject<dynamic>(json).invitacion;
+
+                        if (!string.IsNullOrEmpty(invitacion))
+                        {
+                            // Acceso para alumnos, abrir la invitación de Discord
+                            var uri = new Uri(invitacion);
+                            await Launcher.Default.OpenAsync(uri);
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Error", "No se pudo obtener la invitación al Discord.", "OK");
+                    }
                     Preferences.Set("UsuarioEmail", profesor.Email);
                     SesionUsuario.Instancia.ProfesorLogueado = profesor;
                     if (Shell.Current is AppShell appShell)

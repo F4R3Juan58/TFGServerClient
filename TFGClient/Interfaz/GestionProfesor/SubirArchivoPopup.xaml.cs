@@ -58,7 +58,7 @@ namespace TFGClient
 
                 using var client = new HttpClient();
                 Console.WriteLine("[DEBUG] Enviando solicitud POST al servidor...");
-                var response = await client.PostAsync("http://localhost:5000/api/subir_archivo", content);
+                var response = await client.PostAsync("http://13.38.70.221:5000/api/subir_archivo", content);
 
                 if (response.IsSuccessStatusCode)
                 {

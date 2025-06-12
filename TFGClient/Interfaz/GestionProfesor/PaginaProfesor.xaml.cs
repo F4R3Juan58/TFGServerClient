@@ -73,7 +73,7 @@ public partial class PaginaProfesor : ContentPage
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         using var client = new HttpClient();
-        var response = await client.PostAsync("http://localhost:5000/obtener-asignaturas-profesor", content);
+        var response = await client.PostAsync("http://13.38.70.221:5000/obtener-asignaturas-profesor", content);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -169,7 +169,7 @@ public partial class PaginaProfesor : ContentPage
 
             using var client = new HttpClient();
 
-            var response = await client.PostAsync("http://localhost:5000/obtener-alumnos-por-asignatura", content);
+            var response = await client.PostAsync("http://13.38.70.221:5000/obtener-alumnos-por-asignatura", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -211,7 +211,7 @@ public partial class PaginaProfesor : ContentPage
         {
             try
             {
-                var url = "http://localhost:5000/api/alumnos_conectados";
+                var url = "http://13.38.70.221:5000/api/alumnos_conectados";
 
                 var data = new
                 {
@@ -258,7 +258,7 @@ public partial class PaginaProfesor : ContentPage
         {
             try
             {
-                var url = "http://localhost:5000/api/crear_canal_voz";
+                var url = "http://13.38.70.221:5000/api/crear_canal_voz";
 
                 var data = new
                 {
@@ -291,7 +291,7 @@ public partial class PaginaProfesor : ContentPage
         {
             try
             {
-                var url = "http://127.0.0.1:5000/api/reestablecer_asignatura";
+                var url = "http://13.38.70.221:5000/api/reestablecer_asignatura";
 
                 var data = new
                 {

@@ -29,7 +29,7 @@ namespace TFGClient
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 using var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:5000/obtener-categorias-para-tutor", content);
+                var response = await client.PostAsync("http://13.38.70.221:5000/obtener-categorias-para-tutor", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -68,7 +68,7 @@ namespace TFGClient
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 using var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:5000/obtener-asignaturas", content);
+                var response = await client.PostAsync("http://13.38.70.221:5000/obtener-asignaturas", content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -110,7 +110,7 @@ namespace TFGClient
             try
             {
                 using var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:5000/eliminar-asignatura", content);
+                var response = await client.PostAsync("http://13.38.70.221:5000/eliminar-asignatura", content);
 
                 if (response.IsSuccessStatusCode)
                 {

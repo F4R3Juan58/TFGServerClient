@@ -59,7 +59,7 @@ public partial class Tutor : ContentPage
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
         using var httpClient = new HttpClient();
-        var response = await httpClient.PostAsync("http://localhost:5000/obtener-tutorias-profesor", content);
+        var response = await httpClient.PostAsync("http://13.38.70.221:5000/obtener-tutorias-profesor", content);
 
         if (response.IsSuccessStatusCode)
         {
@@ -172,7 +172,7 @@ public partial class Tutor : ContentPage
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-texto", content);
+            var response = await httpClient.PostAsync("http://13.38.70.221:5000/crear-canal-texto", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -247,7 +247,7 @@ public partial class Tutor : ContentPage
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
         using var httpClient = new HttpClient();
-        var response = await httpClient.PostAsync("http://localhost:5000/abrir-votacion-delegado", content);
+        var response = await httpClient.PostAsync("http://13.38.70.221:5000/abrir-votacion-delegado", content);
 
         if (response.IsSuccessStatusCode)
         {
@@ -280,7 +280,7 @@ public partial class Tutor : ContentPage
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-tutoria", content);
+            var response = await httpClient.PostAsync("http://13.38.70.221:5000/crear-canal-tutoria", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -320,7 +320,7 @@ public partial class Tutor : ContentPage
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-fct", content);
+            var response = await httpClient.PostAsync("http://13.38.70.221:5000/crear-canal-fct", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -366,7 +366,7 @@ public partial class Tutor : ContentPage
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("http://localhost:5000/crear-canal-tfg", content);
+            var response = await httpClient.PostAsync("http://13.38.70.221:5000/crear-canal-tfg", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -403,7 +403,7 @@ public partial class Tutor : ContentPage
                 return;
             }
 
-            var url = "http://localhost:5000/iniciar_tutoria";  // URL corregida
+            var url = "http://13.38.70.221:5000/iniciar_tutoria";  // URL corregida
 
             var payload = new
             {
@@ -462,7 +462,7 @@ public partial class Tutor : ContentPage
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsync("http://localhost:5000/eliminar-tutoria", content);
+            var response = await httpClient.PostAsync("http://13.38.70.221:5000/eliminar-tutoria", content);
 
             if (response.IsSuccessStatusCode)
             {

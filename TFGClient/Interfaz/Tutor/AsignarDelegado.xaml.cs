@@ -92,7 +92,7 @@ namespace TFGClient
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
                 using var client = new HttpClient();
-                var response = await client.PostAsync("http://localhost:5000/asignar-delegado", content);
+                var response = await client.PostAsync("http://13.38.70.221:5000/asignar-delegado", content);
 
                 if (response.IsSuccessStatusCode)
                 {
