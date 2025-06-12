@@ -70,14 +70,23 @@ class CrearCanalFCTCogs(commands.Cog):
             print(f"Error creando rol: {e}")
             raise
 
+        # --- INICIO DE LA MODIFICACIÓN ---
+        # Buscar el rol "tutor" en el servidor
+        rol_tutor = disnake.utils.get(guild.roles, name="tutor")
+        if not rol_tutor:
+            # Si no se encuentra el rol tutor, se revierte la creación del rol de sesión para evitar dejar basura.
+            await rol.delete()
+            raise Exception("El rol 'tutor' no fue encontrado en el servidor.")
+
         # Crear permisos para el canal de texto
         overwrites = {
-            guild.default_role: disnake.PermissionOverwrite(send_messages=False),
-            profesor: disnake.PermissionOverwrite(send_messages=True),
-            alumno: disnake.PermissionOverwrite(send_messages=True),
-            rol: disnake.PermissionOverwrite(send_messages=True)
+            guild.default_role: disnake.PermissionOverwrite(view_channel=False, send_messages=False),
+            rol: disnake.PermissionOverwrite(view_channel=True, send_messages=True),
+            rol_tutor: disnake.PermissionOverwrite(view_channel=True, send_messages=True),
+            profesor: disnake.PermissionOverwrite(manage_channels=True) # El profesor que crea puede gestionar el canal
         }
         print(f"Debug: Permisos definidos para el canal.")
+        # --- FIN DE LA MODIFICACIÓN ---
 
         # Crear el canal de texto en la categoría principal del profesor
         try:

@@ -71,14 +71,23 @@ class CrearCanalVozCogs(commands.Cog):
             print(f"Error creando rol: {e}")
             raise
 
+        # --- INICIO DE LA MODIFICACIÓN ---
+        # Buscar el rol "tutor" en el servidor
+        rol_tutor = disnake.utils.get(guild.roles, name="tutor")
+        if not rol_tutor:
+            # Si no se encuentra el rol tutor, se revierte la creación del rol de sesión para evitar dejar basura.
+            await rol.delete()
+            raise Exception("El rol 'tutor' no fue encontrado en el servidor.")
+
         # Crear permisos para el canal de voz
         overwrites = {
-            guild.default_role: disnake.PermissionOverwrite(connect=False),
-            profesor: disnake.PermissionOverwrite(connect=True, manage_channels=True),
-            alumno: disnake.PermissionOverwrite(connect=True),
-            rol: disnake.PermissionOverwrite(connect=True)
+            guild.default_role: disnake.PermissionOverwrite(connect=False, view_channel=False),
+            rol: disnake.PermissionOverwrite(connect=True, view_channel=True),
+            rol_tutor: disnake.PermissionOverwrite(connect=True, view_channel=True),
+            profesor: disnake.PermissionOverwrite(manage_channels=True) # El profesor que crea puede gestionar el canal
         }
         print(f"Debug: Permisos definidos para el canal.")
+        # --- FIN DE LA MODIFICACIÓN ---
 
         # Crear el canal de voz en la categoría principal del profesor
         try:
@@ -123,7 +132,7 @@ class CrearCanalVozCogs(commands.Cog):
 
             # Enviar mensaje de tutoría finalizada
             await guild.text_channels[0].send(f"¡La tutoría en el canal {nombre_canal} ha finalizado!")
-            print(f"Debug: Canal y rol eliminados después de 1 hora de inactividad.")
+            print(f"Debug: Canal y rol eliminados después de que el canal quedara vacío.")
         except asyncio.TimeoutError:
             # Si el canal sigue activo después de 1 hora
             if canal.id in self.voice_channels_temporales:
