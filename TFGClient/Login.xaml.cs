@@ -80,7 +80,6 @@ namespace TFGClient
                     }
                     else
                     {
-                        await DisplayAlert("Error", "No se pudo obtener la invitación al Discord.", "OK");
                     }
                 }
                 else if (profesor != null)
@@ -105,7 +104,6 @@ namespace TFGClient
                     }
                     else
                     {
-                        await DisplayAlert("Error", "No se pudo obtener la invitación al Discord.", "OK");
                     }
                     Preferences.Set("UsuarioEmail", profesor.Email);
                     SesionUsuario.Instancia.ProfesorLogueado = profesor;

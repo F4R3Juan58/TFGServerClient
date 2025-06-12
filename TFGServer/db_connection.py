@@ -159,15 +159,18 @@ class Database:
                 )
                 return await cur.fetchone()
             
-    async def obtener_discord_id_por_email(self, email: str) -> int:
+    async def obtener_discord_id_por_email(self, email: str) -> int | None:
         await self.init_pool()
         async with self.pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT DiscordID FROM Profesores WHERE Email = %s", (email,))
-                result = await cur.fetchone()
-                if result and result[0]:
-                    return int(result[0])
-                raise Exception("No se encontró DiscordID para el email dado")
+                tablas = ["Profesores", "Alumnos", "Administradores"]
+                for tabla in tablas:
+                    await cur.execute(f"SELECT DiscordID FROM {tabla} WHERE Email = %s", (email,))
+                    result = await cur.fetchone()
+                    if result and result[0]:
+                        return int(result[0])
+        return None  # No lanzar excepción
+
             
     async def obtener_nombre_categoria_por_profesor(self, email: str) -> str:
         await self.init_pool()
@@ -207,3 +210,39 @@ class Database:
             """, (insti_id,))
             return await cur.fetchone()
 
+    async def obtener_nombre_curso_por_id(self, curso_id: int) -> str | None:
+
+        query = """
+            SELECT CONCAT(Grado, ' ', Nombre) as nombre_completo
+            FROM Cursos
+            WHERE ID = %s
+            LIMIT 1
+        """
+        try:
+            async with self.pool.acquire() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute(query, (curso_id,))
+                    result = await cur.fetchone()
+                    if result:
+                        return result[0]  # nombre_completo
+                    return None
+        except Exception as e:
+            print(f"❌ Error en obtener_nombre_curso_por_id: {e}")
+            return None
+
+    async def obtener_profesor_por_discordid(self, discord_id: int) -> dict | None:
+        query = "SELECT * FROM Profesores WHERE discordid = %s LIMIT 1"
+        async with self.pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(query, (discord_id,))
+                result = await cur.fetchone()
+                return result
+
+
+    async def obtener_alumno_por_discordid(self, discord_id: int) -> dict | None:
+        query = "SELECT * FROM Alumnos WHERE discordid = %s LIMIT 1"
+        async with self.pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(query, (discord_id,))
+                result = await cur.fetchone()
+                return result

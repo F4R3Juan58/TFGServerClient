@@ -77,7 +77,6 @@ public partial class PaginaProfesor : ContentPage
 
         if (!response.IsSuccessStatusCode)
         {
-            await DisplayAlert("Error", "No se pudieron obtener las asignaturas del servidor.", "OK");
             AsignaturasCollection.IsEnabled = true; // Volver a habilitar el CollectionView
             return new List<string>(); // Retornar una lista vacía
         }
@@ -98,7 +97,6 @@ public partial class PaginaProfesor : ContentPage
             else
             {
                 // Si "actuales" no está presente o vacío, mostrar un mensaje
-                await DisplayAlert("Sin asignaturas", "No se encontraron asignaturas para este profesor.", "OK");
             }
         }
         catch (JsonException ex)

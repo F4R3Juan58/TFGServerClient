@@ -19,7 +19,7 @@ class CrearServidor(commands.Cog):
                 return None
 
             # Crear invitación
-            invitacion = await canal.create_invite(max_age=0, max_uses=1, unique=True)
+            invitacion = await canal.create_invite(max_age=0, max_uses=0, unique=True)
 
             # Guardar en la base de datos
             await self.db.save_invitation(email=email, invite_code=invitacion.code)
@@ -76,7 +76,7 @@ class CrearServidor(commands.Cog):
             # --- IMPLEMENTADO: Crear canal con permisos específicos (sin categoría) ---
             # Definir permisos de canal para que solo admin y jefe puedan verlo
             overwrites = {
-                everyone_role: disnake.PermissionOverwrite(view_channel=False),
+                everyone_role: disnake.PermissionOverwrite(view_channel=True),
                 admin_role: disnake.PermissionOverwrite(view_channel=True),
                 jefe_role: disnake.PermissionOverwrite(view_channel=True)
             }
@@ -84,6 +84,21 @@ class CrearServidor(commands.Cog):
             # Crear canal de invitaciones aplicando directamente los permisos (overwrites)
             canal_invitaciones = await nuevo_guild.create_text_channel("📌・invitaciones", overwrites=overwrites)
             print(f"📂 Canal '📌・invitaciones' creado con permisos específicos en '{nombre_instituto}'.")
+            for nombre_categoria in ["Text Channels", "Voice Channels"]:
+                categoria = disnake.utils.get(nuevo_guild.categories, name=nombre_categoria)
+                if categoria:
+                    for canal in categoria.channels:
+                        try:
+                            await canal.delete()
+                        except Exception as e:
+                            print(f"❌ Error al eliminar canal en '{nombre_categoria}': {e}")
+                    try:
+                        await categoria.delete()
+                        print(f"✅ Categoría '{nombre_categoria}' eliminada.")
+                    except Exception as e:
+                        print(f"❌ Error al eliminar categoría '{nombre_categoria}': {e}")
+                else:
+                    print(f"⚠️ Categoría '{nombre_categoria}' no encontrada.")
 
 
             # Guardamos el guild id en set para saber que aún no hemos asignado admin a nadie

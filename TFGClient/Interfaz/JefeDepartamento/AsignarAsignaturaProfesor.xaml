@@ -55,7 +55,7 @@
             <!-- Asignaturas: Entradas para texto -->
             <VerticalStackLayout Spacing="10">
                 <Label Text="Asignatura" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
-                <Entry x:Name="AsignaturaEntry" Placeholder="Asignatura" PlaceholderColor="Black" BackgroundColor="#ced4da" />
+                <Entry x:Name="AsignaturaEntry" Placeholder="Asignatura" PlaceholderColor="Black" BackgroundColor="#ced4da" TextColor="Black" />
             </VerticalStackLayout>
 
             <!-- Botones Guardar y Cancelar -->

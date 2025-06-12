@@ -488,9 +488,6 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 // Concatenar todos los cursos y grados seleccionados
                 string cursosGradosConcatenados = ObtenerDatosConcatenados();
 
-                // Mostrar los cursos concatenados antes de enviarlos
-                await DisplayAlert("Cursos a enviar", cursosGradosConcatenados, "OK");
-
                 var profesor = SesionUsuario.Instancia.AdministradorLogueado;
 
                 // Crear el objeto que vamos a enviar al servidor Flask
@@ -514,7 +511,6 @@ new Opcion { Nombre = "2º", EsSeleccionado = false },
                 // Manejar respuesta
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Éxito", "Cursos enviados correctamente al servidor Flask.", "OK");
                 }
                 else
                 {

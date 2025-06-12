@@ -47,6 +47,8 @@ public partial class Tutor : ContentPage
     {
         var instiId = SesionUsuario.Instancia.ProfesorLogueado.InstiID;
         var profesorId = SesionUsuario.Instancia.ProfesorLogueado.DiscordID;
+        await DisplayAlert("Debug", $"{instiId}, {profesorId}", "OK");
+
 
         // Crear un objeto con los datos necesarios
         var dataToSend = new
